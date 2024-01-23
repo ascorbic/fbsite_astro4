@@ -10,17 +10,9 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.fabiobiondi.dev/',
+  site: 'https://fbsite-astro4.vercel.app/',
   output: 'hybrid',
   adapter: vercelServerless(),
-  markdown: {
-    remarkPlugins: [[remarkToc, {
-      heading: 'TOPICS',
-      // skip: 'delta',
-      maxDepth: 1
-    }], remarkReadingTime],
-    // remarkPlugins: [remarkToc, remarkReadingTime],
-    shikiConfig: {}
-  },
+
   integrations: [react(), tailwind(), mdx(), sitemap()]
 });
