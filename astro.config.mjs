@@ -22,5 +22,5 @@ export default defineConfig({
     // remarkPlugins: [remarkToc, remarkReadingTime],
     shikiConfig: {}
   },
-  integrations: [react(), tailwind(), mdx()]
+  integrations: [react(), tailwind(), mdx(), sitemap()]
 });
