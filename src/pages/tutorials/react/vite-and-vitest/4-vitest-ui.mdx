@@ -1,0 +1,84 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: react/vite-and-vitest
+route: '4-vitest-ui'
+title: React and Vitest UI
+title1: React and Vitest UI
+title2: Configure Vitest UI in React projects
+author: ['Fabio Biondi']
+description: 
+image: 
+  blur: 'react/vite-and-vitest/image.png'
+  url: null
+  alt: Hello React Vitest
+  series: 'react/vite-and-vitest/image.png'
+pubDate: 2022-12-26
+tags: ["react", "typescript"] 
+series: 
+  name: "React, TypeScript and Vitest: write your first test"
+  idx: 4
+difficulty: 1
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import StackBlitz from '@widgets/StackBlitz'
+import Hint from '@widgets/Hint.astro';
+
+
+
+
+
+[Vite](https://vitejs.dev/)  offers a super useful package to manage your test by using a Web UI:
+
+<Code>
+```
+npm i -D @vitest/ui
+```
+</Code>
+
+You can now run from command line the following command:
+
+<Code>
+```
+vitest --ui
+```
+</Code>
+
+or add a new script to `package.json` to run it by using `npm run test:ui`.
+
+It should automatically open a new page on your browser after running it:
+
+<Code title="<Code>package.json</Code>" techs={['js']}>
+```json
+scripts: {
+  // ...
+ "test:ui": "vitest --ui",
+}
+```
+</Code>
+
+<Img src={import('./images/2023-01-04-10-45-06.png')} w={900} quality={60} border />
+
+You can also directly update your tests from the UI and it will update your source code:
+
+<Img src={import('./images/2023-01-04_15-52-05 (1).gif')} w={900} quality={60} border />
+
+The useful "Module Graph" tab also shows your dependencies:
+
+<Img src={import('./images/2023-01-04-15-55-05.png')} w={700} quality={60} border />
+
+The next recipes describes how to configure tools for test coverage:
+
+<TutorialSeries frontmatter={frontmatter} />

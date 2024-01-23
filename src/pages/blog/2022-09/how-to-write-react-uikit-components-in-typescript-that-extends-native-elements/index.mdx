@@ -1,0 +1,223 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: 2022-09/how-to-write-react-uikit-components-in-typescript-that-extends-native-elements
+title: How to create React UIKIT components 
+title1: How to create React UIKIT components 
+title2: in TypeScript that extends native HTML Elements
+author: ['Fabio Biondi']
+description: How to create React UIKIT components in TypeScript that extends native HTML Elements
+image: 
+  blur: "react-emote-finger.png"
+  url: "react-emote-finger.png"
+  alt: "a small ninja"
+pubDate: 2022-09-28
+tags: ["react", "typescript"] 
+series: 
+  name: "React Tips"
+difficulty: 2
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+// import Example1 from './demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+
+import PostSeries from '@widgets/PostSeries.astro';
+
+
+import {App, MyButton} from './scripts'
+
+
+
+
+## TOPICS
+
+# Introduction 
+
+
+In the front-end ecosystem, UiKits are collections of utilities and several components, such as:
+
+<li> `<Card />` </li>
+<li> `<TabBar />` </li>
+<li> `<Carousel />` </li>
+<li> `<Row />` and `<Col />` </li>
+<li> `<GoogleMap />` </li>
+
+Each component has usually its own custom layout and could accepts several properties. For example, a `<GoogleMap />` component could accept the "coordinates" and a "zoom" value as properties:
+
+
+<Code>
+```tsx
+<GoogleMap coords={coords} zoom={zoom} />
+```
+</Code>
+
+Sometimes we need to create components whose layout is created from scratch. In other cases their layout may be based of native elements. 
+Some examples:
+
+* `<MyButton />`: that extends `<button>` element capabilities
+* `<MyImg />`: that extends `<img>` element
+* and so on.
+
+Let's imagine a `button` component that must display an icon next to the label that I can use as the code below:
+
+<Code>
+```tsx
+<MyButton icon="💩"> CLICK ME </MyButton>
+```
+</Code>
+
+This component should accept the `icon` and `children` properties and its definition may looks like the following:
+
+<Code>
+```tsx
+interface MyButtonProps {
+  icon: string;
+}
+
+function MyButton(props: PropsWithChildren<MyButtonProps>) {
+  const { icon, children } = props;
+  return <button className="btn btn-primary">
+    {icon} {children}
+  </button>
+}
+```
+</Code>
+
+So we can use the component in this way:
+
+<Code>
+```tsx
+<MyButton icon="💩"> DO SOMETHING</icon>
+<MyButton icon="😱"> CLICK ME</icon>
+```
+</Code>
+
+![Button Preview](https://res.cloudinary.com/my-notes-demo/image/upload/v1657295124/tutorial-content/dev.to/2022-07-react/Schermata_2022-07-08_alle_14.59.28.png)
+
+
+# Extend with HTML Props
+
+In order to be more flexible, the `<MyButton />` component should also accepts all the native `button` properties. For example we may need to listen the `onClick` event or set the `disabled` attribute:
+
+
+<Code>
+```tsx
+<MyButton icon="💩" onClick={() => {}} disabled />
+```
+</Code>
+
+So we can simply add them to the Component's Property Type and apply them as attributes of the `<button>` element:
+
+
+<Code>
+```tsx
+// 1. Add the properties 
+interface MyButtonProps {
+  icon: string;  
+  disabled: boolean;   // ➡️ native prop
+  onClick: (e: React.MouseEvent) => void; // ➡️ native prop
+  // ➡️ other native props
+}
+
+function MyButton(props: PropsWithChildren<MyButtonProps) {
+
+  const { icon, children, onClick, disabled } = props;
+  // 2. apply all props one by one
+  return <button disabled={disabled} onClick={onClick} className="btn btn-primary">
+    {icon}
+    {children}
+  </button>
+}
+```
+</Code>
+
+What could I do to avoid manually passing all properties of a native button? 
+
+**There is a trick!**
+
+We can simply use an [intersection type](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html) to combine our custom props with all the `HTMLButtonElement` properties to automatically support all native buttons properties:
+
+<Code>
+```tsx
+export function MyButton(
+  props: PropsWithChildren<MyButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>>
+) { 
+ // ... component here ...
+}
+```
+</Code>
+
+Now your component supports all buttons properties and we can apply them simply using this trick:
+
+<Code>
+```tsx
+// apply all props as button attributes
+return <button className="btn btn-primary" {...props}>
+```
+</Code>
+
+However `icon` and `children` are not valid button's properties so we can use [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to create a `rest` property that contain all the properties except them:
+
+<Code>
+```tsx
+const { icon, children, ...rest } = props;
+
+// Now we apply all props except icons and children
+return <button className="btn btn-primary" {...rest}>
+  {icon}
+  {children}
+</button>
+```
+</Code>
+
+And that's all. 
+Here the final source code to create a button that support `icon`, `children` and all native button properties:
+
+<Code>
+```tsx
+import { PropsWithChildren } from 'react';
+
+interface MyButtonProps {
+  icon: string;
+}
+export function MyButton(
+  props: PropsWithChildren<MyButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>>
+) {
+  const { icon, children, ...rest } = props;
+  return <button className="btn btn-primary" {...rest}>
+    {icon}
+    {children}
+  </button>
+}
+
+```
+</Code>
+
+# How to Use
+
+<Code>
+```tsx
+<MyButton 
+  icon="💩" 
+  type="submit"
+  disabled={...} 
+  onClick={...} 
+  onMouseOver={...} 
+> CLICK ME </MyButton>
+```
+</Code>
+
+# Code Playground
+
+
+<PostSeries frontmatter={frontmatter} />

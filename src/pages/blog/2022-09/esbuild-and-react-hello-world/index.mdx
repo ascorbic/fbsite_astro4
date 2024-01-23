@@ -1,0 +1,213 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2022-09/esbuild-and-react-hello-world'
+title: ESBuild and React - Hello world example
+title1: ESBuild and React
+title2: Hello world example
+author: ['Fabio Biondi']
+description:  Create and build a simple React/TypeScript project with "esbuild"
+image: 
+  blur: "image.png"
+  url: "image.png"
+  alt: "emote with ES logo"
+pubDate: 2022-09-01
+tags: ["esbuild", "react", "typescript"] 
+series: 
+  name: "React Tips"
+difficulty: 1
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+import Hint from '@widgets/Hint.astro';
+
+
+
+## TOPICS
+
+# Introduction 
+
+
+[esbuild](https://esbuild.github.io/) is a fast javascript bundler that is 10-100x faster than webpack, rollup or parcel and it is used by tool like [ViteJS](https://vitejs.dev/).
+
+It supports features such as:
+* ES6 and CommonJS modules
+* Tree shaking of ES6 modulesz
+* An API for JavaScript and Go
+* TypeScript and JSX syntax
+* Source maps
+* Minification
+* Plugins
+* and more....
+
+In this post I share a quick (and simplified) summary to create a bundle for a React 18 / TypeScript project.
+
+## Install `esbuild` in your project
+
+<Code>
+```bash
+mkdir esbuild-demo
+cd esbuild-demo
+npm init -y
+npm install esbuild
+```
+</Code>
+
+This generates the following `package.json`:
+
+<Code>
+```json
+{
+  "name": "esbuild-demo-story",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.14.48"
+  }
+}
+```
+</Code>
+
+
+## Create a React 18 / TypeScript project
+
+Now create a simple React script:
+
+1. First, install `react` and `react-dom` as project dependencies
+2. Create the `src/App.tsx` file
+3. Add `App` and `Panel` components in the same file
+4. Mount `App` component in a `div` element with `root` id
+
+<Code>
+```tsx
+// src/App.tsx
+import * as React from 'react'
+import ReactDOM from 'react-dom/client';
+
+// App Component
+const App = () => (<div>
+  <h1>Hello, ESBUILD!</h1>
+  <Panel />
+  <Panel />
+</div>)
+
+// Panel Component
+const Panel = () => <h2>I'm a Panel</h2>
+
+// Mount component 
+const root = ReactDOM.createRoot(
+  document.getElementById('root')
+);
+root.render(<App />);
+
+```
+</Code>
+
+## `esbuild` configuration
+
+Create an `esbuild` configuration file to compile the project.
+It will generate a (minified) bundle in the `dist` folder that also includes React and ReactDom libraries (you can exclude them by using the `external` property:
+
+
+<Code>
+```json
+// esbuild.config.js
+const res = require('esbuild').buildSync({
+  entryPoints: ['src/app.tsx'],
+  bundle: true,
+  minify: true,
+  format: 'cjs',
+  sourcemap: true,
+  outfile: 'dist/output.js',
+  // external: ['react', 'react-dom'], 
+})
+```
+</Code>
+
+Run the configuration file by using Node:
+
+<Code>
+```bash
+node esbuild.config.js
+```
+</Code>
+
+
+Project Folder:
+
+<DesktopWindow center>
+
+![alt text for accessibility](https://res.cloudinary.com/my-notes-demo/image/upload/v1656775504/tutorial-content/dev.to/esbuild-tutorial-1/image.png
+)
+</DesktopWindow>
+
+## Index.html
+
+Create an `index.html` in the project root folder and import your bundle:
+
+
+<Code>
+```html
+<html>
+  <body>
+  <script type="module" src="./dist/output.js"></script>
+  <h1>React</h1>
+
+  <div id="root"></div>
+  </body>
+</html>
+```
+</Code>
+
+Run a webserver:
+
+<Code>
+```
+npx lite-server
+```
+</Code>
+
+<DesktopWindow center>
+![liteserver preview](https://res.cloudinary.com/my-notes-demo/image/upload/v1656775504/tutorial-content/dev.to/esbuild-tutorial-1/image_1.png)
+</DesktopWindow>
+
+And you'll get the following output:
+
+
+<DesktopWindow center>
+![Final preview](https://res.cloudinary.com/my-notes-demo/image/upload/v1656775504/tutorial-content/dev.to/esbuild-tutorial-1/image_2.png)
+</DesktopWindow>
+
+Your simple React 18 / TypeScript project should works :)
+
+
+
+# Video Tutorial (45 min - Italian only )
+<IFrame src="https://www.youtube.com/embed/Kof6iEKVwzw" />
+
+# Slides
+
+<IFrame src="https://www.slideshare.net/slideshow/embed_code/key/M9zv2yng7BHfJm" />
+
+
+
+<PostSeries frontmatter={frontmatter} />

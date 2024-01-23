@@ -17,7 +17,9 @@ const {
 
 // const baseUrl = "https://astro-fabiobiondi-blog.vercel.app";
 
+console.log('...', Astro.url.pathname, Astro.site)
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = image
   ? new URL(image, Astro.url)
   : new URL("/images/default-share-img-256.png", Astro.url);

@@ -1,0 +1,652 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2023-01/ngrx-15-createAction-group-and-create-feature'
+title: Angular and NGRX 15 | How to use createAction and createFeature
+title1: Angular & NGRX 15
+title2: How to use <code>createAction</code> and <code>createFeature</code>
+author: ['Fabio Biondi']
+image: 
+  blur: "image.png"
+  url: "image.png"
+  alt: "ngrx emote"
+pubDate: 2022-12-30
+tags: ["angular", "ngrx", "rxjs"] 
+series: 
+  name: "NGRX Tips"
+difficulty: 2
+draft: true
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+import Hint from '@widgets/Hint.astro';
+import StackBlitz from '@widgets/StackBlitz';
+
+
+# Introduction
+
+
+<Img src={import('./images/2022-12-28_02-33-56 (1).gif')} w={300} quality={60} border />
+
+## Redux Dev Tools
+
+The usage of Redux Dev Tools is one of the main benefits when you use Redux or NGRX (that is Redux based).
+
+You can track actions, how they updated the state, it supports time travel debug and much more...
+
+<Img src={import('./images/2022-12-28_02-36-04 (1).gif')} w={600} quality={60} border />
+
+
+# Requirements
+
+This tutorial is not for beginners. You should already know Angular, NGRX and RxJS 
+
+# Project
+
+When we create an Angular application we usually organize it in several `ngModule` that are often lazy loaded.
+
+Each module is usually defined by:
+
+* an `ngModule`
+* at least a component 
+* a routing module  
+
+<Code techs={['ts']} title="<code>features/catalog/catalog.module.ts</code>">
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { CatalogRoutingModule } from './catalog-routing.module';
+import { CatalogComponent } from './catalog.component';
+
+@NgModule({
+  declarations: [CatalogComponent],
+  imports: [
+    CommonModule,
+    CatalogRoutingModule,
+  ],
+})
+export class CatalogModule {}
+```
+</Code>
+
+<Code techs={['ts']} title="<code>features/catalog/catalog.component.ts</code>">
+```typescript
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
+import { Item } from '../../model/item';
+import { CatalogActions } from './store/catalog.actions';
+import {
+  CatalogState,
+  selectError,
+  selectList,
+  selectPending,
+} from './store/catalog.feature';
+
+@Component({
+  selector: 'app-catalog',
+  template: `
+    <h1>Catalog Page</h1>
+  `,
+  styles: [],
+})
+export class CatalogComponent {}
+```
+</Code>
+
+
+<Code techs={['angular', 'ts']} title="<code>features/catalog/catalog-routing.module.ts</code>">
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { CatalogComponent } from './catalog.component';
+
+const routes: Routes = [{ path: '', component: CatalogComponent }];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class CatalogRoutingModule {}
+```
+</Code>
+
+# Install and configure NGRX 
+
+After the creation of an Angular 15 project and its own modules we can install the [NGRX](https://ngrx.io/) packages: 
+
+* `@ngrx/core`: the library package
+* `@ngrx/store-devtools`: utility to use Redux Dev Tools
+* `@ngrx/effects`: package to handle side effects in NGRX
+
+<Code title="Terminal">
+```typescript
+npm install @ngrx/store @ngrx/store-devtools @ngrx/effects                 
+```
+</Code>
+
+
+Now we can initialize NGRX and the global store in `app.module`.
+
+<Hint>
+  In this article we focus on `createActionGroup` and `createFeature` utilities, so we can leave our store empty.
+
+  It will be populated when user visit the Catalog Page.
+</Hint>
+
+<Code techs={['angular', 'ts']} title="<code>app.module.ts</code>">
+```typescript
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { EffectsModule } from '@ngrx/effects';
+import { ActionReducerMap, StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+export interface AppState {
+  // ... empty in this article ...
+}
+export const reducers: ActionReducerMap<AppState> = {
+  // ... empty in this article ...
+};
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    // Needed for side effects / HTTP requests
+    HttpClientModule,
+    // initialize the store. Empty in this article
+    StoreModule.forRoot(reducers),
+    // inizialize effects. Empt in this article
+    EffectsModule.forRoot([]),
+    // enable redux devtools
+    StoreDevtoolsModule.instrument({
+      maxAge: 15,
+    }),
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+
+```
+</Code>
+
+## Router rules
+
+Our application will handle two routes: `catalog` and `home`:
+
+* `home`: render a simple empty component we won't use in this article
+* `catalog`: lazy load the custom module we'll create in the next recipe
+
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './features/home/home/home.component';
+
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'catalog', loadChildren: () => import('./features/catalog/catalog.module').then((m) => m.CatalogModule) },
+  { path: '', redirectTo: 'catalog', pathMatch: 'full' },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
+
+```
+</Code>
+
+
+The `AppComponent` will simply contain a couple of buttons to visit the pages and the `router-outlet`
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { Component, VERSION } from '@angular/core';
+
+@Component({
+  selector: 'my-app',
+  template: `
+    <button routerLink="home">home</button>
+    <button routerLink="catalog">Catalog</button>
+    <router-outlet></router-outlet>
+  `,
+})
+export class AppComponent {}
+
+```
+</Code>
+
+
+# Type 
+
+
+<Code techs={['ts']} title="<code>app/model/items.ts</code>">
+```typescript
+export interface Item {
+  id: number;
+  name: string;
+}
+```
+</Code>
+
+
+# Actions with `createActionGroup`
+
+Let's imagine a CRUD application that needs to load data from a REST API (`GET`), to add items (`POST`) and update them (`PUT/PATCH`).
+
+Usually we have to define all the actions:
+
+<Code techs={['angular', 'ts']} title="<code>features/catalog/store/catalog.actions.ts</code>">
+```typescript
+import { createAction, props } from '@ngrx/store';
+import { Item } from '../../../model/item';
+
+export const loadItems = createAction(
+  '[Item] Load'
+);
+
+export const loadItemsSuccess = createAction(
+  '[Item] Load Success',
+  props<{ items: Item[] }>()
+);
+
+export const loadItemsFail = createAction(
+  '[Item] Load Fail',
+);
+
+export const addItem = createAction(
+  '[Item] Add',
+  props<{ item: Item }>()
+);
+
+export const addItemSuccess = createAction(
+  '[Item] Add Success',
+  props<{ item: Item }>()
+);
+
+export const addItemFail = createAction(
+  '[Item] Add Item Fail',
+);
+
+export const deleteItem = createAction(
+  '[Item] Delete',
+  props<{ id: number }>()
+);
+
+export const deleteItemSuccess = createAction(
+  '[Item] Delete Success',
+  props<{ id: number }>()
+);
+
+export const deleteItemFail = createAction(
+  '[Item] Delete Item Fail',
+);
+
+```
+</Code>
+
+It's a boring process and the new `createActionGroup` it's very useful to make our code more concise:
+
+<Code techs={['angular', 'ts']} title="<code>features/catalog/store/catalog.actions.ts</code>">
+```typescript
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { Item } from '../../../model/item';
+
+export const CatalogActions = createActionGroup({
+  source: 'Catalog',
+  events: {
+    'Load': emptyProps(),
+    'Load Success': props<{ items: Item[] }>(),
+    'Load Fail': emptyProps(),
+
+    'add Item': props<{ item: Item }>(),
+    'add Item Success':  props<{ item: Item }>(),
+    'add Item Fail': emptyProps(),
+
+    'Delete Item': props<{ id: number }>(),
+    'Delete Item Success': props<{ id: number }>(),
+    'Delete Item Fail': emptyProps(),
+  }
+});
+
+```
+</Code>
+
+
+# NGRX Effects
+
+Effects are triggered by actions and are used for side effects: HTTP requests, routing, localstorage and so on...
+
+<Hint>
+  There is no updates to effects to it uses the same API since several NGRX versions
+</Hint>
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { Injectable } from '@angular/core';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { mergeMap, switchMap, catchError, map, exhaustMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
+
+import { Item } from '../../../model/item';
+import { CatalogActions } from './catalog.actions';
+
+
+@Injectable()
+export class CatalogEffects {
+
+  loadItems$ = createEffect(() => this.actions$.pipe(
+    ofType(CatalogActions.load),
+    switchMap(() =>
+      this.http.get<Item[]>('https://jsonplaceholder.typicode.com/users')
+        .pipe(
+          map(data => CatalogActions.loadSuccess({ items: data})),
+          catchError(() => of(CatalogActions.loadFail())
+          )
+        )
+    )
+  ));
+
+  deleteItem$ = createEffect(() => this.actions$.pipe(
+    ofType(CatalogActions.deleteItem),
+    exhaustMap((action) =>
+      this.http.delete(`https://jsonplaceholder.typicode.com/users/${action.id}`)
+        .pipe(
+          map(() => CatalogActions.deleteItemSuccess({ id: action.id})),
+          catchError(() => of(CatalogActions.deleteItemFail())
+          )
+        )
+    )
+  ));
+
+  addItem$ = createEffect(() => this.actions$.pipe(
+    ofType(CatalogActions.addItem),
+    mergeMap((action) =>
+      this.http.post<Item>(`https://jsonplaceholder.typicode.com/users/`, action.item)
+        .pipe(
+          map((item) => CatalogActions.addItemSuccess({ item })),
+          catchError(() => of(CatalogActions.addItemFail())
+          )
+        )
+    )
+  ));
+
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient
+  ) {}
+}
+
+```
+</Code>
+
+
+# `createFeature`: reducer + selectors
+
+This utility allow you to define the reducer (very similar to `createReducer`) and automatically generates selectors for each part of the state: in this example `pending`, `error, `list`.
+
+In fact, if you take a look at the end of the snippet you can see how we can export selectors directly from `catalogFeature`:
+
+* `selectPending`
+* `selectError`
+* `selectList`
+
+<Hint>
+  The selector you can export is always named as: `select` + state property 
+</Hint>
+
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { createFeature, createReducer, on } from '@ngrx/store';
+import { Item } from '../../../model/item';
+import { CatalogActions } from './catalog.actions';
+
+export interface CatalogState {
+  error: boolean;
+  pending: boolean;
+  list: Item[];
+}
+
+export const initialState: CatalogState = {
+  error: false,
+  pending: false,
+  list: [],
+};
+export const catalogFeature = createFeature({
+  name: 'catalog',
+  reducer: createReducer(
+    initialState,
+    on(CatalogActions.loadSuccess, (state) => ({
+      ...state,
+      error: false,
+      pending: true,
+    })),
+    on(CatalogActions.loadSuccess, (state, action) => ({
+      list: [...action.items],
+      error: false,
+      pending: false,
+    })),
+    on(CatalogActions.loadFail, (state) => ({
+      ...state,
+      error: true,
+      pending: false,
+    })),
+
+    on(CatalogActions.deleteItem, (state) => ({
+      ...state,
+      error: false,
+      pending: true,
+    })),
+    on(CatalogActions.deleteItemSuccess, (state, action) => ({
+      list: state.list.filter((item) => item.id !== action.id),
+      error: false,
+      pending: false,
+    })),
+    on(CatalogActions.deleteItemFail, (state) => ({
+      ...state,
+      error: true,
+      pending: false,
+    })),
+
+    on(CatalogActions.addItem, (state) => ({
+      ...state,
+      error: false,
+      pending: true,
+    })),
+    on(CatalogActions.addItemSuccess, (state, action) => ({
+      list: [...state.list, action.item],
+      error: false,
+      pending: false,
+    })),
+    on(CatalogActions.addItemFail, (state) => ({
+      ...state,
+      error: true,
+      pending: false,
+    }))
+  ),
+});
+
+export const {
+  name, // feature name
+  reducer, // feature reducer
+  selectPending, // Pending selector
+  selectError, // Error selector
+  selectList, // List selector
+} = catalogFeature;
+```
+</Code>
+
+
+
+
+
+# Configure the feature module
+
+Now you can add the feature store and its effects in any "feature `ngModule`":
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+
+import { CatalogRoutingModule } from './catalog-routing.module';
+import { CatalogComponent } from './catalog.component';
+import { CatalogEffects } from './store/catalog.effects';
+import { catalogFeature } from './store/catalog.feature';
+
+@NgModule({
+  declarations: [CatalogComponent],
+  imports: [
+    CommonModule,
+    CatalogRoutingModule,
+    FormsModule,
+    StoreModule.forFeature(catalogFeature),
+    EffectsModule.forFeature([CatalogEffects]),
+  ],
+})
+export class CatalogModule {}
+
+```
+</Code>
+
+# Use in the feature component 
+
+And now you can use it 
+
+
+
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { Component } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Item } from '../../model/item';
+import { CatalogActions } from './store/catalog.actions';
+import { CatalogState, selectError, selectList, selectPending } from './store/catalog.feature';
+
+@Component({
+  selector: 'app-catalog',
+  template: `
+    <div  *ngIf="error$ | async">Server error</div>
+    <div  *ngIf="pending$ | async">loading...</div>
+
+    <li *ngFor="let item of items$ | async">{{item.name}}</li>
+  `,
+})
+export class CatalogComponent {
+  items$ = this.store.pipe(select(selectList));
+  error$ = this.store.pipe(select(selectError));
+  pending$ = this.store.pipe(select(selectPending));
+
+  constructor(private store: Store<CatalogState>, private actions: Actions) {
+    this.store.dispatch(CatalogActions.load());
+  }
+}
+
+```
+</Code>
+
+
+
+<Img src={import('./images/2022-12-28_02-27-28.png')} w={400} quality={60} border />
+
+
+And of course you can now also add and delete items dispatching the other actions:
+
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
+import { Item } from '../../model/item';
+import { CatalogActions } from './store/catalog.actions';
+import {
+  CatalogState,
+  selectError,
+  selectList,
+  selectPending,
+} from './store/catalog.feature';
+
+@Component({
+  selector: 'app-catalog',
+  template: `
+    <div  *ngIf="error$ | async">Server error</div>
+    <div  *ngIf="pending$ | async">loading...</div>
+
+    <form #f="ngForm" (submit)="addItemHandler(f)" >
+      <input type="text" [ngModel] name="name">
+    </form>
+
+    <li *ngFor="let item of items$ | async">
+      {{item.name}}
+      <button (click)="deleteHandler(item.id)">Delete</button>
+    </li>
+  `,
+  styles: [],
+})
+export class CatalogComponent {
+  @ViewChild('f') form!: NgForm;
+  items$ = this.store.pipe(select(selectList));
+  error$ = this.store.pipe(select(selectError));
+  pending$ = this.store.pipe(select(selectPending));
+
+  constructor(private store: Store<CatalogState>, private actions: Actions) {
+    this.store.dispatch(CatalogActions.load());
+    actions.pipe(ofType(CatalogActions.addItemSuccess)).subscribe(() => {
+      this.form.reset();
+    });
+  }
+
+  deleteHandler(id: number): void {
+    this.store.dispatch(CatalogActions.deleteItem({ id }));
+  }
+
+  addItemHandler(form: NgForm): void {
+    const item: Item = {
+      ...form.value,
+    };
+    this.store.dispatch(CatalogActions.addItem({ item }));
+  }
+}
+```
+</Code>
+
+
+<Img src={import('./images/2022-12-28_02-32-03.png')} w={400} quality={60} border />
+
+
+
+<StackBlitz clickToLoad={false} url="https://stackblitz.com/edit/angular-ivy-jkrct1?embed=1&file=src/app/features/catalog/catalog.module.ts" client:visible />
+
+<PostSeries frontmatter={frontmatter} />

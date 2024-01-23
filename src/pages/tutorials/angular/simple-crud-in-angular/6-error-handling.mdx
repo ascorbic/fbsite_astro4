@@ -1,0 +1,674 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: angular/simple-crud-in-angular
+route: '6-error-handling'
+title: Error Handling & Fix
+title1: Angular 15
+title2: Error Handling & Fix
+author: ['Fabio Biondi']
+description: In this part of the tutorial you will fix some UI problems and you will learn some tricks to handle HTTP errors by using <code>Promise</code>s and <code>Observable</code>s
+image: 
+  blur: 'angular/simple-crud-in-angular/image.png'
+  url: null
+  alt: Create a simple CRUD app
+  series: 'angular/simple-crud-in-angular/image.png'
+pubDate: 2022-12-28
+tags: ["angular", "typescript"] 
+series: 
+  name: "Create a simple CRUD app"
+  idx: 6
+difficulty: 2
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+// import Example1 from './demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import Hint from '@widgets/Hint.astro';
+import BannerPromoAngular from '@widgets/BannerPromoAngular.astro';
+
+ 
+
+# TOPICS
+
+
+# Fix: Avoid UI reference in services
+
+The `saveHandler` method of `UsersService` class now receives a `NgForm` as argument.
+However, it is preferable that the service has no references to  the UI because if we update it in the future, we won't have to change the service as well.
+ 
+
+ 
+So, open the service and update the current `saveHandler`, from the following:
+
+<Code techs={['angular', 'ts']} title="<code>users.service.ts</code>">
+```typescript
+saveHandler(f: NgForm) {
+  const user = f.value as User;     // will be removed
+  this.http.post<User>(`${this.URL}/users/`, user)
+    .subscribe((dbUser) => {
+      this.users = [...this.users, dbUser];      
+      f.reset({ gender: '' });                    // will be removed
+    });
+}
+``` 
+</Code>
+
+To the following one.
+In fact the method now receives the form value instead of `NgForm` and our service has no UI references anymore.
+
+<Code techs={['angular', 'ts']} title="<code>users.service.ts</code>">
+```typescript
+saveHandler(user: User) {
+  this.http.post<User>(`${this.URL}/users/`, user)
+    .subscribe((dbUser) => {
+      this.users = [...this.users, dbUser];
+    });
+}
+```
+</Code>
+
+
+<Hint type="empty" title="TypeScript TIP">
+The `saveHandler` method won't really receive an object typed as `User` but, in the next step, we'll pass the `form.value` to it, that represents a "partial" version of the `User`.
+
+In fact it should be set to `user: Partial<User>` instead but the type of `form.value` is `any` so it won't generate compiler errors.
+<br />
+Since I don't want to complicate the tutorial further we'll leave it at that. 
+</Hint>
+
+However you'll get this error:
+
+<Img src={import('./images/image (21).png')} w={600} quality={60} border />
+
+Why?
+
+Your component still pass the `NgForm` as paremeter to the service method so you need to update  your component HTML template.
+
+So, we have to update the current code in which we pass the `NgForm instance` to the `saveHandler` method:
+
+<Code>
+```html
+(submit)="usersService.saveHandler(f)"
+```
+</Code>
+
+to the following one, in order to pass the form `value` (the form content) instead of the form reference:
+
+<Code>
+```typescript
+(submit)="usersService.saveHandler(f.value)"
+```
+</Code>
+
+### FINAL SOURCE CODE
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
+import { Component } from '@angular/core';
+import { User } from './model/user';
+import { UsersService } from './services/users.service';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div class="container">
+      <h1>Users</h1>
+
+      <form
+        class="card card-body mt-3"
+        #f="ngForm"
+        (submit)="usersService.saveHandler(f.value)"
+        [ngClass]="{
+          'male': f.value.gender === 'M',
+          'female': f.value.gender === 'F'
+        }"
+      >
+        <input
+          type="text"
+          [ngModel]
+          name="label"
+          placeholder="Add user name"
+          class="form-control"
+          required
+          #labelInput="ngModel"
+          [ngClass]="{'is-invalid': labelInput.invalid && f.dirty}"
+        >
+
+        <select
+          [ngModel]
+          name="gender"
+          class="form-control"
+          required
+          #genderInput="ngModel"
+          [ngClass]="{'is-invalid': genderInput.invalid && f.dirty}"
+        >
+          <option value="">Select option</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+
+  
+        <button
+          class="btn"
+          [disabled]="f.invalid"
+          [ngClass]="{
+            'btn-success': f.valid,
+            'btn-danger': f.invalid
+          }"
+        >Save</button>
+      </form>
+
+      <hr>
+
+
+      <ul class="list-group">
+        <li
+          *ngFor="let u of usersService.users" class="list-group-item"
+          [ngClass]="{
+            'male': u.gender === 'M', 
+            'female': u.gender === 'F'
+          }"
+        >
+          <i
+            class="fa fa-3x"
+            [ngClass]="{
+            'fa-mars': u.gender === 'M',
+            'fa-venus': u.gender === 'F'
+          }"
+          ></i>
+
+          {{u.label}}
+
+          <i class="fa fa-trash fa-2x pull-right" 
+             (click)="usersService.deleteHandler(u)"></i>
+        </li>
+      </ul>
+    </div>
+  `,
+  styles: [`
+    .male { background-color: #36caff; }
+    .female { background-color: pink; }
+    .card { transition: all 0.5s }
+  `]
+})
+export class AppComponent {
+  constructor(public usersService: UsersService) {
+    usersService.init();
+  }
+}
+```
+</Code>
+
+
+# What is the problem?
+
+The form is not cleaned anymore after adding a new user:
+
+<Img src={import('./images/image (18).png')} w={400} quality={60} border />
+
+
+There are several solutions to solve this issue but since this is a beginner tutorial we'll find an easy way to fix it.
+
+# Solution 1: not the best one 🤮
+
+First we avoid to directly invoke the `saveHandler` service method directly from the template:
+
+
+<Code>
+```
+❌  (submit)="usersService.saveHandler(f.value)"
+```
+</Code>
+
+and we invoke a method of `AppComponent` class instead, passing again the whole `NgForm` object:
+
+<Code>
+```typescript
+✅  (submit)="saveHandler(f)"
+```
+</Code>
+
+
+
+Create a new `saveHandler()` method in `app.component.ts` and reset the form after invoking the service method:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+export class AppComponent {
+  constructor(public usersService: UsersService) {
+    usersService.init();
+  }
+
+  // NEW
+  saveHandler(form: NgForm) {
+    // invoke the saveHandler method of the service
+    this.usersService.saveHandler(form.value);
+    // NEW: Reset the form
+    form.reset({ gender: '' })
+  }
+}
+```
+</Code>
+
+<Hint>
+Be sure to import `NgForm` and `User` in `AppComponent`:
+
+  <Code>
+  ```javascript
+  import { NgForm } from '@angular/forms';
+  import { User } from './model/user';
+  // ...
+  ```
+  </Code>
+
+
+</Hint>
+
+
+<Hint>
+Now your app should work again but it's not the great solution.
+
+In fact the form is cleaned even when your REST API returns some errors when adding a new user, and it's not the right behavior.
+
+**The form should be cleaned only when server returns a valid response.**
+
+
+<Img isWindowed={false} src={import('./images/2022-11-30_01-21-29 (1).gif')} w={400} quality={60} border />
+
+</Hint>
+
+
+
+
+
+# Solution 2: use `Promise`
+
+Our goal is cleaning the form after the HTTP requests are successfully done but only the service currently know when it happens.
+
+**So, how can we notify the component that we need to clean the form at a certain moment?**
+
+We can use a JavaScript concept knows as [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+
+Open `UsersService`, wrap all the `saveHandler` content into a `Promise` and return it:
+
+<Code techs={['angular', 'ts']} title="<code>services/users.service.ts</code>">
+```javascript
+  saveHandler(user: User): Promise<void> {
+    // return a new promise
+    return new Promise((resolve, reject) => {
+      this.http.post<User>(`${this.URL}/users/`, user)
+        .subscribe({
+          // success
+          next: (newUser) => {
+            this.users = [...this.users, newUser];
+            // nofity the promise has successfully resolved
+            resolve(); 
+          },
+          // fail
+          error: () => {
+            // notify the operation has failed and send an error message
+            reject('server side error!')
+          }
+        });
+    });
+  }
+```
+</Code>
+
+<Hint title="RXJS Observer">
+Since this time we also want to handle HTTP errors, we now pass an object (aka "Observer") to the `subscribe` function of the `HttpClient` request.
+
+This object we'll invoke the function defined in the `next` property if it is resolved successfully, otherwise it invoke the `error` function.
+</Hint>
+
+Thanks to this approach we can now invoke the `saveHandler` method in the class component and wait for the result (success or failed)
+
+<Code>
+```ts
+this.usersService.saveHandler(form.value)
+  .then( () => /* do something */ )    // success
+  .catch(() => /* do something */);    // error
+```
+</Code>
+
+
+
+
+
+We can now open `AppComponent`, handle the promise in the `saveHandler()` method and finally reset the form when the HTTP request are successfully completed:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+export class AppComponent {
+  // NEW
+  error: string | null = null;
+
+  constructor(public usersService: UsersService) {
+    usersService.init();
+  }
+
+  saveHandler(form: NgForm) {
+    // NEW
+    this.usersService.saveHandler(form.value as User)
+      .then(() => {
+        // reset form
+        form.reset({ gender: '' });
+        // clean previous errors
+        this.error = null;
+      })
+      .catch((err) => {
+        // save error message to a new `error` class property
+        this.error = err;
+      })
+  }
+}
+```
+</Code>
+
+Now we can use the `error` property to display the error message in HTML template:
+
+<Code>
+```html
+<div class="container">
+  <div class="alert alert-danger" *ngIf="error">Server side error</div>
+  <!-- missing part -->
+```
+</Code>
+
+
+
+<Hint type="empty">
+We may also display the error message contained in the `error` property instead 
+</Hint>
+
+
+
+
+## Dev Tools Tip:  simulate offline  networks
+
+How to check if the  "error"  is shown?
+
+1. Load the app: users should be displayed.
+2. Open your "Browser Network DevTools" and set your application as 'offline'
+
+<Img src={import('./images/2022-11-30_01-28-34 (1).gif')} w={500} quality={60} border />
+
+Now add a new user: the operation fails and the error should be displayed just above the form:
+
+<Img src={import('./images/2022-11-30\_01-29-59 (1).gif')} w={500} quality={60} border />
+
+
+### How to check if the  "success" operation work?
+
+1. Re-open Network DevTool and set the application online: `No throttling`
+2. Add a new user
+3. Error should now be hidden and the form has been reset.
+
+#### Result:
+
+
+<Img src={import('./images/2022-11-30\_01-32-23 (1).gif')} w={500} quality={60} border />
+
+### FINAL SOURCE CODE
+
+There are better solutions to solve this issue but, at least, now it works fine :)
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { User } from './model/user';
+import { UsersService } from './services/users.service';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div class="container">
+      <h1>Users</h1>
+      <div class="alert alert-danger" *ngIf="error">Server side error</div>
+      <form
+        class="card card-body mt-3"
+        #f="ngForm"
+        (submit)="saveHandler(f)"
+        [ngClass]="{
+          'male': f.value.gender === 'M',
+          'female': f.value.gender === 'F'
+        }"
+      >
+        <input
+          type="text"
+          [ngModel]
+          name="label"
+          placeholder="Add user name"
+          class="form-control"
+          required
+          #labelInput="ngModel"
+          [ngClass]="{'is-invalid': labelInput.invalid && f.dirty}"
+        >
+
+        <select
+          [ngModel]
+          name="gender"
+          class="form-control"
+          required
+          #genderInput="ngModel"
+          [ngClass]="{'is-invalid': genderInput.invalid && f.dirty}"
+        >
+          <option value="">Select option</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+
+  
+        <button
+          class="btn"
+          [disabled]="f.invalid"
+          [ngClass]="{
+            'btn-success': f.valid,
+            'btn-danger': f.invalid
+          }"
+        >Save</button>
+      </form>
+
+      <hr>
+
+
+      <ul class="list-group">
+        <li
+          *ngFor="let u of usersService.users" class="list-group-item"
+          [ngClass]="{
+            'male': u.gender === 'M', 
+            'female': u.gender === 'F'
+          }"
+        >
+          <i
+            class="fa fa-3x"
+            [ngClass]="{
+            'fa-mars': u.gender === 'M',
+            'fa-venus': u.gender === 'F'
+          }"
+          ></i>
+
+          {{u.label}}
+
+          <i class="fa fa-trash fa-2x pull-right" 
+             (click)="usersService.deleteHandler(u)"></i>
+        </li>
+      </ul>
+    </div>
+  `,
+  styles: [`
+    .male { background-color: #36caff; }
+    .female { background-color: pink; }
+    .card { transition: all 0.5s }
+  `]
+})
+export class AppComponent {
+  error: string | null = null;
+  constructor(public usersService: UsersService) {
+    usersService.init();
+  }
+
+  saveHandler(form: NgForm) {
+    this.usersService.saveHandler(form.value as User)
+      .then(() => {
+        form.reset({ gender: '' });
+        this.error = null;
+      })
+      .catch((err) => this.error = err);
+  }
+}
+
+```
+</Code>
+
+
+<Code techs={['angular', 'ts']} title="<code>/services/users.service.ts</code>">
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { User } from '../model/user';
+
+@Injectable({ providedIn: 'root'})
+export class UsersService {
+  users: User[] = [];
+  URL = 'http://localhost:3000';
+
+  constructor(private http: HttpClient) { }
+
+  init() {
+    this.http.get<User[]>(this.URL + '/users')
+      .subscribe(res => {
+        this.users = res;
+      });
+  }
+
+  deleteHandler(userToRemove: User) {
+    this.http.delete(`${this.URL}/users/${userToRemove.id}`)
+      .subscribe(() => {
+        this.users = this.users.filter(u => u.id !== userToRemove.id);
+      });
+  }
+
+  saveHandler(user: User): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.post<User>(`${this.URL}/users/`, user)
+        .subscribe({
+          next: (newUser) => {
+            this.users = [...this.users, newUser];
+            resolve();
+          },
+          error: () => reject('server side error!')
+        });
+    });
+  }
+}
+
+```
+</Code>
+
+# Solution 3: RxJS and `shareReplay`
+
+Another interesting alternative way to fix the same problem is by using RxJS only.
+
+<Hint type="alert" title="ALERT">
+Don't worry if you don't completely understand the next example. 
+It's tricky if you've never used reactive programming and RxJS.
+</Hint>
+
+We can update `saveHandler` in `users.service.ts` just as shown below:
+
+<Code techs={['angular', 'ts']} title="<code>/services/users.service.ts</code>">
+```typescript
+saveHandler(user: User) {
+  // Save the HttpClient request 
+  const usersReq$ = this.http.post<User>(`${this.URL}/users/`, user)
+    .pipe(shareReplay(1));
+
+  // subscribe the HttpClient request and add the new user to the array
+  // when the HTTP request is successfully completed
+  usersReq$.subscribe(newUser => {
+    this.users = [...this.users, newUser];
+  });
+
+  // return the Observable
+  return usersReq$;
+}
+```
+</Code>
+
+
+Update `app.component`:
+
+<Code techs={['angular', 'ts']} title="<code>app-component.ts</code>">
+```typescript
+
+  saveHandler(form: NgForm) {
+    this.usersService.saveHandler(form.value as User)
+      .subscribe({
+        next: () => {
+          form.reset({ gender: '' });
+          this.error = null;
+        },
+        error: () => {
+          this.error = 'Some errors here! 😅'
+        }
+      })
+  }
+```
+</Code>
+
+<Hint title="WHY shareReplay?">
+We have used the `shareReplay` RxJS operator because we want to subscribe the `users$` observable in both, the service and the component.
+Since all the observable are COLD by default (it means that every subscribe generates a new execution of the observable),
+the REST API will be invoked twice if we subcribe the `HttpClient` in the service and in the component.
+
+So we use the `shareReplay` operator in order to share and replay the emission of the value generated by the `HttpClient` avoiding the double request.
+
+<br />
+**Don't worry if this process is not clear. RxJS is not so easy to understand**
+
+<br />
+Resources:
+
+* [RxJS Documentation](https://rxjs.dev/)
+* [LearnRxJs.io](https://www.learnrxjs.io/)
+</Hint>
+
+
+The result is the same as before:
+
+<Img src={import('./images/2022-11-30\_01-21-29 (1).gif')} w={400} quality={60} border />
+
+
+
+
+
+
+
+<HDivider secondary>WHAT'S NEXT</HDivider>
+
+That's all. You have completed this tutorial but you can try to solve the next challenges to prove yourself or learn something new.
+
+<TutorialSeries frontmatter={frontmatter} />
+
+
+
+<br />
+<BannerPromoAngular></BannerPromoAngular>
+<br />
+

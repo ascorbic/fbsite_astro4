@@ -1,0 +1,206 @@
+---
+layout: ../../../components/video-courses/VideoCoursesLayout.astro
+css: 'dark-slate'
+slug: 'next-fundamentals'
+title: NextJS Fundamentals
+title1: NextJS 12/13<br> Fundamentals
+title2: Video Corso
+description: Un corso su <span class="font-bold">NextJS</span> e <span class="font-bold">TypeScript</span> per creare siti web e applicazioni performanti e SEO-Friendly! <br /><br />NextJS è attualmente il framework più apprezzato per la creazione di landing page e web app in React performanti e ottimizzate per i motori di ricerca. <br /><br />Creato in collaborazione con <a href="https://www.youtube.com/@TheCarmhack" target="_blank" class="link">Adriano Grimaldi</a>.
+author: ['Fabio Biondi']
+badge: UPDATED v.13
+image: 
+  blur: "images/emote-next.png"
+  url: "images/emote-next.png"
+  alt: "Next Fundamentals"
+lastUpdate: 2023-01-10
+tags: ["next", "react", "typescript"]  
+difficulty: 1
+draft: false
+stats: [
+  {v: 135, unit: 'video', text: ''},
+  {v: 10, unit: 'ore', text: 'su Next v.12'},
+  {v: 1, unit: 'ora', text: 'su Next v.13'},
+  {v: 2, unit: 'docenti', text: 'Fabio Biondi e Adriano Grimaldi'},
+]
+videoSeries: 
+  name: react
+  idx: 150
+---
+
+import * as C from '../../../components/video-courses/components/'
+import * as W from '@widgets'
+// import StackBlitz from '@widgets/StackBlitz'; // NOTE: cannot be exported from barrel file
+import {lessons} from './program';
+import {lessonsNext13} from "./programNext13";
+import {programJS} from '../js-ts/program';
+
+<div class="text-center mb-12"> 
+   # Il corso include:
+</div>
+
+
+<C.BulletPoints 
+  frontmatter={frontmatter}
+  video="https://www.youtube.com/embed/B18X-d8jDsU"
+  items={[
+    { id: '1', t: 'Performance & SEO', d: 'Applica Server Side Rendering (SSR) e Static Generation (SSG) per creare siti / applicazioni performanti e ottimizzate per i motori di ricerca' },
+    { id: '2', t: '3d party libraries', d: 'Crea backoffice in Strapi, Firebase, AirTable e utilizza moltissime altre tecnologie per velocizzare lo sviluppo' },
+    { id: '3', t: 'TypeScript', d: 'L\'unica risorsa italiana che descrive NextJS con l\'utilizzo di TypeScript allo scopo di creare codice più solido e type-safed' },
+    { id: '4', t: 'Next v.13', d: '5 capitoli dedicati alle ultime novità introdotte in Next V.13' },
+  ]}
+/>
+ 
+
+
+
+<C.ImageGrid bg title="A chi è rivolto" items={[
+  { 
+    t: 'SVILUPPATORI REACT', d: 'Per sviluppatori React, anche alle prime armi, che desiderano creare siti web performanti e ottimizzati per i motori di ricerca in NextJS e TypeScript', 
+    image: import('../../../images/brand/emote_react_right.png')
+  },
+  { 
+    t: 'NON CONOSCI REACT?', d: 'Per seguire questo corso non è necessario conoscere perfettamente React! Tuttavia, per sfruttare NextJS al massimo del suo potenziale ti consigliamo ovviamente di studiarlo prima di acquistare questo corso',
+    image: import('../../../images/brand/emote-read.png'),
+    align: 'right'
+  },
+]}>
+</C.ImageGrid>
+
+
+
+<C.ImageGrid title="Punti di forza" items={[
+  { 
+    t: 'Per principianti ed esperti', d: 'Un corso adatto a principianti ed esperti che avranno la possibilità di apprendere tutti i segreti del framework', 
+    image: import('../../../images/brand/emote-wizard.png')
+  },
+  
+  { 
+    t: 'Amazing Technologies', d: 'Tailwind, Azure, Strapi, Firebase, Supabase, AirTable sono solo alcune delle tecnologie utilizzate durante il corso',
+    image: import('../../../images/brand/emote-ninja.png')
+  },
+  { 
+    t: 'Dalle basi al deploy', d: 'Analizzeremo le funzionalità base del framework (stili, font, images, routing, ...), prendending con Server Side Rendering (SSR) e Static Site Generation (SSG), creazione endpoint REST e procedure di deploy',
+    image: import('../../../images/brand/emote-laptop.png')
+  },
+  { 
+    t: 'Versione', d: 'Tutti gli esercizi e i progetti creati durante il corso utilizzano TypeScript (con Next 12.x e React 17.x ma totalmente compatibile con React 18.x). <br/>Include, inoltre, molti nuovi video sulle novità introdotte in Next v.13',
+    image: import('../../../images/brand/emote-calendar-angular.png')
+  },
+]}>
+Tutto ciò di cui hai bisogno per creare web application SEO-Friendly e performanti
+
+</C.ImageGrid>
+
+
+<C.Program
+  row1="Argomenti trattati nel corso"
+  row2="Next v.12 Fundamentals"
+  data={lessons}
+  frontmatter={frontmatter}
+   />
+
+
+<C.ProgramList
+  row1="Novità 2023"
+  row2="Next v.13: nuove API e funzionalità"
+  description="Questo mini corso di un'ora, realizzato a giugno 2023, include una panoramica sulle funzionalità introdotte in Next V.13: React Server e Client Components, la cartella 'App Router', nuove strategie per il fetch di dati e gestione stato globale in applicazioni Next"
+  data={lessonsNext13}
+  frontmatter={frontmatter}
+/>
+
+<W.P title="BONUS">
+Incluso nel prezzo un video corso propedeutico su JavaScript ES6 / TypeScript 
+</W.P>
+
+<C.Program
+  row1="Argomenti trattati nel corso"
+  row2="JavaScript & TypeScript "
+  data={programJS} 
+  frontmatter={frontmatter}/>
+
+
+<W.Separator size="xl" />
+<h1 class="text-center"> Estratto dal corso </h1>
+<W.Separator size="md" />
+
+<C.BulletPoints  
+  video="https://www.youtube.com/embed/Z1caHiREIq4"
+  textTitle="Le utility di Next"
+  text={`
+    Next include moltissime utility per velocizzare lo sviluppo e migliorare la Developer eXperience: ottimizzazione immagini, router, strategie per la gestione di script JavaScript, un server NODE per la creazione di API REST e molto altro...
+  `}
+/>
+
+<C.BulletPoints  
+  right
+  video="https://www.youtube.com/embed/wGtWCK9c-ag"
+  textTitle="Pre-Rendering, SSR, SSG e ISR"
+  text={`
+    Next offre tre modalità di pre-rendering allo scopo di ottimizzare le performance e ottimizzare per i motori di ricerca: Server Side Rendering (SSR), Static Site Generation (SSG) e Incremental Static Regeneration (ISR)
+  `}
+/>
+
+<C.BulletPoints  
+  video="https://www.youtube.com/embed/dC7h4h-mdb8"
+  textTitle="No-Code: BackEnd in AirTable"
+  text={`
+    Airtable è uno strumento utilissimo per la creazione di backend senza la necessità di cnoscere un linguaggio server side. In questo video analizziamo il suo potenziale utilizzandolo per la gestione di dati di un sito web sviluppato in NextJS, React e TypeScript tramite l’utilizzo della Static Site Generation (SSG)
+  `}
+/>
+
+<C.BulletPoints  
+  right
+  video="https://www.youtube.com/embed/IjhN0TokzJ8"
+  textTitle="Landing page con NextJS"
+  text={`
+    Un modulo dedicato allo sviluppo di una landing page con NextJS, Bootstrap 5, SASS ed email-js. Il progetto simula un caso d'uso tipico di NextJS: la creazione di un sito web per la vendita di un prodotto (EasyFisco) dedicato ai liberi professionisti per la gestione della fiscalità e dei clienti tramite consulenti fiscali dedicati e una web app. 
+    <br/><br/>Il tutto sarà creato sfruttando la Static Generation offerta da NextJS.
+  `}
+/>
+
+
+
+<div>
+  <C.Pricing 
+    frontmatter={frontmatter} 
+    left={{
+      title: 'Multi Licenza',
+      price: {
+        value: '50', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Stessi vantaggi del piano Standard',
+        'Prezzo scontato per 5 o più utenti',
+        'Report / Progress per singolo utente',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 5 licenze del corso Next Fundamentals'
+      }
+    }}
+    center={{
+      badge: 'Il più venduto!',
+      title: 'Singolo Utente',
+      price: {
+        value: '89', currency: '€', unit: '+ iva'
+      },
+      items: [
+        'Corso Next Fundamentals <br /> (135 video | 10+ ore)',
+        'Mini Corso Next V.13 <br /> (26 video | 1 ora)',
+        'Corso JavaScript / TypeScript <br /> (30 video | 3+ ore)',
+        '15 gg soddisfatto o rimborsato',
+      ],
+      button: {
+        label: 'PROCEDI',
+        link: 'https://fabiobiondi.teachable.com/purchase?product_id=4920273',
+        link59: 'https://fabiobiondi.teachable.com/purchase?product_id=4711184',
+        linkOLD: 'https://fabiobiondi.teachable.com/purchase?product_id=4560564',
+        target: '_blank'
+      }
+    }}
+  />
+</div>
+<C.Faq frontmatter={frontmatter}/>
+
+<W.Notes>
+</W.Notes>

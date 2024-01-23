@@ -1,0 +1,23 @@
+#new_blog #angular #tutorial #beginner
+I finally have a new blog in which I will mainly publish two types of content:
+➡️ Snippets, Quick Posts, Notes
+➡️ Step-by-Step Tutorials that you can use to practice and learn stuff
+It's completely built from scratch in Astro and Tailwind and I will talk about it in another post.
+Anyway today I want to share the first tutorial about Angular for absolute beginners, and I would like to test the blog too. 
+
+If you have never used Angular this is a good starting point.
+In this step-by-step tutorial you will learn:
+➡️ How to use a code playground (StackBlitz)
+➡️ what is the interpolation
+➡️ the differences between attribute and structural directives 
+➡️ familiarize yourself with Angular.
+
+So you will develop your first hello world web application in Angular (v.15) by the creation of a simple counter. 
+You will learn how to create dinamic HTML templates, work with CSS, the concept of interpolation, the differences between attribute / structural directives and familiarize yourself with the framework.
+
+⭐️⭐️⭐️ 
+Please report any issues to me in the comments and let me know what you think 
+⭐️⭐️⭐️ 
+
+
+https://www.fabiobiondi.dev/tutorials/angular/angular-basics/1-angular-hello-world

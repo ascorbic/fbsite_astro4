@@ -1,0 +1,216 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: react/vite-and-vitest
+route: '3-react-vitest-testing-library-test-react-components'
+title: Vitest & React Testing Library
+title1: Vitest & React Testing Library
+title2: Write test for React components
+author: ['Fabio Biondi']
+description: 
+image: 
+  blur: 'react/vite-and-vitest/image.png'
+  url: null
+  alt: Hello React Vitest
+  series: 'react/vite-and-vitest/image.png'
+pubDate: 2022-12-26
+tags: ["react", "typescript"] 
+series: 
+  name: "React, TypeScript and Vitest: write your first test"
+  idx: 3
+difficulty: 1
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import StackBlitz from '@widgets/StackBlitz'
+import Notes from '@widgets/Notes.astro'
+import Hint from '@widgets/Hint.astro';
+
+
+
+
+# React Testing Library
+
+[Vitest](https://vitest.dev/) does not offer any utility to test React components and  [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is one of the powerful and most used library in the market.
+
+We also need to install a library like [jsdom](https://github.com/jsdom/jsdom) since we're using HTML / DOM.
+
+<Code>
+```bash
+npm install  @testing-library/react jsdom @testing-library/jest-dom -D
+```
+</Code>
+
+
+Create a new React Component:
+
+<Code title="<Code>components/Hello.tsx</Code>" techs={['react', 'ts']}>
+```tsx
+export default function Hello() {
+  return <div>Hello World</div>
+}
+```
+</Code>
+
+And a replace the content of our test (`Hello.test.ts`), that we also need to rename now to `Hello.test.tsx`:
+
+<Hint>
+  Don't forget to use the `.tsx` extension to support JSX syntax in your tests
+</Hint>
+
+<Code title="<Code>components/Hello.test.tsx</Code>" techs={['react', 'ts']}>
+```tsx
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Hello from './Hello';
+
+test('render text', () => {
+  render(<Hello />);
+  expect(screen.getByText('Hello World')).toBeInTheDocument();
+});
+```
+</Code>
+
+And run test :
+
+<Code>
+```
+npm run test
+```
+</Code>
+
+You'll get an error :
+
+<Code>
+```
+ReferenceError: document is not defined
+```
+</Code>
+
+<Img src={import('./images/2023-01-04-10-17-11.png')} w={600} quality={60} border />
+
+To fix this issue you need to add the support of `jsdom` in your `vite.config.ts`:
+
+<Code title="<Code>vite.config.ts</Code>" techs={['ts']}>
+```ts
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import checker from 'vite-plugin-checker';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  // NEW
+  test: {
+    globals: true,
+    environment: 'jsdom',  // <==
+  },
+  plugins: [
+    react(),
+    checker({ typescript: true }),
+    // You can also disable type checking when running testing with Vitest
+    // !process.env.VITEST ? checker({ typescript: true }) : undefined,
+  ],
+})
+```
+</Code>
+
+But now you'll get another error:
+
+<Code>
+```
+Error: Invalid Chai property: toBeInTheDocument
+```
+</Code>
+
+But we're not using Chai.
+
+`toBeInTheDocument` is part of "Testing Library Jest DOM" API that is used to append its assertions in the test setup file.
+
+So now create a `setupTests.ts` file in the project root folder (close to `tsconfig.json)`):
+
+<Code title="<Code>setupTests.ts</Code>" techs={['ts']}>
+```ts
+import { expect, afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
+import matchers from '@testing-library/jest-dom/matchers';
+
+// extends Vitest's expect method with methods from react-testing-library
+expect.extend(matchers);
+
+// runs a cleanup after each test case (e.g. clearing jsdom)
+afterEach(() => {
+  cleanup();
+});
+
+```
+</Code>
+
+
+
+
+So we just need to update `tsconfig.json` and add the reference to the setup test file.
+Furthermore we also add the `include` property to define which file Vitest should analyze:
+
+
+<Code title="<Code>vite.config.ts</Code>"  techs={['ts']}>
+```ts
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import checker from 'vite-plugin-checker';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  // NEW
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'], // <==
+    setupFiles: './setupTests.ts', // <==
+  },
+  plugins: [
+    react(),
+    checker({ typescript: true }),
+  ],
+})
+
+```
+</Code>
+
+Now you should kill the current process (<Key>CTRL</Key> + <Key>C</Key>) and run tests again: `npm run test`.
+
+It should works fine now.
+
+<Img src={import('./images/2023-01-04-10-30-50.png')} w={600} quality={60} border />
+
+But we may still have a warning on our IDE:
+
+<Img src={import('./images/2023-01-04-10-31-42.png')} w={600} quality={60} border />
+
+Add `@testing-library/jest-dom` types to `tsconfig.json` to fix it:
+
+<Code title="<Code>tsconfig.json</Code>" techs={['ts']}>
+```ts
+  "compilerOptions": {
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    // ...
+  }
+```
+</Code>
+
+In the next chapter we'll install Vitest UI, a web user interface to run and check your tests.
+
+<TutorialSeries frontmatter={frontmatter} />
+

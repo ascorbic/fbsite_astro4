@@ -1,0 +1,668 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: angular/simple-crud-in-angular
+route: '3-template-driven-forms'
+title: Template Driven Forms and Validations
+title1: Angular 15
+title2: Template Driven Forms 
+author: ['Fabio Biondi']
+description: One of the most complex and repetitive task you will encounter when you're developing a Single Page Application is the creation of forms.<br /><br/>I love and use React, Svelte, SolidJS and several other modern JS frameworks but IMHO Angular is by far the best framework for managing several types of forms. <br/><br/>So, when you're choosing the front-end technology to use in your next project keep this in mind 😅
+image: 
+  blur: 'angular/simple-crud-in-angular/image.png'
+  url: null
+  alt: Create a simple CRUD app
+  series: 'angular/simple-crud-in-angular/image.png'
+pubDate: 2022-12-28
+tags: ["angular", "typescript"] 
+series: 
+  name: "Create a simple CRUD app"
+  idx: 3
+difficulty: 1
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+// import Example1 from './demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import Hint from '@widgets/Hint.astro';
+import Toggle from '@widgets/Toggle.astro';
+import BannerPromoAngular from '@widgets/BannerPromoAngular.astro';
+
+
+
+
+<Hint title="Template Driven Forms vs Reactive Forms">
+Angular offers two approaches: 
+
+<br />
+• **Template driven forms**:  based on template directives. It requires more or less **zero JavaScript code**.
+
+• **Reactive Forms**: defined programmatically at the level of component class.
+<br />
+
+Although Reactive Forms represent the best choice for most applications, as they are more powerful and strongly typed, we'll use template driven forms because they are very simple to use and allow us to become familiar with the framework and its template system
+
+
+</Hint>
+
+# TOPICS
+
+
+
+# Goal
+
+In this recipe you will create a _template-driven_ Angular form in order to add new users to the list.
+
+
+<Img src={import('./images/2022-11-30_00-31-27 (1).gif')} w={400} quality={60} border />
+
+
+### `FormsModule`
+
+In order to work with template-driven forms, you need to import `FormsModule` in `AppModule` (`src/app/app.module.ts`):
+
+<Hint>
+  `FormsModule` is the collection of "utilities" and directives you need to import in order use Template Driven Forms in your components.
+</Hint>
+
+<Code techs={['angular', 'ts']} title="<code>app.module.ts</code>">
+```javascript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';   // NEW
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule                                 // NEW
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+</Code>
+
+
+
+# Create the Form
+
+Add a form just above the list (below the `<h1>Users</h1>`. <br/ >
+I'll explain later how it works step by step:
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<!--
+<div class="container">
+  <h1>Users</h1>
+-->
+  
+    <form
+      class="card card-body mt-3"
+      #f="ngForm"
+      (submit)="saveHandler(f)"
+    >
+      <input
+        type="text"
+        ngModel
+        name="label"
+        placeholder="Add user name"
+        class="form-control" 
+        required
+      >
+  
+      <select
+        ngModel
+        name="gender"
+        class="form-control"
+        required
+      >
+        <option value="">Select option</option>
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+  
+      <button
+        class="btn btn-dark"
+        [disabled]="f.invalid"
+      >Save</button>
+    </form>
+    
+    <hr>
+
+    <!--LIST BELOW: NO CHANGES HERE-->
+```
+</Code>
+
+
+
+# How it works
+ 
+
+* ` <form #f="ngForm">`: this syntax creates the `f` variable that is available in any part of the template. It holds the instance of the form that you can use to get its content (`f.value`) and its status: `f.valid`, `f.dirty`, `f.touched` and more... <br /><br />
+
+* In fact, it will be used to automatically disable the submit `<button>` when form is invalid (since both, `button` and `select`, have a `required` attribute  <br /><br />
+
+<Code>
+```html
+<button [disabled]="f.invalid">Save</button>
+```
+</Code>
+
+
+* `<input ngModel name="label"`: 
+`ngModel` allow you to create an instance of the "form control" that will be available in the main form instance.
+<br /> In this way, the form can know that these fields exists,  get its values and know if they are `dirty`, `touched` and so on.
+
+<Hint title="ngModel vs [ngModel]">
+`ngModel` is a directive and can be used with or without square brackets.
+
+We usually use brackets when we want bind a state to a form control, i.e. `[ngModel]="value"` but this is not the case.
+We only want that form controls are recognized by Angular so we don't need them. 
+
+<br />
+Anyway there is an important different: the default value of a form control is an empty string when we don't use brackets, while is `null` when we use them.
+</Hint>
+
+
+* `(submit)="saveHandler(f)"`: invoke the method when the form is submitted passing the reference to the form as paremeter. 
+You can then get the value of each control using `f.value` that returns an object whose keys are the `name` attributes of each control:
+
+
+<Code title="<code>f.value</code>">
+```json
+{
+  name: 'anything',
+  gender: 'M' 
+}
+```
+</Code>
+
+
+<br /><br />
+
+
+
+* the `text` input and the `select` works more or less in the same way. The only difference is that the `select` contains some default values.<br /><br />
+
+* `<option value="">`: associate an empty string to the default `select` option. 
+
+# Add new User
+
+Anyway your code still doesn't work.
+You still need to create the `saveHandler` method in your `app.component` class that will be invoked when the form is submited.
+
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+saveHandler(f: NgForm) {
+  const user = f.value as User;
+  user.id = Date.now(); // create a fake ID (i.e. a timestamp)
+  this.users = [...this.users, user]
+  f.reset({gender: ''});
+}
+```
+</Code>
+
+<Hint title="Why a fake ID?">
+In the previous snippet we assigned a fake ID by using a timestamp with `Date.now()`. <br/>
+In the next recipes it will be generated by the server but it's temporarily useful to assign a different ID to each element (otherwise you cannot delete them since this operation needs an ID).
+</Hint>
+
+<Hint title="Why `reset({gender: ''})` ?">
+The default value of each form control is an empty string since we have used `ngModel` without brackets.
+<br />
+However the `reset` form method set all form control values to `null` and there are no `<option>` elements that handle it. So we must manually set the `gender` value to an empty string in order to display the default `<option>` when form is reset.
+`<input>`s form controls don't suffer of this issue because even when they are set to `null` they simply don't display anything.
+</Hint>
+
+
+You also need to import `NgForm` in `AppComponent` in order to work:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+import { NgForm } from '@angular/forms';
+```
+</Code>
+
+
+
+<Hint type="info" title="JAVASCRIPT TIP">
+Instead of using array spread operator `[...this.users, value]` you may also push the new value `this.users.push(user)`. See the [previous chapter](./2-display-list) to know more about **Immutability** 
+</Hint>
+
+#### PREVIEW
+
+Refresh the browser and try it on [`http://localhost:4200``](https://localhost:4200).
+
+<Img src={import('./images/image (19).png')} w={400} quality={60} border />
+
+
+### SOURCE CODE
+
+Here the completed source code of `app.component`:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+
+```tsx
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { User } from './model/user';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div class="container">
+      <h1>Users</h1>
+
+      <form
+        class="card card-body mt-3"
+        #f="ngForm"
+        (submit)="saveHandler(f)"
+      >
+        <input
+          type="text"
+          ngModel
+          name="label"
+          placeholder="Add user name"
+          class="form-control" required>
+
+        <select
+          ngModel
+          name="gender"
+          class="form-control"
+          required
+        >
+          <option value="">Select option</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+
+        <button
+          class="btn btn-dark"
+          [disabled]="f.invalid"
+        >Save</button>
+      </form>
+
+      <hr>
+
+      <!--LIST BELOW: NO CHANGES HERE-->
+      <hr>
+        
+      <ul class="list-group">
+        <li
+          *ngFor="let u of users" class="list-group-item"
+          [ngClass]="{
+            'male': u.gender === 'M', 
+            'female': u.gender === 'F'
+          }"
+        >
+          <i
+            class="fa fa-3x"
+            [ngClass]="{
+            'fa-mars': u.gender === 'M',
+            'fa-venus': u.gender === 'F'
+          }"
+          ></i>
+          
+          {{u.label}}
+
+          <i class="fa fa-trash fa-2x pull-right" (click)="deleteHandler(u)"></i>
+        </li>
+      </ul>
+    </div>
+  `,
+  styles: [`
+    .male { background-color: #36caff; }
+    .female { background-color: pink; }
+  `]
+})
+export class AppComponent {
+  users: User[] = [
+    { id: 1, label: 'Fabio', gender: 'M', age: 20 },
+    { id: 2, label: 'Lorenzo', gender: 'M', age: 37 },
+    { id: 3, label: 'Silvia', gender: 'F', age: 70 },
+  ];
+
+  deleteHandler(userToRemove: User) {
+    this.users = this.users.filter(u => u.id !== userToRemove.id);
+  }
+  saveHandler(f: NgForm) {
+    const user = f.value as User;
+    user.id = Date.now(); // create a fake ID
+    this.users = [...this.users, user]
+    f.reset({gender: ''});
+  }
+}
+
+```
+</Code>
+
+
+
+
+
+# Play with CSS and Transitions
+
+We simply want to apply a different background color to the form itself when user selects the gender from the `select`:
+
+
+<Img src={import('./images/2022-11-30\_00-39-51 (1) (1).gif')} w={400} quality={60} border />
+
+
+
+
+## Dynamic Form Background
+
+Now we use `ngClass` to display a blue or a pink background to the form in according to the gender selection:
+
+<Img src={import('./images/2022-11-30\_00-34-55 (1).gif')} w={400} quality={60} border />
+
+
+So, update the following previous code:
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<form
+  class="card card-body mt-2"
+  #f="ngForm" 
+  (submit)="saveHandler(f)"
+>
+```
+</Code>
+
+To:
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<form
+  class="card card-body mt-2"
+  #f="ngForm" 
+  (submit)="saveHandler(f)"
+  [ngClass]="{
+    'male': f.value.gender === 'M',
+    'female': f.value.gender === 'F'
+  }"
+>
+```
+</Code>
+
+It should already works but we also want add a nice transition between colors.
+
+So we can simple override the Bootstrap `.card` CSS class  adding the `transition` property:
+
+<Code techs={['angular', 'css']} title="<code>app.component.ts</code> (in <code>styles</code> property)">
+```css
+styles: [`
+  .male { background-color: #36caff; }
+  .female { background-color: pink; }
+  .card { transition: all 0.5s }
+`]
+```
+</Code>
+
+
+
+## "SAVE" Button Color
+
+We also want to apply a different color to the Submit Button:
+
+* When the form is `valid`: the button should be green
+* When the form is `invalid`: the button should be red
+
+<Img src={import('./images/2022-11-30_00-36-36 (1).gif')} w={400} quality={60} border />
+
+Use the `ngClass` directive to apply a different CSS class to the "save" button when form is `valid` or invalid:
+
+From:
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<button
+  class="btn"
+  [disabled]="f.invalid"
+>Save</button>
+```
+</Code>
+
+To:
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<button
+  class="btn"
+  [disabled]="f.invalid"
+  [ngClass]="{
+    'btn-success': f.valid,
+    'btn-danger': f.invalid
+  }"
+>Save</button>
+```
+</Code>
+
+
+
+
+
+
+# Input validations
+
+Currently we only know if the form itself is `invalid` but we also would like to know which
+ of the _form controls_ are invalid in order to display a different message for each one or, 
+ just like in the following example, apply an error CSS class to them. 
+
+ 
+
+<Img src={import('./images/2022-11-30\_00-38-37 (1).gif')} w={600} quality={60} border />
+
+
+So, replace the following code:
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<input
+  type="text"
+  ngModel
+  name="label"
+  placeholder="Add user name"
+  class="form-control" required>
+
+<select
+  ngModel
+  name="gender"
+  class="form-control"
+  required
+>
+```
+</Code>
+
+To the following one:
+
+<Hint>  The `is-invalid` CSS class is provided by Bootstrap</Hint>
+
+<Code techs={['angular', 'html']} title="<code>app.component.ts</code> (in HTML template)">
+```html
+<input
+  type="text"
+  ngModel
+  name="label"
+  placeholder="Add user name"
+  class="form-control"
+  required
+  #labelInput="ngModel"
+  [ngClass]="{'is-invalid': labelInput.invalid && f.dirty}"
+>
+
+<select
+  ngModel
+  name="gender"
+  class="form-control"
+  required
+  #genderInput="ngModel"
+  [ngClass]="{'is-invalid': genderInput.invalid && f.dirty}"
+>
+```
+</Code>
+
+
+
+<Hint title="What do we did?">
+We assigned each `ngModel` to a _template reference variable_ that can be used to know if a form control is `invalid`, `dirty`, `touched` and we can also know which `errors` it contains
+</Hint>
+
+
+<Hint title="Why check if form is `dirty`?" type="empty">
+In the snippet below we apply the `is-invalid` Bootstrap CSS class to the `input` and the `select` when they are `invalid` and, at the same time, the whole form is `dirty`.
+
+In fact, **I would see all the controls colored by red when the page is loaded if I had only checked if a form control is invalid** . <br />
+But I want to show errors only when users starts to interact with the form (so it's `dirty`)!
+</Hint>
+
+
+#### TRY IT
+
+Refresh the browser and try it on [`http://localhost:4200`](https://localhost:4200).
+
+
+<Img src={import('./images/2022-11-30_00-39-51 (1).gif')} w={400} quality={60} border />
+
+
+# Final Source Code
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```html
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { User } from './model/user';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div class="container">
+      <h1>Users</h1>
+
+      <form
+        class="card card-body mt-3"
+        #f="ngForm"
+        (submit)="saveHandler(f)"
+        [ngClass]="{
+          'male': f.value.gender === 'M',
+          'female': f.value.gender === 'F'
+        }"
+      >
+        <input
+          type="text"
+          ngModel
+          name="label"
+          placeholder="Add user name"
+          class="form-control"
+          required
+          #labelInput="ngModel"
+          [ngClass]="{'is-invalid': labelInput.invalid && f.dirty}"
+        >
+
+        <select
+          ngModel
+          name="gender"
+          class="form-control"
+          required
+          #genderInput="ngModel"
+          [ngClass]="{'is-invalid': genderInput.invalid && f.dirty}"
+        >
+          <option value="">Select option</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+
+  
+        <button
+          class="btn"
+          [disabled]="f.invalid"
+          [ngClass]="{
+            'btn-success': f.valid,
+            'btn-danger': f.invalid
+          }"
+        >Save</button>
+      </form>
+
+      <hr>
+
+      <!--LIST BELOW: NO CHANGES HERE-->
+      <hr>
+
+      <ul class="list-group">
+        <li
+          *ngFor="let u of users" class="list-group-item"
+          [ngClass]="{
+            'male': u.gender === 'M', 
+            'female': u.gender === 'F'
+          }"
+        >
+          <i
+            class="fa fa-3x"
+            [ngClass]="{
+            'fa-mars': u.gender === 'M',
+            'fa-venus': u.gender === 'F'
+          }"
+          ></i>
+
+          {{u.label}}
+
+          <i class="fa fa-trash fa-2x pull-right" (click)="deleteHandler(u)"></i>
+        </li>
+      </ul>
+    </div>
+  `,
+  styles: [`
+    .male { background-color: #36caff; }
+    .female { background-color: pink; }
+    .card { transition: all 0.5s }
+  `]
+})
+export class AppComponent {
+  users: User[] = [
+    { id: 1, label: 'Fabio', gender: 'M', age: 20 },
+    { id: 2, label: 'Lorenzo', gender: 'M', age: 37 },
+    { id: 3, label: 'Silvia', gender: 'F', age: 70 },
+  ];
+
+  deleteHandler(userToRemove: User) {
+    this.users = this.users.filter(u => u.id !== userToRemove.id);
+  }
+  saveHandler(f: NgForm) {
+    const user = f.value as User;
+    user.id = Date.now(); // create a fake ID
+    this.users = [...this.users, user]
+    f.reset({gender: ''});
+  }
+}
+```
+</Code>
+
+
+
+<HDivider secondary>WHAT'S NEXT</HDivider>
+
+<TutorialSeries frontmatter={frontmatter} />
+
+<br />
+<BannerPromoAngular></BannerPromoAngular>
+<br />
+
+
+

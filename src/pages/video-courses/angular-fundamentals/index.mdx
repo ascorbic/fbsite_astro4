@@ -1,0 +1,212 @@
+---
+layout: ../../../components/video-courses/VideoCoursesLayout.astro
+css: 'red'
+badge: UPDATE v.16
+slug: 'angular-fundamentals'
+title: Angular Fundamentals
+title1: Angular<br /> Fundamentals 
+title2: Video Corso
+description: Scopri le principali funzionalità del noto framework sviluppato da Google. <br/><br/> Moltissimi esempi e casi d’uso tramite i quali non solo potrete apprendere i concetti fondamentali per la creazione di Single Page Application ma applicare, fin da subito, pattern, metodologie e best practice tramite sessioni di teoria, pratica e live-coding. <br /> <br />Un corso adatto sia ai principianti, che ai developer più esperti che già utilizzano il framework. <br> <br> È inoltre incluso un aggiornamento su molte delle novità introdotte da Angular 16, come Standalone Projects, Signals e nuove API.
+author: ['Fabio Biondi']
+image: 
+  blur: "images/emote-angular-love.png"
+  url: "images/emote-angular-love.png"
+  alt: "Angular Fundamentals"
+lastUpdate: 2023-01-10
+tags: ["angular"]  
+difficulty: 1
+draft: false
+stats: [
+  {v: 150, unit: 'video', text: 'su Angular'},
+  {v: 40, unit: 'video', text: 'su JavaScript ES6 e TypeScript'},
+  {v: 21, unit: 'ore', text: 'di materiale'}
+]
+videoSeries: 
+  name: angular
+  idx: 10
+---
+
+
+import * as C from '../../../components/video-courses/components/'
+import * as W from '@widgets'
+
+import {programAngularUpdate} from './program_mini_corso_aggiornamento';
+import {programAngular} from './program';
+import {programJS} from './program';
+
+<W.Notes>
+# TODOS
+* Bullet Point Improve UI
+* VideoPlayer component (preview | link + modal)
+* Stats
+* Programma 
+* Review
+* Pricing
+* FAQ
+</W.Notes>
+
+<div class="text-center mb-12"> 
+   # Il corso include:
+</div>
+
+
+<C.BulletPoints 
+  frontmatter={frontmatter}
+  video="https://www.youtube.com/embed/teYQqexbvUs"
+  items={[
+    { id: '1', t: 'Video corso Angular Fundamentals', d: 'Più di 150 video di teoria e pratica con moltissime sessioni di live-coding dalle basi alle best practice: sviluppo applicazioni e decine di casi d’uso ed esempi pratici' },
+    { id: '3', t: 'Aggiornato ad Angular 16', d: 'Mini corso di 30 video sulle novità introdotte da Angular 16: standalone projects, Signals, nuove API ' },
+    { id: '2', t: 'Mini corso JavaScript & TypeScript', d: 'Incluso nel prezzo un mini-corso di 3 ore su Javascript ES6 e TypeScript, propedeutico all\'apprendimento del framework' },
+    { id: '3', t: 'Aggiornamenti', d: 'Il corso è stato realizzato in Angular 7 ma il codice sorgente, disponibile sotto ogni video, è stato aggiornato alle versioni 14/15.' },
+  ]}
+/>
+ 
+
+
+
+<C.ImageGrid bg title="A chi è rivolto" items={[
+  { 
+    t: 'Beginners', d: 'Per tutti coloro che desiderano utilizzare Angular e creare Single Page Application tramite un percorso di studio graduale, ben strutturato, che permetta ai neofiti di partire da zero e raggiungere un buon livello in brevissimo tempo. L’unico requisito è la conoscenza di almeno un linguaggio di programmazione', 
+    image: import('../../../images/brand/emote-book.png')
+  },
+  { 
+    t: 'Experts', d: 'Per gli sviluppatori che già utilizzano Angular ma non ritengono di farlo nel modo corretto e/o desiderano migliorare la qualità del loro codice applicando best practices, pattern, metodologie e ottimizzando il codice allo scopo di renderlo più performante, leggibile e manutenibile',
+    image: import('../../../images/brand/emote-angular.png'),
+    align: 'right'
+  },
+]}>
+  Un corso adatto sia ai principianti che agli sviluppatori Angular che desiderano consolidare la propria conoscenza sul framework, apprendere nuove tecniche e best practice
+
+
+</C.ImageGrid>
+
+
+
+<C.ImageGrid title="Punti di forza" items={[
+  { 
+    t: 'Tutto ciò di cui bisogno per iniziare.', d: 'Tutto ciò che devi conoscere su Angular per essere produttivo nel minor tempo possibile: forms, styling, comunicazione REST API, dependency injection, custom components, moduli, router, animations e molto altro', 
+    image: import('../../../images/brand/emote-laptop.png')
+  },
+  { 
+    t: 'Sviluppo applicazioni Demo', d: 'Oltre a fornire moltissimi esempi per comprendere i concetti alla base del framework, svilupperemo diverse applicazioni demo in Angular e Google Firebase per mettere in pratica i concetti appresi durante il corso',
+    image: import('../../../images/brand/emote-calendar-angular.png')
+  },
+  { 
+    t: 'Applica Best<br /> Practices', d: 'Dalle fondamenta del framework all\'utilizzo di pattern, best practice e metodologie consolidate per la creazione di codice di qualità, scalabile e manutenibile',
+    image: import('../../../images/brand/emote-ninja.png')
+  },
+  { 
+    t: 'Organizzazione Progetti', d: 'Codice dichiarativo, approccio component-based, organizzazione dell\’applicazione in moduli, immutabilità, ottimizzazione performance sono solo alcune delle tematiche trattate durante il corso',
+    image: import('../../../images/brand/emote-desk.png')
+  },
+]}>
+Moltissimi esempi, casi d'uso reali, pattern e best practices
+</C.ImageGrid>
+
+
+<C.Program
+  row1="Argomenti trattati nel corso"
+  row2="Angular Fundamentals"
+  data={programAngular}
+  frontmatter={frontmatter}
+  />
+
+
+<C.ProgramList
+  row1="Aggiornamento 2023"
+  row2="Mini corso sulle novità di Angular 16/17"
+  data={programAngularUpdate}
+  frontmatter={frontmatter}
+  />
+
+<C.Program
+  row1="Argomenti trattati nel corso"
+  row2="JavaScript / TypeScript"
+  data={programJS}
+  frontmatter={frontmatter}
+  />
+
+<W.Separator size="xl" />
+<h1 class="text-center"> Estratto dal corso </h1>
+<W.Separator size="md" />
+
+<C.BulletPoints  
+  frontmatter={frontmatter}
+  video="https://www.youtube.com/embed/ovqUhtgJC-M"
+  textTitle="I contenuti del corso"
+  text={`
+    Il corso include tutto ciò di cui hai bisogno per iniziare ad essere produttivo con Angular nel minor tempo possibile: dalle basi alle best practices  
+  `}
+/>
+
+<C.BulletPoints  
+  right
+  frontmatter={frontmatter}
+  video="https://www.youtube.com/embed/_Ya2cAYuFII"
+  textTitle="Esempio Lezione"
+  text={`
+    <li>Utilizzo di Angular CLI da terminale
+    <li>Creazione componenti sfruttando i "generator"</li>
+    <li>Approccio component based</li>
+    <li>Progetti modulari</li>
+  `}
+/>
+
+
+
+<div>
+  <C.Pricing 
+    frontmatter={frontmatter} 
+    left={{
+      title: '5 studenti',
+      price: {
+        value: '87', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo scontato per 5 o più utenti',
+        'Report / Progress per singolo utente',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 5 licenze del corso Angular Fundamentals'
+      }
+    }}
+    center={{
+      badge: 'Il più venduto!',
+      title: 'Singolo utente',
+      price: {
+        value: '147', currency: '€', unit: '+ iva'
+      },
+      items: [
+        'Corso Angular Fundamentals',
+        'Corso JavaScript ES6 / TypeScript',
+        '190 video',
+        '21 ore di lezione',
+        'CheatSheet PDF su Angular e JavaScript ES6',
+        '15 gg soddisfatto o rimborsato',
+      ],
+      button: {
+        label: 'PROCEDI',
+        link: 'https://fabiobiondi.teachable.com/purchase?product_id=4556875',
+        target: '_blank'
+      }
+    }}
+    right={{
+      title: '10 studenti',
+      price: {
+        value: '57', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo scontato per 10 o più utenti',
+        'Report / Progress per singolo utente',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 10 licenze del corso Angular Fundamentals'
+      }
+    }}
+  />
+</div>
+
+
+<C.Faq frontmatter={frontmatter}/>

@@ -1,0 +1,71 @@
+---
+// NOTE: this file is not used anymore
+// It was used to generate dev.to articles pages
+import Tags from '@widgets/Tags.astro';
+import Layout from '../../layouts/BaseLayout.astro'
+
+// generate all paths
+export async function getStaticPaths() {
+
+  const devToArticlesFetch = await fetch("https://dev.to/api/articles/me", {
+      headers: {
+        "api-key": import.meta.env.API_KEY_DEV_TO,
+      },
+  })
+  const devToArticles = await devToArticlesFetch.json()
+
+
+  // FAKE GENERATION OF SLUTs
+  return [{ params: {slug: 'a'}}]
+
+  // real generation dev.to (sometimes it receives json parse error)
+  return devToArticles.map((article: any) => {
+    return ({ params: {slug: article.slug}})
+  })
+}
+
+const { slug } = Astro.params;
+
+// get article
+const devToArticleFetch = await fetch(`https://dev.to/api/articles/fabiobiondi/${slug}`, {
+    headers: {
+      // "api-key": import.meta.env.API_KEY_DEV_TO,
+    },
+})
+const article = await devToArticleFetch.json();
+
+// console.log(article)
+
+---
+<!--
+<Layout pageTitle={article.title}>
+
+  <div class="page">
+    <div class="mt-3">
+      <Tags tags={article.tags} />
+    </div>
+
+    <div class="mdx-slug-blog-post" set:html={article.body_html}></div>
+  </div>
+</Layout>
+
+
+<style is:global>
+  @tailwind base;
+	@tailwind components;
+	@tailwind utilities;
+
+  .mdx-slug-blog-post a {
+    @apply !text-pink-600 hover:!text-pink-300
+  }
+  
+  h1 {
+    @apply text-2xl text-white
+  }
+
+ 
+  .mdx-slug-blog-post p {
+    @apply my-4;
+  }
+</style> 
+-->

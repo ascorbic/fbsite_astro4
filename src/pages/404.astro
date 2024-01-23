@@ -1,0 +1,33 @@
+---
+import BaseLayout from "src/layouts/BaseLayout.astro";
+import { Image } from 'astro:assets';
+
+---
+
+<BaseLayout
+  pageTitle="Fabio Biondi - Cookie Policy"
+  description="Training Angular, React, RxJS, Redux, JavaScript, TypeScript"
+>
+  <!-- <div set:htl={res.content}></div> -->
+
+  <div class="page page-min page-max-w-screen-xl mx-auto  rounded-2xl p-3 mb-12 ">
+    <div class="flex flex-col items-center justify-center dark:text-white">
+      <Image class="text-center" src={import('../images/brand/emote-drama.png')} width={300} height={300} alt="logo"></Image>
+      
+      <h1 class="text-7xl">404</h1>
+      <h1 class="text-4xl">Something goes wrong...</h1>
+      <div class="text-xl mt-16 desc">
+        You may be interested in browsing 
+        my <a href="/blog" class="link">Blog</a>, the <a href="/tutorials" class="link">Tutorial</a> page  or the <a href="/video-courses" class="link">Video Courses</a> section.
+      </div>
+
+    </div> 
+
+  </div>
+</BaseLayout>
+
+<style>
+  .page-min {
+    min-height: calc(100vh - 500px);
+  }
+</style>

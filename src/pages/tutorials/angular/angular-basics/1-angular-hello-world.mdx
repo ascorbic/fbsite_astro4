@@ -1,0 +1,516 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: angular/angular-basics
+route: '1-angular-hello-world'
+title: Tutorial for absolute beginners 
+title1: Hello Angular (v15)
+title2: Tutorial for absolute beginners
+author: ['Fabio Biondi']
+description: In this step-by-step tutorial you will learn how to create dinamic HTML template in Angular, what is the interpolation, the differences between attribute and structural directives and familiarize yourself with Angular. 
+image: 
+  blur: 'angular/angular-basics/image.png'
+  url: null
+  alt: Hello Angular
+  series: 'angular/angular-basics/image.png'
+pubDate: 2022-12-26
+tags: ["angular", "typescript"] 
+series: 
+  name: Angular Basics
+  idx: 1
+difficulty: 1
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import StackBlitz from '@widgets/StackBlitz';
+import Hint from '@widgets/Hint.astro';
+import BannerPromoAngular from '@widgets/BannerPromoAngular.astro';
+
+
+
+# TOPICS
+
+# Who is this tutorial for?
+
+If you have never used Angular this is a good starting point.
+
+In this short "step by step" tutorial you will develop your first _hello world_ web application in Angular by the creation of a simple counter.
+You will learn how to create dinamic HTML templates, work with CSS, the concept of interpolation, the differences between attribute / structural directives and familiarize yourself with the framework.
+
+## Why another Angular tutorial?
+
+Angular is a sophisticated framework and includes most of the functionality needed to create Single Page Application, also known as SPA.
+The [Angular Documentation](https://angular.io/ ) is amazing but it might seem a bit difficult and complex for beginners.
+
+So I have created some tutorials trying to simplify many of the fundamental concepts of the framework and give you the opportunity to practice with some exercises
+
+
+# Requirements
+
+You only need a browser and an internet connection since you'll use an online "Code Playground": [StackBlitz](https://stackblitz.com/).
+Although you can use this tool as a guest I really suggest you to login with your GitHub account to save your progress.
+
+<Hint title="Why Stackblitz?">
+  StackBlitz is a code online Playground and its editor is very similar to Visual Studio Code.
+  You can use it to practice and make some experiments without installing anything on your machine.
+  <br />
+
+  * I like StackBlitz because it's a good compromise between speed and flexibility when compared to other code playgrounds
+  * you can save the your snippets for future use
+  * but the most important reason is that it's a cool way to share your code with the community and ask support sharing a working example. The community can then fork your example and reply with the solution
+
+<br />
+ So I think it's convenient to get familiar with it
+</Hint>
+
+
+# Use StackBlitz
+
+After opening [StackBlitz](https://stackblitz.com/) the first step is to authenticate with your GitHub account.
+Now you can select the StackBlitz Angular template but, as you can see, there are several other options: React, Svelte, Vue, RxJS and so on. So you can use it to practice with any other front-end technology.
+
+<Hint>
+  The authentication is not a required step but you cannot save snippets in your profile without doing it
+</Hint>
+
+You can see how to create an Angular template in the animation below:
+
+<Img src={import('./images/2022-12-24_13-58-30 (1).gif')} w={600} quality={60} border/>
+
+The Stackblitz window is very similar to Visual Studio Code:
+
+* left side: project files and dependencies
+* right side: application preview and the console panel
+* center: the code editor
+
+<Img src={import('./images/01_screen_stackblitz.png')} w={800} quality={60} border/>
+
+# Components
+
+Components are custom html elements (i.e. `<my-component>`) that allow you to split HTML templates and business logic into several and (often) reusable parts.
+
+Some common scenarios:
+
+* you want to create reusable UI components such as `<tab-bar>`, `<carousel>`, `<card>` and so on...
+* you have an HTML page composed by 500/1000+ rows: you can then split the template into small parts to have more maintainable code and improve semantics.
+
+Modern front-end frameworks are often based around the concept of components and each application usually have at least one component, known as "Root  Component".
+
+Each component is composed by 3 parts:
+
+* `[name].component.html`: the HTML template
+* `[name].component.ts`: a TypeScript class in which you can define properties and methods that are accessible to the template
+* `[name].component.css`: local CSS that are only accessible by the component itself (so it's not global!)
+
+<Hint>
+In this tutorial we will not talk about components but we will focus only on the dynamic management of templates through the use of directives and the basic features of the framework
+</Hint>
+
+
+# Your first Angular example
+
+Create a new [Stackblitz](https://stackblitz.com/) (Angular Template), open `src/app/app.component.html`  and replace everything with the following snippet:
+
+<Code>
+```html
+<h1>{{ 1 + 1 }}</h1>
+```
+</Code>
+
+The output (in the preview panel) will be 2.
+
+<Hint>
+The syntax `{{expression}}` is known as "interpolation" (or simply template tags) and allow you to embed valid expressions into your HTML template.
+For example, you can use it to make math operations, display the value of class properties or insert a ternary operator.
+
+
+<Code>
+```html
+<h1>{{ anyClassProperty }}</h1>
+```
+</Code>
+
+
+<Code>
+```html
+<h1>{{ condition ? 'A' : 'B' }}</h1>
+```
+</Code>
+
+</Hint>
+
+
+# Add interactivity with Native Events
+
+Your next goal is the creation of a simple counter that increment its value when a button is clicked.
+
+You can simply add events to your HTML elements using brackets:
+
+
+<Code>
+```html
+<div (mouseOver)="...">
+<input (change)="..." />
+<form (submit)="...">
+```
+</Code>
+
+## Create a simple counter
+
+Now open `app.component.ts` and add the `counter` property:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+
+```ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  counter = 1; // <==
+}
+
+```
+</Code>
+
+
+
+Open `app.component.html`, insert a `button` and add the `click` event listener to increment the `counter` property.
+
+<Code techs={['angular', 'html']} title="<code>app.component.html</code>">
+```html
+<button (click)="counter = counter + 1">+</button>
+<h1>{{ counter }}</h1>
+```
+</Code>
+
+
+Click on the "RUN PROJECT" button below to see the working example:
+
+<StackBlitz url="https://stackblitz.com/edit/angular-ivy-5n3lr8?embed=1&file=src/app/app.component.ts" client:visible />
+
+
+<Hint>
+  Click the first icon on the left to display the project files
+</Hint>
+
+
+<Hint title="Why the template is updated?">
+  Angular <span class="font-bold"> "change detection" </span> is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
+  It detects common browser events like mouse / keyboard events, timers, HTTP requests and so on.
+</Hint>
+
+## Conditional DOM
+
+You can also use ternary operators inside your template tags.
+
+Update `app.component.html` in order to increment and decrement your counter and display a different text:
+
+<Code techs={['angular', 'html']} title="<code>app.component.html</code>">
+
+```html
+<button (click)="counter = counter - 1">-</button>
+<button (click)="counter = counter + 1">+</button>
+<h1>{{ counter }}</h1>
+
+<div>{{ counter >= 0 ? 'positive' : 'negative' }}</div>
+
+```
+</Code>
+
+<StackBlitz url="https://stackblitz.com/edit/angular-ivy-avanzc?file=src/app/app.component.html" client:visible />
+
+
+## Brackets and Attributes
+
+Use square brackets to dinamically set attributes and properties to any HTML element.
+
+
+<Code>
+```html
+<a [href]="myProp1" [target]="myProp2">
+<div [innerHTML]="myProp2">
+<img [src]="myProp3">
+```
+</Code>
+
+Now we want to apply a different CSS class in according with the `counter` value:  when `counter >= 0`: apply the `red` class, otherwise the `green` class:
+
+
+<Code techs={['angular', 'html']} title="<code>app.component.html</code>">
+```html
+<div [class]="counter >= 0 ? 'green' : 'red'">
+  {{ counter >= 0 ? 'positive' : 'negative' }}
+</div>
+```
+</Code>
+
+
+Of course, you have to add the new `.green` and `.red` CSS classes in `app.component.css`:
+
+<Code techs={['angular', 'css']} title="<code>app.component.css</code>">
+```css
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+```
+</Code>
+
+
+
+
+<StackBlitz url="https://stackblitz.com/edit/angular-ivy-rivim4?file=src/app/app.component.html" client:visible />
+
+
+
+# Attribute directives: `[ngClass]`
+
+A directive is a sort of custom HTML attribute that handle some logic behind the scenes and Angular provides several built-in directives to handle common scenarios such as DOM manipulation, apply dynamic styles, create list of elements and so on.
+
+There are two types of directives:
+
+* _attribute_ directive: they are usually used to dinamically update the look and feel of your application and add behaviors, such as events. Attributes directives are often used with square brackets: `[directive]="..."`
+* _structural_ directive: used for DOM manipulation, for example destroy and re-create the DOM. Structural directives has always the `*` prefix ( `*ngIf`, `*ngFor`, ... ) that can be very useful to recognize them, since you cannot add more that one structural directive to an HTML element.
+
+<br />
+Some of the most used "attribute" directives are `ngClass` and `ngStyle`:
+
+You may apply the `active` CSS class when the condition returns `true`:
+
+<Code>
+  ```html
+  <div [ngClass]="{'active': condition}">...
+  ```
+</Code>
+
+
+or dinamically apply inline styles.
+The following example increments the `font-size` in according with the `counter` value:
+
+<Code>
+  ```html
+  <div [ngStyle]="{'font-size': counter + 'px'}">
+  ```
+</Code>
+
+In angular there are other cool ways to do the same operation:
+
+<Code>
+  ```html
+  <div [style.font-size]="counter + 'px'">
+  ```
+</Code>
+
+or using the "suffix" operator
+
+
+<Code>
+  ```html
+  <div [style.font-size.px]="counter">
+  <div [style.font-size.rem]="counter">
+  ```
+</Code>
+
+
+
+
+The `*ngIf` structural directive allow you to conditionally destroy and create DOM elements:
+
+<Code>
+  ```html
+  <div *ngIf="boolean | condition">Some content</div>
+  ```
+</Code>
+
+
+`*ngFor` directive clones a part of the template looping through an array and it's used to display a list of elements:
+
+
+<Code>
+  ```html
+  <div *ngFor="let item of items"*>{{item.prop}}</div>
+  ```
+</Code>
+
+
+You can also create your own custom directives. <br />
+For example, the following one may hide the HTML element if user is not logged. However, the creation of custom directives is out of the scope of this tutorial
+
+<Code>
+  ```html
+  <button *ifLogged>Some content</button>
+  ```
+</Code>
+
+# Class Methods
+
+`app.component.ts` file is a TypeScript class and can contains methods.
+it's often preferable to move your business logic into the class rather than in the template.
+So now we'll move the logic to increment and decrement the `counter` value from the template to the class.
+
+First, add the `increment` and `decrement` methods to `app.component.ts`:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  counter = 1;
+
+  increment() {
+    this.counter++;
+  }
+
+  decrement() {
+    this.counter--;
+  }
+}
+
+```
+</Code>
+
+And you can invoke these methods from the HTML template:
+
+<Code techs={['angular', 'html']} title="<code>app.component.html</code>">
+```html
+<button (click)="decrement()">-</button>
+<button (click)="increment()">+</button>
+<h1>{{ counter }}</h1>
+
+<div [class]="counter >= 0 ? 'green' : 'red'">
+  {{ counter >= 0 ? 'positive' : 'negative' }}
+</div>
+```
+</Code>
+
+
+<StackBlitz url="https://stackblitz.com/edit/angular-ivy-3xozzp?embed=1&file=src/app/app.component.ts" client:visible />
+
+
+# Invoke methods from template
+
+So far we have not properly handled the "zero" value but we couldn't do it simply using a ternary operator in the HTML template.
+
+We'll rather invoke class methods to add more logic in order to dinamically set the CSS `class` and the label to display:
+ we want to remove the CSS class and display a default message  when the `counter` is zero.
+
+First we add the `getLabel` and the `getCls` methods to handle the `0` value too:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  // UPDATE: now start from zero
+  counter = 0;
+
+  increment() {
+    this.counter++;
+  }
+
+  decrement() {
+    this.counter--;
+  }
+
+  // NEW
+  getLabel() {
+    if (this.counter === 0) return 'Demo Counter';
+    return this.counter > 0 ? 'positive' : 'negative';
+  }
+
+  // NEW
+  getCls() {
+    if (this.counter === 0) return null;
+    return this.counter > 0 ? 'green' : 'red';
+  }
+}
+```
+</Code>
+
+and the HTML template will automatically invoke these methods each time the change detection is triggered:
+
+<Code techs={['angular', 'html']} title="<code>app.component.html</code>">
+```html
+<button (click)="decrement()">-</button>
+<button (click)="increment()">+</button>
+<h1>{{ counter }}</h1>
+
+<div [class]="getCls()">
+  {{ getLabel() }}
+</div>
+```
+</Code>
+
+<Hint title="PERFORMANCE">
+  This approach can generate performance issues in complex views since these methods may be invoked too many times because of change detection.
+
+  A better approach would be the creation of custom pipes but it's out of scope of this tutorial.
+</Hint>
+
+<StackBlitz url="https://stackblitz.com/edit/angular-ivy-zkjm93?embed=1&file=src/app/app.component.ts" client:visible />
+
+
+
+
+# Structural directives: `*ngIf`
+
+`*ngIf` is one of the most used Angular directives and allow you to dinamically render or destroy HTML elements.
+
+Now we can then remove the counter `h1` element from the template when its value is zero.
+
+<Code techs={['angular', 'html']} title="<code>app.component.html</code>">
+```html
+<h1 *ngIf="counter !== 0">{{ counter }}</h1>
+```
+</Code>
+
+
+<StackBlitz url="https://stackblitz.com/edit/angular-ivy-wg6spa?file=src/app/app.component.ts" client:visible />
+
+
+# What's Next
+
+Read the [Angular Documentation](https://angular.io/) to get more info and examples. It's amazing, well-written and always updated: I often read it again to discover something I didn't know until the day before 😅.
+
+Or you can also read my next tutorial "[Create a simple CRUD app with Angular](/tutorials/angular/simple-crud-in-angular/1-create-an-angular-project)" to learn how to create template-driven forms, display list of elements, use the dependency injection engine, communicate with REST API and more.
+
+
+## Support
+Let me know if you liked it with a comment and don't forget to add me on [Twitter](https://twitter.com/biondifabio), [LinkedIn](https://www.linkedin.com/in/fabiobiondi/) and [YouTube](https://www.youtube.com/c/FabioBiondi).
+
+You can also get free support on our [Telegram Group | Angular Topic](https://t.me/we_are_devs). We usually speak in italian but we will do our best to support you in English too.
+
+
+
+<br />
+<BannerPromoAngular></BannerPromoAngular>
+<br />
+

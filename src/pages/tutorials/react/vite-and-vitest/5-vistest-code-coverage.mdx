@@ -1,0 +1,115 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: react/vite-and-vitest
+route: '5-vistest-code-coverage'
+title: React, Vitest & Code Coverage
+title1: React and Vitest 
+title2: Code Coverage
+author: ['Fabio Biondi']
+description: Code coverage is a measure of how much of your code is being tested by your test suite. <br /> It can help you identify which parts of your code are not being exercised by your tests, so that you can write additional tests to increase coverage. 
+image: 
+  blur: 'react/vite-and-vitest/image.png'
+  url: null
+  alt: Hello React Vitest
+  series: 'react/vite-and-vitest/image.png'
+pubDate: 2022-12-26
+tags: ["react", "typescript"] 
+series: 
+  name: "React, TypeScript and Vitest: write your first test"
+  idx: 5
+difficulty: 1
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import StackBlitz from '@widgets/StackBlitz'
+import Hint from '@widgets/Hint.astro';
+
+
+In JavaScript, there are several tools that can measure code coverage, including Istanbul and Jest. 
+
+These tools can generate reports that show you which lines of code are being executed when your tests are run, and which lines are not. 
+This can help you ensure that your tests are thorough and that your code is working as intended.
+
+SOURCE: Chat GPT 😅
+
+
+
+<Hint>
+These tools show you what tests pass or fail but also the percentage of code you have tested for each component / script: lines, functions, branches and more.
+</Hint>
+
+Add following script to `package.json`:
+
+<Code title="<Code>package.json</Code>" techs={['js']}>
+```
+  "coverage": "vitest run --coverage"
+
+```
+</Code>
+
+First time you run this command, it will ask to install the default Vitest coverage tool option `coverage-c8`. Press yes to confrm
+
+<Img src={import('./images/2023-01-04-16-02-18.png')} w={600} quality={60} border />
+
+Re-Run `npm run coverage`:
+
+<Img src={import('./images/2023-01-04-16-05-56.png')} w={900} quality={60} border />
+
+It will also generate an HTML site that you can open into a webserver:
+
+<Img src={import('./images/2023-01-04-16-10-52.png')} w={600} quality={60} border />
+
+and that's the result:
+
+<Img src={import('./images/2023-01-04-16-12-38.png')} w={600} quality={60} border />
+
+
+# Install Istanbul
+
+You can also select other coverage tools if you prefer or have experience with them, like the famous [Istanbul](https://istanbul.js.org/), by setting it in the `vite` configuration file:
+
+<Code title="<Code>vite.config.ts</Code>" techs={['ts']}>
+```ts
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import checker from 'vite-plugin-checker';
+
+export default defineConfig({
+  // NEW
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './setupTests.ts',
+    coverage: {
+      provider: 'istanbul' // <==
+    }
+  },
+  plugins: [
+    react(),
+    checker({ typescript: true }),
+  ],
+})
+```
+</Code>
+
+Re-Run `npm run coverage` and it will ask to install "istanbul":
+
+<Img src={import('./images/2023-01-04-16-08-43.png')} w={600} quality={60} border />
+
+That's all. I hope you enjoyed this tutorial : )
+
+
+<TutorialSeries frontmatter={frontmatter} />

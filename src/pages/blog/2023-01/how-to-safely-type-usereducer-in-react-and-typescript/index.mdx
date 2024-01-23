@@ -1,0 +1,308 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2023-01/how-to-safely-type-usereducer-in-react-and-typescript'
+title: React 18.x & TypeScript | how to safely type the useReducer hook
+title1: React 18.x & TypeScript
+title2: How to safely type the <code>useReducer</code> hook
+description: Use TypeScript to strongly type your code 
+author: ['Fabio Biondi']
+image: 
+  blur: "image.png"
+  url: "image.png"
+  alt: "react emote"
+pubDate: 2022-12-29
+tags: ["react", "typescript"] 
+series: 
+  name: "React Tips"
+difficulty: 2
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+import Hint from '@widgets/Hint.astro';
+import StackBlitz from '@widgets/StackBlitz';
+
+
+# Introduction
+
+The React `useReducer` hook is one of the less used and under rated built-in hook but it can be especially useful when we use several `useState` hooks in a component that are related to each other.
+
+The concept is very simple:
+
+* the state is handled by a (reducer) function 
+* you need to `dispatch` an action to update the state
+* the function is automatically invoked after every `dispatch` and the state is updated accordingly 
+
+
+## How to use `useReducer`
+
+The `useReducer` hook accepts at least two parameters:
+
+* a reducer function 
+* the initial state
+
+and returns the current `state` and the `dispatch` function:
+
+<Code techs={['js']}>
+```typescript
+const [state, dispatch] = useReducer(reducerFn, initialState);
+```
+</Code>
+
+<Hint title="New to 'useReducer'?">
+  If you have never used the `useReducer` hook before I highly recommend you to read my article
+
+ [React: from useState hook to useReducer](./react-from-usestate-to-usereducer)
+</Hint>
+
+
+
+
+
+
+# Topics
+
+# Type 
+
+The first step is the creation of a custom type to represents the state:
+
+<Code techs={['ts']}>
+```typescript
+interface AppState {
+  counter: number; // a simple counter
+  random: number;  // a random value
+}
+```
+</Code>
+
+# Actions
+
+
+You can emit an action by using the `dispatch` function returned by the `useReducer` hook (we'll discuss about it later in this post).
+
+An "action" can be a simple `string` as shown below:
+
+<Code techs={['ts']}>
+```typescript
+dispatch('increment')
+```
+</Code>
+
+But, by convention, it's common to pass an object with the `type` property and, if necessary, a `payload`:
+
+<Code techs={['ts']}>
+```typescript
+dispatch({type: 'increment', payload: 10})
+```
+</Code>
+
+
+## Action Type
+
+The previous action can be represented by the following type:
+
+<Code techs={['ts']}>
+```typescript
+type AppAction = {
+  type: string;
+  payload: number;
+}
+``` 
+</Code>
+
+Or we can use [literal types](https://www.typescriptlang.org/docs/handbook/literal-types.html) in order to define exactly what string we should pass:
+
+<Code techs={['ts']}>
+```typescript
+type AppAction = {
+  type: 'increment';
+  payload: number;
+}
+``` 
+</Code>
+
+
+Since you may need to handle several actions in order to update the same state,  you can use the [`Union`](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html) type to define what types of actions can be accepted by the `type` property:
+
+<Code techs={['ts']}>
+```typescript
+type AppActions = {
+  type: 'increment' | 'decrement';
+  payload: number;
+}
+```
+</Code>
+
+
+But how can we handle the scenario where each action has a different payload (i.e. a `string` and a `number`) or doesn't have it at all?
+
+In fact our state is composed by:
+
+* `counter`: updated when the `increment` action is emitted.  This action accepts a payload (`number`) that is the value to add to the current `counter`.
+* `random` : updated when the `random` action is emitted and has no payload
+
+We may think to update our type to the following:
+
+<Code techs={['ts']}>
+```typescript
+type AppActions = {
+  type: 'increment' | 'decrement' | 'random';
+  payload?: number; // ? means "not required"
+}
+```
+</Code>
+
+However, since we have used the question mark `?`, the payload is optional, and we'll never know if it's really required or not when we'll dispatch an action.
+Furthermore, things get even worse if we add a new action that required a `string` as payload.
+
+**What's the solution?**
+
+We can create a different type for each action and use the [`Union`](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html) type again:
+
+
+
+<Code techs={['ts']}>
+```typescript
+type Increment = { type: 'increment'; payload: number };
+type Random = { type: 'random' };
+
+type AppActions = Increment | Random;
+```
+</Code>
+
+# Reducer
+
+The reducer is a simple function that is automatically invoked each time you dispatch a new action.
+This function always receives two parameters, the current state and the dispatched action, and returns the new state.
+
+As you can see in the script below, the state is typed as `AppState` and the action as `AppActions`:
+
+
+<Code techs={['ts']}>
+```typescript
+function appReducer(state: AppState, action: AppActions) {
+  switch (action.type) {
+    case 'increment':
+      return { ...state, counter: state.counter + action.payload };
+    case 'random':
+      return { ...state, random: Math.random() };
+    default:
+      return state;
+  }
+}
+```
+</Code>
+
+<Hint>
+  Since our code is strongly typed you cannot use any string in the `case` statement, but `increment` and `random` are the only accepted values.
+</Hint>
+
+
+The `switch` statement and [TypeScript Guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html) allow you to narrowing types.
+In fact, the `action.payload` is of type `number` when the action is `increment`, while there is no `payload` if the action is `random`.
+
+<Hint title="Check in your editor">
+  Move your mouse over the `payload` property in your favorite editor to check the `payload` type:
+
+  <Img isWindowed={false} src={import('./images/2022-12-26-12-36-07.png')} w={600} quality={60} border/>
+
+  You can also create a new action with a `string` as `payload` and check if it works.
+</Hint>
+
+# Usage 
+
+That's all. 
+You can now safely use the `useReducer` hook in your components and custom hooks.
+
+
+<Code techs={['react', 'ts']}>
+```typescript
+const [state, dispatch] = useReducer(appReducer, { counter: 0, random: 0 });
+```
+</Code>
+
+And now you can dispatch the actions:
+
+<Code techs={['react', 'ts']}>
+```typescript
+<button onClick={() => dispatch({ type: 'increment', payload: 10 })}>
+<button onClick={() => dispatch({ type: 'random' })}>
+
+```
+</Code>
+
+<Hint>
+Since our code is strongly typed you cannot pass any string anymore to the `type` property but `increment` and `random` are the only accepted values.
+  
+Furthermore, the `increment` action requires a payload of type `number` while the `random` action does not.
+</Hint>
+
+
+
+Here an example of a React component that uses the `useReducer` hook, dispatch actions and display the state:
+
+<Code techs={['react', 'ts']} title="<code>App.tsx</code>">
+```typescript
+export default function App() {
+  const [state, dispatch] = useReducer(appReducer, { counter: 0, random: 0 });
+
+  return (
+    <div>
+      <button onClick={() => dispatch({ type: 'increment', payload: 10 })}>
+        "Increment" Action
+      </button>
+      <button onClick={() => dispatch({ type: 'random' })}>
+        "Random" Action
+      </button>
+
+      <div>{state.counter}</div>
+      <div>{state.random}</div>
+    </div>
+  );
+}
+```
+</Code>
+
+And of course you can also pass the state to children by drilling props, composition and Context:
+
+
+
+<Code techs={['react', 'ts']}>
+```typescript
+<Child1 value={state.counter} />
+<Child2 value={state.random} />
+```
+</Code>
+
+
+# Code Playground
+
+The completed example is available on StackBlitz
+<Hint>
+For simplicity I wrote all the code in `App.tsx` but, of course, you can (you should! 😅) split it in several files
+</Hint>
+
+<StackBlitz clickToLoad={false} url="https://stackblitz.com/edit/react-ts-zkhovr?embed=1&file=App.tsx" client:visible />
+
+
+# Video Tutorial
+
+I have also recorded a video tutorial about this topic available on my [YouTube Channel](https://www.youtube.com/c/FabioBiondi):
+
+<IFrame src="https://www.youtube.com/embed/Ph-ZT-BYGgw" />
+
+
+<PostSeries frontmatter={frontmatter} />

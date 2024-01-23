@@ -1,0 +1,377 @@
+---
+layout: ../../../components/video-courses/VideoCoursesLayout.astro
+css: 'sky'
+badge: APRILE 2023
+featured: true
+heroButtonLabel: null
+slug: 'react-pro-real-world-applications'
+title: React PRO - Creare Real World applications
+title1: React PRO - <em>Creare <br>Real World applications</em>
+title2: Tailwind, Zustand, Vite e TypeScript
+description: Un corso pratico in cui sviluppiamo da zero un'applicazione React con TypeScript analizzando diversi scenari e casi d'uso frequenti - autenticazione, state management locale e globale, gestione forms, router, creazione layout e componenti, best practices e molto altro...
+author: ['Fabio Biondi']
+image: 
+  blur: "images/emote-shopping-cart-react.png"
+  url: "images/emote-shopping-cart-react.png"
+  alt: "Mastering React - Creare uno shop con CMS"
+lastUpdate: 2023-03-20
+tags: ["react", "typescript"]
+difficulty: 3
+draft: false
+stats: [
+  {v: '~8', unit: 'ore', text: 'di lezione'},
+  {v: '160+', unit: 'lezioni', text: 'intensive'},
+  {v: '10', unit: 'capitoli', text: '(real world app)'},
+  {v: '2', unit: 'capitoli', text: '(bonus)'},
+  
+]
+videoSeries: 
+  idx: 2
+---
+import {programJS} from "../js-ts/program.js";
+
+import * as C from '../../../components/video-courses/components/'
+import * as W from '@widgets'
+// import StackBlitz from '@widgets/StackBlitz'; // NOTE: cannot be exported from barrel file 
+import {lessons } from './program';
+
+
+
+<W.P title="Il corso" mt="none">
+  Questo corso sposa la filosofia <span className="font-bold text-sky-400"> "Learn by Doing"</span>.
+
+  Creeremo passo-passo un piccolo negozio per la vendita di prodotti, dal layout alla gestione del carrello.
+  Avrai modo, inoltre, di configurare il database e sviluppare il relativo CMS per la gestione di ordini e prodotti, integrando tutto il processo per gestire autenticazione e sicurezza . <br/>
+
+</W.P>
+
+<W.Notes>
+<W.YT_Trigger id="Ph-ZT-BYGgw" >
+<button class="button c-sky" > Open Video Player 1 </button>
+</W.YT_Trigger>
+</W.Notes>
+
+
+<W.P title="Cosa imparerai in questo corso?">
+
+L'obiettivo del corso non è tanto quello di creare un software pronto per la produzione ma:
+
+<li>acquisire confidenza nell'utilizzo di <span className="link">TypeScript in progetti React</span></li>
+<li><span className="link text-sky-600">creazione layout con Tailwind</span>, senza l'ausilio di UIKIT esterni e/o template di terze parti</li>
+<li><span className="link text-sky-600">gestione route</span> di primo e secondo livello, con navigazione primaria e secondaria</li>
+  <li>gestire componenti con   molti stati locali tramite l'utilizzo di <span className="link text-sky-600">useReducer</span>, separando <span className="link text-sky-600">azioni, side effect, selettori e stato</span> </li>
+<li> comprendere il potenziale degli <span className="link text-sky-600">state manager</span> per la gestione dello stato globale (utilizzeremo <span className="link text-sky-600"> Zustand</span>) </li>
+<li><span className="link text-sky-600">creare un database</span> tramite l'utilizzo di PocketBase (un fantastico strumento scritto in Go, che potrete utilizzare anche in altri progetti reali)</li>
+  <li>effettuare le classiche operazioni CRUD  <span className="link text-sky-600">creando un CMS da zero</span> per gestione prodotti, ordini e <span className="link text-sky-600">upload di immagini</span> </li>
+<li>gestire il processo di <span className="link text-sky-600"> autenticazione con JWT</span> e tutti gli step necessari per limitare l'accesso all'area riservata, agli elementi del DOM e alle route protette </li>
+<li>applicare <span className="link text-sky-600">best practices</span> e strategie di <span className="link text-sky-600">clean coding</span> per la creazione di codice manunitebile</li>
+
+
+</W.P>
+
+<W.Separator size="lg"/>
+
+<C.BulletPoints 
+  frontmatter={frontmatter}
+  video="https://www.youtube.com/embed/W99kV14zVxc?rel=0"
+  items={[
+    { id: '1', t: 'Modern Stack', d: 'React 18, TypeScript, Vite, Tailwind, Zustand.' },
+    { id: '2', t: 'Progetto real-world', d: 'Sviluppo applicazione CRUD con area pubblica e riservata. La maggior parte dei concetti sono comunque applicabili anche in meta-framework come Next o Gatbsy e state manager come Redux' },
+    { id: '3', t: 'Pochissime dipendenze', d: 'Utilizzeremo pochissime dipendenze, quindi creeremo layout, componenti e la maggior parte delle funzionalità dell\'applicazione senza l\'ausilio di UIKIT o dipendenze di terze parti.' },
+    { id: '4', t: 'Mini corso ES6 & TypeScript', d: 'Incluso nel prezzo un mini-corso di 3 ore su Javascript ES6 e TypeScript, propedeutico all\'apprendimento di React' },
+    { id: '5', t: 'Supporto', d: 'Puoi chiedere supporto tramite i commenti visibili sotto ad ogni video' },
+  ]}
+/>
+
+
+
+
+<C.ImageGrid bg title="A chi è rivolto" items={[
+  { 
+    t: 'Beginners', d: '<span class="font-bold text-sky-400">Non hai mai usato React? </span><br />Questo percorso rappresenta la strada più veloce per comprendere il potenziale della libreria tramite la creazione di un progetto reale. <br />  <br /><span class="font-bold text-sky-400">Sei alle prime armi nello sviluppo Front-End?</span> <br />Troverai incluso un mini-corso su JavaScript ES6 e TypeScript. Il primo capitolo bonus, inoltre, fornirà una panoramica veloce su React e TypeScript e ogni capitolo ininzia un elenco dei prerequisiti necessari per svolgerlo in serenità, con relativi link di approfondimento',
+    image: import('../../../images/brand/emote_react_right.png')
+  },
+  { 
+    t: 'React Developer', d: '<span class="font-bold text-sky-400">Utilizzi React da un po\' di tempo o hai già seguito un corso base?</span> <br /><br />Potrai scoprire nuovi trick, strategie e strumenti da applicare nel lavoro quotidiano! <br /> Consulta il programma completo disponibile in questa pagina e verifica se il corso è adatto alle tue esigenze<br> <br> *<em>Puoi anche acquistarlo, valutarlo ed eventualmente chiedere il rimborso entro 30gg nel caso non soddisfi le tue aspettative</em>',
+    image: import('../../../images/brand/emote-superheroreact.png')
+  }
+  
+]}>
+</C.ImageGrid>
+
+
+<W.P title="Requisiti">
+Tutti i concetti descritti nel corso sono affrontati passo-passo. Tuttavia consiglio di acquistarlo solo se si possiedono le seguenti conoscenze:
+
+  <li>HTML e CSS: conoscenza base</li>
+  <li>Confidenza nell'utilizzo di JavaScript ES6: manipolazione <a className="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank">Array</a>
+    e <a className="link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Oggetti</a>,
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" className="link" target="_blank">destructuring</a>, <a
+      href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" className="link" target="_blank"> arrow syntax</a>, <a
+      href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" className="link" target="_blank"> promise</a>, <a
+      href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" className="link" target="_blank">Spread operator</a>. Incluso nel prezzo troverai comunque un corso introduttivo di 3 ore su JavaScript ES6 e TypeScript </li>
+
+  <li>Utilizzo basilare dei types in TypeScript: non è necessario che tu conosca TypeScript ma, prima di iniziare, ti consiglio di guardare il mini corso su ES6 / TypeScript incluso nel pacchetto e il capitolo Bonus su React e TypeScript</li>
+  
+</W.P>
+
+
+  <C.ImageGrid title="Punti di forza" items={[
+  { 
+    t: 'Progetto real-world', d: 'Organizzare e strutturare un progetto React / TypeScript',
+    image: import('../../../images/brand/emote-book.png')
+  },
+  { 
+    t: 'Tailwind & CSS', d: 'Creare layout senza l\'ausilio di componenti e temi pre-confezionati',
+    image: import('../../../images/brand/emote-pad2.png')
+  },
+
+  { 
+    t: 'React e TypeScript', d: 'Acquisire confidenza con React e le sue API con particolare attenzione all\'utilizzo di TypeScript',
+    image: import('../../../images/brand/emote-superherots.png')
+  },
+  { 
+    t: 'State Management', d: 'Gestione stato locale con useReducer e stato globale con Zustand',
+    image: import('../../../images/brand/emote-atom.png')
+  },
+  {
+    t: 'React Router', d: 'Creare applicazioni multi-view con route di primo e secondo livello',
+    image: import('../../../images/brand/emote-report.png')
+  },
+  {
+    t: 'Clean Coding', d: 'Best practices, convenzioni e diversi consigli utili per la creazione di codice manutenibile',
+    image: import('../../../images/brand/emote-wizard.png')
+  },
+  { 
+    t: 'Autenticazione', d: 'Gestire il processo di autenticazione e sicurezza: area pubblica e riservata, protezione DOM e route, procedure di login / logout e molto altro...',
+    image: import('../../../images/brand/emote-laptop.png')
+  },
+  { 
+    t: 'CMS', d: 'Utilizzo di CMS Headless (PocketBase), creazione del database e integrazione con SDK esterni.',
+    image: import('../../../images/brand/emote-desk.png')
+  }
+  
+]}>
+
+Acquisire il know-how necessario per creare progetti reali in React nel più breve tempo possibile:
+</C.ImageGrid>
+
+
+  <W.Notes>
+
+
+
+<C.BulletPoints  
+  badge="PREVIEW"
+  video="https://www.youtube.com/embed/pIy2k91XznE?rel=0"
+  textTitle="La piattaforma"
+  text={`
+    Il corso è fruibile tramite la piattaforma Teachable:
+<br/>• video tutorial organizzati in lezioni e in capitoli 
+<br/>• Possibilità di commentare ogni lezione e chiedere supporto
+<br/>• Link e risorse per approfondire  gli argomenti
+<br/>• Codice sorgente
+<br/>• Monitoraggio del proprio progresso
+  `}
+/>
+  </W.Notes>
+
+
+<C.BulletPoints
+  badge="PREVIEW"
+  video="https://www.youtube.com/embed/kQNPPLqtdhM?rel=0"
+  textTitle="La piattaforma"
+  text={`
+    Il corso è fruibile tramite la piattaforma Teachable: <br />
+<br/>• Video tutorial organizzati in lezioni e capitoli
+<br/>• Elenco pre-Requisiti con link di approfondimento all'inizio di ogni capitolo
+<br/>• Risorse e codice sorgente disponibile sotto ogni video
+<br/>• Possibilità di commentare ogni lezione e chiedere supporto
+<br/>• Possibilità di inserire note personali
+<br/>• Monitoraggio del proprio progresso
+
+
+  `}
+/>
+
+<C.BulletPoints
+  right
+  badge="LEARN BY DOING"
+  image={import('./images/screenshoots/shop_cart.png')}
+  textTitle="Crea un progetto reale da zero"
+  text={`
+    In questo corso realizziamo un semplice shop online per l'acquisto di prodotti, con carrello, CMS per gestione prodotti e ordini, autenticazione e molto altro.
+    Utilizzerai React e TypeScript,  il layout sarà creato interamente con Tailwind, lo stato locale tramite useReducer e quello globale con il micro state manager Zustand, utilizzerai Cloudinary per l'upload delle immagini, gestirai router, forms e molto altro.
+<br />
+    <br />Riassumendo: <br><span class="font-bold text-sky-400">affronterai moltissimi scenari tipici presenti nella maggior parte delle applicazione front-end.</span>
+  `} f
+/>
+
+<C.BulletPoints
+  badge="AUTENTICAZIONE JWT"
+  image={import('./images/screenshoots/cms.png')}
+  textTitle="Sviluppo dell'area riservata"
+  text={`
+    Creiamo un'area riservata, con accesso protetto tramite JWT, per la gestione di prodotti e ordini:
+    <br /><br />creazione database, sviluppo pagina di login e procedura di logout, proteggere l'area riservata da accessi indesiderati, nascondere elementi del DOM in base allo stato dell'utente e molto altro...
+    
+    <br /><br />Il corso non approfondisce l'aspetto relativo alla sicurezza e la strategia utilizzata da PocketBase, JWT + localStorage, è stata integrata a titolo esemplificativo allo scopo di descrivere e implementare diverse funzionalità di React.
+  `}
+/>
+
+
+<C.BulletPoints
+  right
+  badge="PREVIEW CORSO"
+  image={import('./images/screenshoots/package.json.png')}
+  textTitle="POCHISSIME DIPENDENZE"
+  text={`
+    Uno dei problemi più diffusi nello sviluppo e per la manutenzione di applicazioni React è il numero elevato di dipendenze che spesso includono questi progetti.
+Spesso si installa una dipendenza senza pensarci molto ma la realtà dei fatti è che rappresenterà di certo un debito tecnico !
+  <br><br>
+Per questo motivo creeremo pressoché tutto da zero eccetto per alcune dipendenze chiave:
+<li><span class="text-sky-400 font-bold">clsx</span>: utility (20 righe) per applicare dinamicamente classi CSS</li>
+<li><span class="text-sky-400 font-bold">font-awesome</span>: un banale set di icone</li>
+<li><span class="text-sky-400 font-bold">pocketbase</span>: l'SDK per comunicare con il database che integreremo</li>
+<li><span class="text-sky-400 font-bold">react, react-dom e react-router-dom</span>: la libreria React e il router più utilizzato nel suo ecosistema </li>
+<li><span class="text-sky-400 font-bold">zustand</span>: uno dei micro state manager più diffusi per gestire facilmente stati globali</li>
+  `}
+/>
+
+
+
+<C.BulletPoints
+  badge="CONSIDERAZIONI PERSONALI"
+  image={import('./images/screenshoots/folder.png')}
+  textTitle="BEST PRACTICE e TIPS"
+  text={`
+    React non è un framework opinionato e per questo motivo ogni sviluppatore ha diverse metodologie di lavoro e convinzioni su quale sia l'approccio migliore per risolvere un problema o gestire un determinato scenario.
+    <br><br>
+    Anche se il progetto realizzato è composto da  poco più di 50 files, in questo percorso cercherò di trasferire la mia esperienza, le strategie e i pattern che spesso adotto per creare applicazioni scalabili e manutenibili nel tempo.
+
+  `}
+/>
+
+
+<W.P title="Il Programma" mt="none">
+  Il progetto è stato realizzato con React 18.2, Vite 4, Tailwind 3, React Router 6.8 e le ultime versioni di ogni libreria (aggiornate al primo trimestre del 2023).
+
+  Ogni capitolo ha due obiettivi:
+  <li>sviluppare una specifica sezione del progetto</li>
+  <li>esplorare un argomento, utilizzando diverse API, strumenti e/o pattern</li>
+
+</W.P>
+
+
+
+<C.ProgramList
+  description=""
+  data={lessons}
+  frontmatter={frontmatter}
+/>
+
+
+<C.Program
+  row1="Incluso nel pacchetto"
+  row2="Mini corso JavaScript ES6  / TypeScript"
+  data={programJS}
+  frontmatter={frontmatter}
+/>
+
+
+<div>
+  <C.Pricing 
+    frontmatter={frontmatter} 
+    left={{
+      title: '5 studenti',
+      price: {
+        value: '98', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo scontato per 5 o più utenti',
+        'Report / Progress per singolo utente',
+        'Promozione applicabile solo a società e team. Non gruppi di acquisto',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 5 licenze del corso React Pro: creare real world applications'
+      }
+    }}
+    center={{
+      badge: 'SUPER PROMO / LIMITATA ',
+      title: 'Singolo Utente',
+      price: {
+        value: '297',
+        currency: '€', 
+        unit: '+ iva',
+        promo: '178',
+        promoMsg: '<div class="text-xl">40% di sconto (offerta limitata)</div>'
+      },
+      items: [
+        'Corso React Pro: <br /> Creare Real World applications',
+        '~160 video tutorial',
+        '12 capitoli',
+        '~8 ore di lezione',
+        'Corso JavaScript ES6 / TypeScript (+3 ore di lezione)',
+        '15 gg soddisfatto o rimborsato',
+      ],
+      button: {
+        label: 'PROCEDI',
+        link: 'https://sso.teachable.com/secure/213789/checkout/4662011/react-pro-real-world-applications?coupon_code=PROMO40',
+        target: '_blank'
+      }
+    }}
+    right={{
+      title: '10 studenti',
+      price: {
+        value: '78', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo scontato per 10 o più utenti',
+        'Report / Progress per singolo utente',
+        'Promozione applicabile solo a società e team. Non gruppi di acquisto',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 10 licenze del corso React Pro: creare real world applications'
+      }
+    }}
+  />
+</div>
+
+
+
+
+<W.Notes>
+<div>
+  <C.Pricing 
+    frontmatter={frontmatter} 
+    center={{
+      badge: 'PRESTO DISPONIBILE',
+      description: 'Disponibile tra fine marzo e aprile. Iscriviti alla newsletter per essere avvisato e ricevere uno sconto promozionale',
+      title: 'React Pro: Creare Real World applications',
+      price: {
+        value: '', 
+        currency: '', 
+        unit: '',
+        promo: '',
+        promoMsg: ''
+      },
+      items: [
+        'Corso React Pro: <br /> Creare Real World applications',
+        '~150 video tutorial',
+        '~7.5 ore di lezione',
+        '+ Corso JavaScript ES6 / TypeScript (3 ore di lezione)',
+        '15 gg soddisfatto o rimborsato',
+      ],
+      button: {
+        label: 'TIENIMI AGGIORNATO',
+        link: '#newsletterBox',
+      }
+    }}
+  />
+</div>
+</W.Notes>
+
+
+<C.Faq frontmatter={frontmatter}/>

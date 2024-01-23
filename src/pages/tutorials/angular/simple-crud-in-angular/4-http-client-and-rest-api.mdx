@@ -1,0 +1,555 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: angular/simple-crud-in-angular
+route: '4-http-client-and-rest-api'
+title: HttpClient and REST API
+title1: Angular 15
+title2: HttpClient and REST API
+author: ['Fabio Biondi']
+description: Beginner developers often don't know how to simulate real-world scenarios for practice and don't know where to get data from. <br />In this chapter we will therefore see how to set up a fake REST API server and consume data from an Angular application. <br /><br />You will learn how to fetch data from REST API (<code>GET</code>) and remove elements from the database (<code>DELETE</code>) by using the <code>HTTPClient</code> Angular service.
+image: 
+  blur: 'angular/simple-crud-in-angular/image.png'
+  url: null
+  alt: Create a simple CRUD app
+  series: 'angular/simple-crud-in-angular/image.png'
+pubDate: 2022-12-28
+tags: ["angular", "typescript"] 
+series: 
+  name: "Create a simple CRUD app"
+  idx: 4
+difficulty: 1
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+// import Example1 from './demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import Hint from '@widgets/Hint.astro';
+import Toggle from '@widgets/Toggle.astro';
+import BannerPromoAngular from '@widgets/BannerPromoAngular.astro';
+
+
+
+
+# TOPICS
+
+# What is `json-server`
+
+
+
+[`json-server`](https://github.com/typicode/json-server) is an opensource tool that allow you to create full (fake) REST API with zero coding in few seconds.
+
+I think it's really a cool way to create REST API:
+
+* to teach and write tutorials that simulate "real-world" scenarios
+* to learn a technology that needs to work with data
+* create simple demos, [PoC](https://en.wikipedia.org/wiki/Proof_of_concept) (proof of concepts) and [MVP](https://en.wikipedia.org/wiki/Minimum_viable_product) (Minimum viable product)
+
+## How it works
+
+You can simply create a `JSON` file in which :
+
+* you can specificy all the endpoints
+* you can store some data 
+
+<Code title="<code>db.json</code>">
+```json
+{
+  "posts": [
+    { "id": 1, "title": "Item 1" },
+    { "id": 2, "title": "Item 2" },
+  ],
+  "comments": [
+    { "id": 1, "body": "a comment", "postId": 1 }
+  ],
+  "profile": { "name": "Fabio Biondi" }
+}
+```
+</Code>
+
+The previous `JSON` file creates 3 endpoints:
+
+1) `http://localhost:3000/posts`
+2) `http://localhost:3000/comments`
+3) `http://localhost:3000/profile`
+
+Now you can query/mutate your JSON database using `GET` to retrieve data, `POST` to write, `PATCH`/`PUT` to update and `DELETE` to remove an item.
+
+But you can do much more:
+* get a single item: `http://localhost:3000/posts/[ID]`
+* full text search: `http://localhost:3000/posts?q=[TEXT]`
+* sort: `http://localhost:3000/posts?_sort=views&_order=asc`
+* create relationships: `/posts?_embed=comments`
+* and much more. Read the [doc](https://github.com/typicode/json-server) for more info
+
+
+
+# Install `json-server`
+
+First, open a new terminal in the project root folder and install [`json-server`](https://github.com/typicode/json-server) as devDependency (using the `-D` parameter):
+
+<Toggle title="What is a dev dependency?">
+DevDependencies are the packages a developer needs during development and not in production just like this fake server, compilers, tools for doc generations, unit and E2E tests and so on...
+</Toggle>
+
+<Code>
+```
+npm install json-server -D
+```
+</Code>
+
+<Hint type="empty">
+  Usually your API can be located and developed in a completely new project / repository but, while you're learning, I suggest you to install JSON-SERVER as `devDependency` of your front-end project. <br />In this way, next time you'll clone or share the project you will have everything already in place and you're ready to go in few minutes without any further configuration, or clone another repository.
+</Hint>
+
+
+
+Now create a JSON file to generare your database in `./[YOUR ROOT FOLDER]/server/db.json`
+
+<Code title="<code>/server/db.json</code>">
+```json
+{
+  "users": [
+    {
+      "id": 1,
+      "label": "Fabio",
+      "gender": "F",
+      "age": 20
+    },
+    {
+      "gender": "F",
+      "label": "Marianna",
+      "id": 2,
+      "age": 21
+    },
+    {
+      "gender": "M",
+      "label": "Mario",
+      "id": 3,
+      "age": 20
+    }
+  ]
+}
+```
+</Code>
+
+Your project folder should look like the following:
+
+
+<Img src={import('./images/image (28).png')} w={400} quality={60} border />
+
+
+
+After installing JSON-Server, open `package.json`, locate the `scripts` node and add following command:
+
+<Code title="<code>package.json</code>">
+```bash
+"scripts": {
+  # ... others scripts here ...
+  "server": "json-server --watch server/db.json"
+}
+```
+</Code>
+
+
+***
+
+## START SERVER
+
+Open a new terminal window, go to the project root folder and run following script:
+
+<Code>
+```bash
+npm run server
+```
+</Code>
+
+<Hint type="alert">
+  IMPORTANT: don't kill the terminal in which you're running Angular CLI. <br /> Both terminals must run at the same time
+</Hint>
+
+
+<Img src={import('./images/2022-11-30_00-42-39 (1).gif')} w={700} quality={60} border />
+
+
+## USE REST API
+
+Now you can consume data from your endpoints. For instance:
+
+<Code>
+```
+• http://localhost:3000/users (GET)
+• http://localhost:3000/users/1 (DELETE)
+• http://localhost:3000/users/1 (POST, PUT, PATCH) and pass the user as payload
+```
+</Code>
+
+<Hint>
+The endpoint now supports CORS and all REST methods: GET, POST, DELETE, PUT, PATCH
+</Hint>
+
+
+
+# Import `HttpModule`
+
+Angular provides a useful service to communicate with your server Api: `HttpClient`.
+
+Anyway, in order to use it in your projects, first you need to import `HttpClientModule` in  `AppModule`:
+
+<Code techs={['angular', 'ts']} title="<code>app.module.ts</code>">
+
+```javascript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';   // NEW
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule // NEW
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+</Code>
+
+
+### Load Data from server
+
+Now you can inject and use `HttpClient` service to load data from server.
+
+<Hint title="WHAT IS DEPENDENCY INJECTION">
+  Dependency Injecton is a mechanism that allow you to inject a class (aka _Service_) rather than create an instance. <br />Read more in the [Angular Documentation](https://angular.io/guide/dependency-injection) and go to the next chapter to create your own service.
+</Hint>
+
+In fact, now you can replace all previous `AppComponent` class content with the following in order to:
+
+1. Inject the `HttpClient` service in the class constructor
+2. Get data from `/users` endpoint when the application starts and populate the `this.users` array.
+
+<Hint type="empty">
+ HTML template does not need to be updated so you only need to change the component class.
+</Hint>
+
+
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+export class AppComponent {
+  // init to empty array
+  users: User[] = [];                     
+  /* base API url */
+  URL = 'http://localhost:3000';          
+
+  // Inject HttpClient Service
+  constructor(private http: HttpClient) {
+    this.init();
+  }
+
+  init() {
+    // Get all users from REST API
+    this.http.get<User[]>(this.URL + '/users')
+      .subscribe(res => {
+        // populate the `users` array
+        this.users = res;
+      });
+  }
+
+  deleteHandler(userToRemove: User) {
+    // MISSING: we should invoke the endpoint to delete the item from the database
+    this.users = this.users.filter(u => u.id !== userToRemove.id);
+  }
+
+  saveHandler(f: NgForm) {
+    // MISSING: we should invoke the endpoint to add a new item to the database
+    const user = f.value as User;
+    user.id = Date.now(); // add a fake ID
+    this.users = [...this.users, user]
+    f.reset({ gender: '' });
+  }
+}
+```
+</Code>
+
+The `deleteHandler` and `saveHandler` methods still don't update the database yet since we still have to invoke the endpoints.
+
+
+<Hint>
+You will receive an compiler error if you don't import `HttpClient` in `AppComponent`:
+
+So, don't forget to import it:
+
+  <Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+  ```javascript
+  import { HttpClient } from '@angular/common/http';
+  ```
+  </Code>
+
+</Hint>
+
+
+
+<Hint title="BEST PRACTICE">
+  Usually we should invoke and consume an API in a lifecycle hook of the component called `ngOnInit` but  now I prefer invoke the API in the costructor to keep the article as simple as possible.
+</Hint>
+
+
+
+
+
+### Result
+
+You should be able now to load and display all available users of your JSON database:
+
+<Img src={import('./images/image (16).png')} w={400} quality={60} border />
+
+
+
+# `DELETE` and `POST` methods
+
+Now we update `deleteHandler` and `saveHandler` methods to invoke the REST API in order to update our database when adding or removing users. <br />
+Furthermore we also want to clean the form when a new user is added.
+
+So update your class methods as shown below:
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+  deleteHandler(userToRemove: User) {
+    // Remove User from db.json
+    this.http.delete(`${this.URL}/users/${userToRemove.id}`)
+      .subscribe(() => {
+        // Update `users` array removing the element from the list
+        this.users = this.users.filter(u => u.id !== userToRemove.id);
+      });
+  }
+
+  saveHandler(f: NgForm) {
+    // get form data (it does not contain the `id`)
+    const user = f.value as User;
+    
+    // add the user to db.json
+    this.http.post<User>(`${this.URL}/users/`, user)
+      .subscribe((dbUser) => {
+        // Add the returned user (with `id`) to the `users` array
+        this.users = [...this.users, dbUser]
+        // reset form to "pristine" status
+        f.reset({ gender: '' });
+      });
+  }
+```
+</Code>
+
+### Result
+
+Now you can remove and add users from the database. In fact, your JSON file should be updated when users are added or removed.
+
+
+### FINAL SOURCE CODE
+
+<Code techs={['angular', 'ts']} title="<code>app.component.ts</code>">
+```javascript
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { User } from './model/user';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div class="container">
+      <h1>Users</h1>
+
+      <form
+        class="card card-body mt-3"
+        #f="ngForm"
+        (submit)="saveHandler(f)"
+        [ngClass]="{
+          'male': f.value.gender === 'M',
+          'female': f.value.gender === 'F'
+        }"
+      >
+        <input
+          type="text"
+          [ngModel]
+          name="label"
+          placeholder="Add user name"
+          class="form-control"
+          required
+          #labelInput="ngModel"
+          [ngClass]="{'is-invalid': labelInput.invalid && f.dirty}"
+        >
+
+        <select
+          [ngModel]
+          name="gender"
+          class="form-control"
+          required
+          #genderInput="ngModel"
+          [ngClass]="{'is-invalid': genderInput.invalid && f.dirty}"
+        >
+          <option value="">Select option</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+
+  
+        <button
+          class="btn"
+          [disabled]="f.invalid"
+          [ngClass]="{
+            'btn-success': f.valid,
+            'btn-danger': f.invalid
+          }"
+        >Save</button>
+      </form>
+
+      <hr>
+
+      <!--LIST BELOW: NO CHANGES HERE-->
+      <hr>
+
+      <ul class="list-group">
+        <li
+          *ngFor="let u of users" class="list-group-item"
+          [ngClass]="{
+            'male': u.gender === 'M', 
+            'female': u.gender === 'F'
+          }"
+        >
+          <i
+            class="fa fa-3x"
+            [ngClass]="{
+            'fa-mars': u.gender === 'M',
+            'fa-venus': u.gender === 'F'
+          }"
+          ></i>
+
+          {{u.label}}
+
+          <i class="fa fa-trash fa-2x pull-right" (click)="deleteHandler(u)"></i>
+        </li>
+      </ul>
+    </div>
+  `,
+  styles: [`
+    .male { background-color: #36caff; }
+    .female { background-color: pink; }
+    .card { transition: all 0.5s }
+  `]
+})
+export class AppComponent {
+  users: User[] = [];                     // init to empty array
+  URL = 'http://localhost:3000';          /* server url */
+
+  constructor(private http: HttpClient) {
+    this.init();
+  }
+
+  init() {
+    this.http.get<User[]>(this.URL + '/users')
+      .subscribe(res => {
+        this.users = res;
+      });
+  }
+
+  deleteHandler(userToRemove: User) {
+    this.http.delete(`${this.URL}/users/${userToRemove.id}`)
+      .subscribe(() => {
+        this.users = this.users.filter(u => u.id !== userToRemove.id);
+      });
+  }
+
+  saveHandler(f: NgForm) {
+    const user = f.value as User;
+
+    this.http.post<User>(`${this.URL}/users/`, user)
+      .subscribe((dbUser) => {
+        this.users = [...this.users, dbUser]
+        f.reset({ gender: '' });
+      });
+  }
+}
+
+```
+</Code>
+
+### Result
+
+The result is similar to the previous one but data are now saved on database (`db.json`):
+
+
+<Img src={import('./images/2022-11-30_00-54-33 (1).gif')} w={400} quality={60} border />
+
+
+
+
+
+
+<Hint type="alert">
+  The following interactive code playground does not work as expected because we need to start a local JSON-SERVER.
+  <br /> **Run a local JSON server to see some products!**
+</Hint>
+
+
+
+
+
+# What is `subscribe`?
+
+As you may have notice, we need to **subscribe** the `HttpClient` to invoke a REST API . 
+<br />Why and what is it?
+
+`HttpClient` returns an `Observable` and emit some data when the request is fullfilled (and an error when it fails).
+ But we must subscribe it if we want to get the emitted value.
+
+<Hint title="RxJS and Observables"> 
+You can imagine an `Observarble` just like a stream of data that you have to subscribe to receive data from it.
+It might seems a `Promise` at a first glance but it's much more.
+
+This topic is very complex and hard to explain in few lines but now you only need to know that the `HttpClient` service returns a (cold) Observable, that is a "producer" that is created and activated only when subscribed.
+</Hint>
+
+
+Often, when we're talking about Observable we're referring to [RxJS](https://rxjs.dev), an amazing library that is closely coupled in Angular: more or less everything in Angular is handled by Observables. <br />
+When you start using Angular you can pretend it doesn't exist but over time you will need to improve your [RxJS](https://rxjs.dev) skills, otherwise you won't be able to take full advantage of the framework.
+
+RxJS and Reactive Programming is a complex topic but don't worry. You have time to learn more about it. 
+<br />
+Anyway, the `HttpClient` returns a "special" type of Observable that just emit one value, the result of the HTTP request, or an error, in case it doesn't work for any reason.
+
+<Hint title="Why do I need an Observable if I just receive data once?">
+  **A common question is: why Promise is not enough to handle a simple HTTP request?** <br />
+<br />  Because thanks to RxJS we can create sequences of observable mixing reactive data from forms, router, components, multiple data sources and do other "magical" stuff. <br /> I know, it's very hard to imagine when you're a beginner but I suggest to have fun with Angular and think about RxJS later. <br /><br />Anyway you can also find several videos about RxJS in my [Youtube Channel](https://www.youtube.com/c/FabioBiondi) 
+</Hint>
+
+
+
+<HDivider secondary>WHAT'S NEXT</HDivider>
+
+<TutorialSeries frontmatter={frontmatter} />
+
+
+<br />
+<BannerPromoAngular></BannerPromoAngular>
+<br />
+
+

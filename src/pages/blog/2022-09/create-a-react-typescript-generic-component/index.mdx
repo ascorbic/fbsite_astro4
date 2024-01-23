@@ -1,0 +1,244 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2022-09/create-a-react-typescript-generic-component'
+title: Create a React / TypeScript "Generic" Component
+title1: Create a <Generic> Component
+title2: with React & TypeScript
+author: ['Fabio Biondi']
+description: How to create a reusable and generic TabBar component in React / TypeScript 
+image: 
+  blur: "_react-emote.png"
+  url: "_react-emote.png"
+  alt: "a small ninja"
+pubDate: 2022-09-10
+tags: ["react", "typescript"] 
+series: 
+  name: "React Tips"
+difficulty: 3
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+import Example1 from './_demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+
+
+
+## TOPICS
+
+# Introduction 
+
+
+Often we need to create generic components in React / TypeScript that need to accept any kind of type.
+
+Since we want to create reusable components and, at the same time, they should be type-safed too, we cannot define its own props as `any` type, and `unknown` is not often a valid solution.
+
+
+<DesktopWindow>
+  <Example1 client:visible />
+</DesktopWindow>
+
+# Scenario 
+
+Now let's imagine if we have to create a `TabBar` component in React/TypeScript that accepts an `items` property of any type of array(`string[]`, `User[]`, `Whatever[]`):
+
+<Code>
+```tsx
+<TabBar
+  items={anyTypeOfArray}
+  onTabClick={selectHandler}
+/>
+```
+</Code>
+
+The output:
+
+![Demo](https://res.cloudinary.com/my-notes-demo/image/upload/v1656858867/tutorial-content/dev.to/2022-07-TabBarReactGeneric/2022-07-03_16-34-22.png)
+
+
+If the TabBar `items` property should accept any kind of type we may think to use `any[]`. Right? Ehm... no 😅
+We completely lose type checking!
+
+<Code>
+```tsx
+interface TabBarProps<T> {
+  items: any[];
+  selectedItem: any;
+  onTabClick: (item: any, selectedIndex: number) => void
+}
+```
+</Code>
+
+
+
+In fact, by using `any`, the TypeScript compiler and your IDE/editor are not able to know which type of parameters your `onTabClick` will come back or what type of data `selectedItem` should accepts:
+
+![Ide problem](https://res.cloudinary.com/my-notes-demo/image/upload/v1656858553/tutorial-content/dev.to/2022-07-TabBarReactGeneric/2022-07-03_16-28-33.png)
+
+
+# Use Generics: `<T>`
+
+Instead of using `any` we can pass a generic type to our component:
+
+1) First, we create a custom type (in this example `MySocial` but it could be anything):
+
+<Code>
+
+```ts
+interface MySocial {
+  id: number;
+  name: string;
+  link: string;
+}
+
+const socials: MySocial[] = [
+  { id: 11, name: 'WebSite', link: 'https://www.fabiobiondi.dev'},
+  { id: 12, name: 'Youtube', link: 'https://www.youtube.com/c/FabioBiondi'},
+  { id: 13, name: 'Twitch', link: 'https://www.twitch.tv/fabio_biondi'},
+]
+```
+</Code>
+
+2) We can pass this type to the component as generic:
+
+<Code>
+```tsx
+<TabBar<MySocial>
+  selectedItem={selectedSocial}
+  items={socials}
+  onTabClick={selectHandler}
+/>
+```
+</Code>
+
+
+3) Our `TabBar` component should now use generics instead of `any`. 
+We can also decide this type must includes `id` and `name` in its definition:
+
+<Code>
+```ts
+interface TabBarProps<T> {
+  items: T[];
+  selectedItem: T;
+  onTabClick: (item: T, selectedIndex: number) => void
+}
+
+export function TabBar<T extends { id: number, name: string}>(props: TabBarProps<T>) {
+  
+  /* ... your component code here ... */
+
+}
+```
+</Code>
+
+# Final Source Code
+
+Here the complete source code of `TabBar` (it uses Tailwind for CSS but it doesn't matter) :
+
+<Code techs={['react', 'ts']} title="<code>TabBar.tsx</code>">
+```tsx
+interface TabBarProps<T> {
+  items: T[];
+  selectedItem: T;
+  onTabClick: (item: T, selectedIndex: number) => void
+}
+
+export function TabBar<T extends { id: number, name: string}>(props: TabBarProps<T>) {
+  const { items, selectedItem, onTabClick} = props;
+  return (
+    <>
+      <div className="flex gap-x-3">
+        {
+          items.map((item, index) => {
+            const activeCls = item.id === selectedItem.id ? 'bg-slate-500 text-white' : ' bg-slate-200';
+            return <div
+                key={item.id}
+                className={'py-2 px-4 rounded ' + activeCls}
+                onClick={() => onTabClick(item, index)}
+              >
+                {item.name}
+              </div>
+            }
+          )
+        }
+      </div>
+    </>
+  )
+}
+
+```
+</Code>
+
+
+
+
+## Usage 
+
+Following an example of usage:
+
+
+<Code techs={['react', 'ts']} title="<code>App.tsx</code>">
+```tsx
+import { useState } from 'react';
+import { TabBar } from '../../../shared/components/TabBar';
+
+interface MySocial {
+  id: number;
+  name: string;
+  link: string;
+}
+
+const socials: MySocial[] = [
+  { id: 11, name: 'WebSite', link: 'fabiobiondi.dev'},
+  { id: 12, name: 'Youtube', link: 'YT'},
+  { id: 13, name: 'Twitch', link: 'twitch'},
+]
+
+export const App = () => {
+  const [selectedSocial, setSelectedSocial] = useState<MySocial>(socials[0])
+
+  function selectHandler(item: MySocial, selectedIndex: number) {
+    setSelectedSocial(item)
+  }
+
+  return (
+    <div>
+      <h1>Tabbar Demo</h1>
+        <TabBar<MySocial>
+          selectedItem={selectedSocial}
+          items={socials}
+          onTabClick={selectHandler}
+        />
+
+      <div className="border border-slate-200 border-solid rounded my-3 p-5">
+        <a href={selectedSocial.link}>Visit {selectedSocial.name}</a>
+      </div>
+    </div>
+  )
+};
+```
+</Code>
+
+### RESULT
+
+![Another example](https://res.cloudinary.com/my-notes-demo/image/upload/v1656859009/tutorial-content/dev.to/2022-07-TabBarReactGeneric/2022-07-03_16-36-30_1.gif)
+
+# Code Playground
+
+<IFrame src="https://stackblitz.com/edit/react-ts-n45ne6?embed=1&file=App.tsx" />
+
+
+
+
+<PostSeries frontmatter={frontmatter} />

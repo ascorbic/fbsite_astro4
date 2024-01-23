@@ -1,0 +1,71 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2022-11/post-5'
+title: JavaScript ES6 - reduce array function
+title1: JavaScript ES6 
+title2: reduce  array function
+author: ['Fabio Biondi']
+description: Tip's'Trick to use reduce with primitives, array, objects
+image: 
+  blur: "girasoli.png"
+  url: "js.png"
+  alt: "a small ninja"
+pubDate: 2022-08-08
+tags: ["astro", "javascript"]
+difficulty: 2
+draft: true
+---
+import { Image } from 'astro:assets';
+
+import HelloReact from '../../../../components/misc/HelloReact';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+import {
+  appCode,
+  appSimpleCode,
+  extendedTest,
+  indexCSS,
+  panelCode,
+  postcssConfig,
+  tailwindConfig,
+} from './data';
+  
+
+
+# CodeSandPack: Angular
+
+
+
+
+[Lorem ipsum](https://www.lipsum.com/feed/html) dolor sit amet, consectetur adipiscing elit. Nam semper malesuada dui, nec iaculis erat maximus at. Nullam porta rhoncus felis non lacinia. Vivamus viverra sapien nisi, sit amet placerat lacus ullamcorper ac. Praesent vel eleifend nulla. Cras urna tortor, imperdiet sed odio vel, vulputate pulvinar nulla. Nunc malesuada nulla ut odio ornare ultrices. Pellentesque rutrum ex in nunc sodales maximus. Suspendisse cursus ipsum ac ipsum imperdiet maximus. Vivamus lacinia quam sed lorem dapibus efficitur. Aenean quis viverra orci, vitae elementum dui. Aenean sagittis maximus ex. Nam quis ligula massa. Pellentesque convallis in velit vitae aliquet.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam semper malesuada dui, nec iaculis erat maximus at. Nullam porta rhoncus felis non lacinia. Vivamus viverra sapien nisi, sit amet placerat lacus ullamcorper ac. 
+ 
+
+# How it works
+This is a great way to style things like blog posts, or documents with CMS-powered content where the contents live outside of Astro. But be careful: components whose appearance differs based on whether or not they have a certain parent component can become difficult to troubleshoot.  
+ 
+
+<Code>
+```ts
+import rss from '@astrojs/rss';
+
+export const get = () => rss({
+  title: 'Astro Learner | Blog',
+  description: 'My journey learning Astro',
+  site: 'https://my-blog-site.netlify.app',
+  items: import.meta.glob('./**/*.md'),
+  customData: `<language>en-us</language>`,
+})
+```
+</Code>
+
+<PostSeries frontmatter={frontmatter} />

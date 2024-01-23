@@ -1,0 +1,84 @@
+---
+// TUTORIAL INDEX PAGE: list of tutorials
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { allTutorialsSeries } from "./_tutorial_list";
+import CardSimple from "@widgets/CardSimple.astro";
+
+const pageTitle = "Fabio Biondi Tutorials ";
+// const getTutorialsMdx = await Astro.glob("./**/*.{md,mdx}")
+// const allTutorialsWithoutDrafts = getTutorialsMdx.filter((tutorial) =>  import.meta.env.DEV ? true : !tutorial.frontmatter.draft);
+const images = import.meta.glob<ImageMetadata>('./**/*', { import: 'default' })
+
+---
+<BaseLayout pageTitle={pageTitle} description="Fabio Biondi - Front-End Training">
+
+  <div class="page page-min ">
+  
+    <h1 class="text-3xl md:text-4xl xl:text-6xl text-center my-3 themetxt">Tutorials</h1>
+
+    <div class="flex justify-center my-6  xl:text-2xl text-slate-400">
+      Step-by-step tutorials that you can follow to practice
+    </div>
+
+   
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-12">
+
+      {
+        allTutorialsSeries.map(async (tutorial: any, i: number) => {
+          //const path = `./${tutorial.frontmatter.slug}/${tutorial.frontmatter.image.url}`
+          // const imagesrc = await images[path]()
+          const path = `./${tutorial.slug}/${tutorial.image}`
+          const imagesrc = await images[path]()
+
+          return ( 
+          <CardSimple 
+            image={imagesrc} 
+            difficulty={tutorial.difficulty}
+            alt={tutorial.title} 
+            title={tutorial.title} 
+            desc={tutorial.description} 
+            tags={tutorial.tags}
+            url={'/'+tutorial.firstPost}
+          />
+          )}
+          
+        )
+      }
+
+    </div>
+    
+    
+{/*
+    <br /><br />
+
+    <h1 class="text-3xl my-3">Dev To Articles</h1>
+    
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+      {
+        devToArticles?.map((article: any, i: number) => 
+          <div class="card shadow-xl bg-slate-900 mb-4">
+            {article.cover_image && <figure><img src={article.cover_image} alt="Shoes" /></figure>}
+            <div class="card-body">
+
+              <a class="card-title text-white hover:text-pink-500 text-ellipsis" href={article.slug}>{article.title}</a> 
+              <p class="text-slate-600">{article.description}</p>
+              <div class="card-actions">
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+    </div>
+    */}
+  </div>
+
+</BaseLayout>
+
+
+<style>
+  .page-min {
+    min-height: calc(100vh - 500px);
+  }
+</style>

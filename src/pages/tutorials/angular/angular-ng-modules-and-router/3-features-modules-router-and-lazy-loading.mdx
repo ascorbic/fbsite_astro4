@@ -1,0 +1,398 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: angular/angular-ng-modules-and-router
+route: '3-features-modules-router-and-lazy-loading'
+title: Features module, router and lazy loading
+title1: Angular 15
+title2: Features module, router and lazy loading
+author: ['Fabio Biondi']
+description: In this step-by-step tutorial you will learn how to create a multiview application using Angular 15, with custom <code>ngModules</code> (core, feature and shared), lazy loading, primary and nested routes
+image:
+  blur: 'angular/angular-ng-modules-and-router/image.png'
+  url: null
+  alt: Create a simple CRUD app
+  series: 'angular/angular-ng-modules-and-router/image.png'
+pubDate: 2022-02-25
+tags: ["angular", "typescript"]
+series: 
+  name: "Create an Angular app with ngModules"
+  idx: 1
+difficulty: 2
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+// import Example1 from './demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import Hint from '@widgets/Hint.astro';
+import StackBlitz from '@widgets/StackBlitz';
+import BannerPromoAngular from '@widgets/BannerPromoAngular.astro';
+
+
+# GOAL
+
+Now we create the pages of the application. Each page is often associated to a specific URL, also knows as "route".
+
+Our secondary goal is to split the code in several chunks by enabling "lazy loading" and optimizing the performance when the application starts.
+
+For each route we create:
+
+* a (feature) module
+* its own routing module
+* the main component loaded when the route is visited, also know as _routed_ component
+
+Here you can see the final result of this recipe:
+
+<StackBlitz clickToLoad={true} url="https://stackblitz.com/edit/angular-ivy-3r8xge?file=src%2Fapp%2Fapp.component.ts" client:visible />
+
+
+# TOPICS
+
+
+# Create the pages
+So let's start creating the "Setting" Page.
+
+This command generates the main (routed) component, its own "feature" module and a "routing" module.
+Furthermore, it also adds a new path to the `AppRoutingModule` file, named `settings`:
+
+
+<Code>
+```bash
+ng g m features/settings --route settings --module app.module
+```
+</Code>
+
+
+<Img src={import('./images/module_schematics.png')} w={800} quality={60} border align="center"/>
+
+It generates the following new folder:
+
+<Img src={import('./images/module_feature_settings_folders.png')} w={300} quality={60} border align="center"/>
+
+
+The "Routed" module is the module that will be associated to a route "path" and lazy loaded:
+
+<Code techs={['angular']} title="<code>settings.module.ts</code>">
+```ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { SettingsRoutingModule } from './settings-routing.module';
+import { SettingsComponent } from './settings.component';
+
+@NgModule({
+  declarations: [
+    SettingsComponent
+  ],
+  imports: [
+    CommonModule,
+    SettingsRoutingModule
+  ]
+})
+export class SettingsModule { }
+```
+</Code>
+
+The "Routing Module" defines the default component to load when the route is visited:
+
+<Code techs={['angular']} title="<code>settings-routing.module.ts</code>">
+```ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { SettingsComponent } from './settings.component';
+
+const routes: Routes = [{ path: '', component: SettingsComponent }];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class SettingsRoutingModule { }
+```
+</Code>
+
+
+
+`SettingsComponent` is the component that will be loaded when the route is visited:
+
+<Code techs={['angular']} title="<code>settings.component.ts</code>">
+  ```ts
+  import { Component } from '@angular/core';
+
+  @Component({
+  selector: 'app-settings',
+  template: `
+    <p>
+      settings works!
+    </p>
+  `,
+  styles: [
+  ]
+})
+  export class SettingsComponent { }
+  ```
+</Code>
+
+And now you can create other two routes, `/home` and `/users`:
+
+<Code>
+```bash
+ng g m features/home --route home --module app.module
+```
+</Code>
+
+<Code>
+```bash
+ng g m features/users --route users --module app.module
+```
+</Code>
+
+The previous commands generate the following files:
+
+<Img src={import('./images/project-structure-with-modules.png')} w={400} quality={60} border align="center"/>
+
+
+
+I love this command because the `app-routing.module.ts` is magically updated too, adding a new rule for each route / module and applying the "lazy loading".
+
+<Code techs={['angular']}  title="<code>app-routing.module</code>">
+```ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: 'settings', loadChildren: () => import('./features/settings/settings.module').then(m => m.SettingsModule) },
+  { path: 'home', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
+  { path: 'users', loadChildren: () => import('./features/users/users.module').then(m => m.UsersModule) }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+</Code>
+
+In fact you can now access each route through a specific url:
+
+* [http://localhost:4200/home](http://localhost:4200/home)
+* [http://localhost:4200/settings](http://localhost:4200/settings)
+* [http://localhost:4200/users](http://localhost:4200/users)
+
+<Img src={import('./images/features_home_preview.png')} w={600} quality={60} border align="center"/>
+
+
+
+
+# Angular Router
+Now you need to create a fallback for users that:
+
+1) visit your application starting from the root: `http://localhost:4200`
+2) visit a wrong path, i.e. `http://localhost:4200/anything`
+
+<Hint title="TIP">
+Use the wildcard `**`
+</Hint>
+
+Open `app-routing.module` and add the `**` redirect:
+
+<Code techs={['angular']}  title="<code>app-routing.module</code>">
+```ts
+const routes: Routes = [
+  { path: 'settings', loadChildren: () => import('./features/settings/settings.module').then(m => m.SettingsModule) },
+  { path: 'home', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) },
+  { path: 'users', loadChildren: () => import('./features/users/users.module').then(m => m.UsersModule) },
+  // NEW
+  { path: '**', redirectTo: 'home' },
+];
+
+```
+</Code>
+
+
+### TRY IT
+You can now test if the default route works by visiting the default url:
+
+* [http://localhost:4200](http://localhost:4200)
+
+it should automatically redirect to `/home`.
+
+You can also try to use a wrong url, just like [http://localhost:4200/anything](http://localhost:4200/anything), and you should be automatically redirected to the `/home` again.
+
+
+# Router directives
+
+Update the navigation bar component to enable the navigation.
+
+You can simply use `routerLink` and `routerLinkActive` directives included in `RouterModule`:
+
+* `routerLink`: simply navigates to a specified path without refreshing the application
+* `routerLinkActive`: apply a custom CSS class to the element when the browser url matches the `routerLink` path
+
+## First Step
+
+Add `RouterModule` to `core/core.module.ts` since we use its directives in the `NavBar` component.
+
+<Code techs={['angular']}  title="<code>core.module.ts</code>">
+```ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';     // <=== NEW
+import { NavbarComponent } from './components/navbar.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule                                    // <=== NEW
+  ],
+  declarations: [NavbarComponent],
+  exports: [NavbarComponent]
+})
+export class CoreModule { }
+```
+</Code>
+
+
+## Second Step
+
+Open `core/components/navbar.component.ts` and use `routerLink` and `routerLinkActive`.
+
+You can just replace previous content copy-pasting the following:
+
+
+<Code techs={['angular']} title="<code>navbar.component.ts</code>">
+  ```html
+import { Component } from '@angular/core';
+
+@Component({
+selector: 'app-navbar',
+template: `
+  <nav class="navbar navbar-expand navbar-dark bg-dark text-white">
+    <a class="navbar-brand">LOGO</a>
+
+    <div class="navbar-collapse collapse">
+      <ul class="navbar-nav">
+        <li class="nav-item" routerLink="/home" >
+          <a class="nav-link" routerLinkActive="active">Home</a>
+        </li>
+
+        <li class="nav-item" routerLink="/settings">
+          <a class="nav-link" routerLinkActive="active">Settings</a>
+        </li>
+
+        <li class="nav-item" routerLink="/users">
+          <a class="nav-link" routerLinkActive="active">Users</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+`
+})
+export class NavbarComponent { }
+
+```
+</Code>
+
+### Try it
+
+Now you should be able to navigate the application by using the navigation bar:
+
+
+<Img src={import('./images/navbar_animated_preview.gif')} w={400} quality={60} border align="center"/>
+
+
+Now open the Network tab of your (Chrome) dev tools and check if each javascript chunk is loaded the first time you visit a route:
+
+<Img src={import('./images/lazy_loading_feature_preview.gif')} w={600} quality={60} border align="center"/>
+
+
+
+
+
+# Challenges
+
+Now it's time to learn by doing.
+
+Try to complete next steps on your own:
+
+# 1) Create the login route
+
+**a)** Create a new route, as done before, named `login`.
+
+**b)** Update the routing rules in order to load the `login` route when users visit the "index" path:  `http://localhost:4200/`
+
+<Hint title="TIP">
+Update `AppRoutingModule`: the "login" page should be shown when the `path` is an empty string:
+<br />
+
+`{ path: '', ... }`
+</Hint>
+
+# 2) Create the Shared Module
+
+**a)** Create a new `SharedModule` in `/app/shared`
+
+<Code>
+```bash
+ng g m shared
+```
+</Code>
+
+
+**b)** Create a new component `CardComponent` in the `shared` folder, add it to `SharedModule` and **export** it in order to be used elsewhere.
+
+You can automatically accomplish it by using the following command:
+
+<Code>
+  ```bash
+  ng g c shared/components/card --flat --export
+  ```
+</Code>
+
+
+<Hint title="INFO">
+  * we used `--flat` to avoid the card folder creation
+  * we used `--export` to add component in both, `declarations` and `exports` properties, of `SharedModule`
+</Hint>
+
+**c)** Now you can use the `CardComponent` component in `HomeComponent`.
+
+
+<Hint title="TIP">
+  Import `SharedModule` in `HomeModule`, so you can use` <app-card>` component in your `HomeComponent` HTML template.
+</Hint>
+
+
+**d)** Test your work. Open `http://localhost:4200/home` and you should see following output:
+
+<Img src={import('./images/shared-module-preview.png')} w={800} quality={60} border align="center"/>
+
+
+
+# 3) Add another component
+Add a new component to `SharedModule`, named `IconComponent`, as done in the previous exercise, and use it in `users.component.ts`.
+
+
+# Source Code & Preview
+Here you can see the final result:
+
+<StackBlitz clickToLoad={true} url="https://stackblitz.com/edit/angular-ivy-3r8xge?file=src%2Fapp%2Fapp.component.ts" client:visible />
+
+
+
+<TutorialSeries frontmatter={frontmatter} />
+
+<br />
+<BannerPromoAngular></BannerPromoAngular>
+<br />

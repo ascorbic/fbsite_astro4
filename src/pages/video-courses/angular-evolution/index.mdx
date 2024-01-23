@@ -1,0 +1,535 @@
+---
+layout: ../../../components/video-courses/VideoCoursesLayout.astro
+css: 'red'
+badge: NOVITÀ 2024
+featured: true
+draft: false
+notListed: false
+slug: 'angular-evolution'
+title: Angular Evolution (v.17) - Impara a sviluppare applicazioni web con la più recente versione di Angular
+title1: Angular Evolution  (v.17)
+title2: Un video corso per imparare a sviluppare applicazioni web con <span class="font-bold">la più recente versione di Angular</bold>
+description: 'La versione 17 di Angular ha introdotto moltissime novità che hanno totalmente stravolto il framework! <br /><br />  Angular è ora molto più semplice e performante</span> rispetto alle precedenti versioni ma, allo stesso tempo, rimane il framework front-end più potente e ricco di funzionalità per la creazione di applicazioni web.'
+author: ['Fabio Biondi']
+heroButtonLabel: ACQUISTA IL CORSO
+image:
+  blur: "images/banner/angular-evolution-square-site.png"
+  url: "images/banner/angular-evolution-square-site.png"
+  social: "images/banner/angular_evolution_preview_social.png"
+  alt: "Angular Evolution - Produttivo in poche ore con le novità recentemente introdotte"
+lastUpdate: 2024-01-01
+tags: ["angular", "typescript", "rxjs"]
+difficulty: 2
+stats: [
+{v: '10+', unit: 'ore', text: 'di lezione'},
+{v: '200', unit: '', text: 'video'},
+{v: '15', unit: '', text: 'capitoli'},
+]
+list: {
+  text: 'Grazie a questo video corso, in pochi giorni, imparerai a:',
+  items: [
+    { text: 'Creare Single Page Application con le <span class="font-bold">più recenti funzionalità del framework</span>' },
+    { text: 'Creare <span class="font-bold">componenti riutilizzabili</span>' },
+    { text: 'Ottimizzare il codice per ottenere il <span class="font-bold">massimo delle performance</span>' },
+  ],
+  endText: 'Un corso realizzato a gennaio 2024 da <span class="text-sky-600 dark:text-sky-300 font-bold">Fabio Biondi</span>, Google Developer Expert in Angular.'
+}
+videoSeries: 
+  idx: 1
+
+---
+
+import * as C from '../../../components/video-courses/components/'
+import * as W from '@widgets'
+// import StackBlitz from '@widgets/StackBlitz'; // NOTE: cannot be exported from barrel file 
+import {lessons} from './program';
+import {programJS} from '../js-ts/program';
+import {reviews, getUser} from './reviews';
+import SingleTestimonial from '@widgets/Testimonial'
+
+<W.PixelFacebook />
+
+<W.P mt="none">
+  <SingleTestimonial reviews={reviews} maxLength={240} client:visible />
+</W.P>
+
+
+
+<W.P title="Introduzione">
+  <span class="font-bold">Angular</span>, il framework di sviluppo front-end creato da Google, si è affermato negli anni come uno strumento indispensabile per la creazione di <span class="font-bold"> applicazioni web enterprise</span>.
+  <div>Offre una robusta architettura che semplifica lo sviluppo di scenari complessi, migliorando la manutenibilità del codice e consentendo la creazione di applicazioni scalabili.</div>
+</W.P>
+<W.Separator size="lg"></W.Separator>
+
+<W.P title="Prima di Angular v.17..." mt="none">
+  ...il framework era troppo <span class="font-bold">complesso</span>!  <br />Soprattutto i neo-programmatori si sono spesso lamentati per la curva di apprendimento iniziale un po' ripida ma, anche per i più esperti, non è mai stato davvero semplice. <br />
+  Anche le performance non erano il massimo se confrontate con i più recenti framework.
+
+  Tuttavia, <span className="text-sky-600 dark:text-sky-300 font-bold">solidità, quantità e qualità delle funzionalità incluse nel framework, lo hanno sempre messo in rilievo rispetto ai competitor</span>.
+
+  Come migliorare un prodotto già valido, quindi?
+
+  1)  <span class="font-bold">Semplificandolo</span>
+  2)  <span class="font-bold">Aumentando le prestazioni</span>
+</W.P>
+
+
+<W.Separator size="lg"></W.Separator>
+
+
+<W.P title="Angular è rinato!" mt="none">
+
+  <br />
+  <span className="text-sky-600 dark:text-sky-300 font-bold">Avevamo realmente  bisogno di un nuovo corso su Angular?</span><span class="font-bold"> La risposta è SI!</span>
+
+  La versione v.17 ha totalmente stravolto il framework che, pur mantenendo la retrocompatibilità con il passato, ha introdotto una moltitudine di API che lo ha semplificato e reso più performante rispetto al passato.
+
+  Il framework è così differente rispetto al passato che il team Angular ha ben pensato di effettuare un re-brand (nuovo logo e nuovo sito) e di definirla  "angular renaissance", ovvero la "rinascita di Angular".
+
+  <span class="font-bold">Ed è per questo che ho deciso di chiamare questo corso</span> <span className="text-sky-600 dark:text-sky-300 font-bold">"Angular Evolution"</span>
+
+</W.P>
+<W.Img isWindowed={false} src={import('./images/banner/angular-evolution-hotizontal-site.png')} w={800} quality={60} border />
+
+
+<W.Separator size="xl"></W.Separator>
+
+<W.P title="Il corso" mt="none">
+
+  L'introduzione degli <span className="text-sky-600 dark:text-sky-300 font-bold">standalone components</span>, dei <span className="text-sky-600 dark:text-sky-300 font-bold">Signals</span>, della nuova <span className="text-sky-600 dark:text-sky-300 font-bold">control flow syntax</span> e di moltissime nuove API ha potenziato e, allo stesso tempo, snellito il framework rispetto alle precedenti versioni, eliminando la necessità di creare sovrastrutture complesse e semplificando notevolmente il processo di sviluppo.
+
+  Per questo motivo, pur avendo già a catalogo il corso <a href="./angular-fundamentals" target="_blank" class="link">Angular Fundamentals</a> (il mio corso più venduto) ho deciso di realizzarne uno totalmente nuovo,
+  <span className="text-sky-600 dark:text-sky-300 font-bold">completamente riscritto per sfruttare al massimo le potenzialità delle nuove API e funzionalità introdotte nelle più recenti versioni</span>.
+
+
+  <span className="font-bold">Guarda il video per saperne di più:</span>
+
+  <W.IFrame vimeo src="https://player.vimeo.com/video/897971598?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" noMargins={true} />
+
+</W.P>
+
+
+
+
+<W.Notes>
+
+<C.BulletPoints
+  badge="FAQ"
+  image={import('./images/desktop-angular-fundamentals.png')}
+  textTitle="HAI GIÀ ACQUISTATO <br />IL CORSO 'ANGULAR FUNDAMENTALS?'"
+  text={`
+    Hai già acquistato il mio precedente corso "Angular Fundamentals" e <span class="text-sky-600 dark:text-sky-300 font-bold">ti stai chiedendo se questo corso può esserti utile?</span>
+  <br />
+  <br />
+  Vi assicuro che non avrei investito il mio tempo nella creazione di un nuovo corso se il framework non fosse cambiato così drasticamente.
+  <br />
+  <!--Viste le numerose novità ho ritenuto necessario creare un <span class="text-sky-600 dark:text-sky-300 font-bold">nuovo video corso per sfruttare a pieno le nuove potenzialità offerte dal framework</a></span> -->
+
+
+  È probabile che avrai già studiato o applicato molti dei concetti esposti nel corso ma nuove API, differenti sintassi e nuove strategie per rendere il framework più "moderno" e performante lo hanno totalmente stravolto da ogni punto di vista: <br><br>
+
+
+   • componenti e moduli sono ora gestiti in modo differente; <br />
+   • router, dependency injection, componenti, solo per citare alcune funzionalità, sono stati semplificati e offrono nuove funzionalità; <br />
+   • i signals, la nuova Control Flow Syntax per i template e @defer stravolgono la creazione di template dinamici; <br />
+   • nuove strategie per l'ottimizzazione delle performance<br />
+   • e molte nuove API ...<br />
+
+
+   <br>
+
+  `}
+/>
+
+</W.Notes>
+
+<C.ImageGrid title="Punti di forza" items={[
+  {
+    t: 'Micro Learning', d: 'Perché perdere tempo con video lunghi e tediosi, creati al solo scopo di allungare il corso?<br /><span class="text-sky-600 dark:text-sky-300 font-bold"> Lezioni brevi, molto pratiche e "velocizzate" in post-produzione nelle parti più noiose e ripetitive</span>.',
+    image: import('../../../images/brand/emote-setup.png')
+  },
+  {
+    t: 'Aggiornato alla v.17', d: '<span class="text-sky-600 dark:text-sky-300 font-bold">Sfruttiamo le API più recenti</span> del framework: Signal, New Control Flow syntax, Defer blocks, novità su router, dependency injection, componenti e molto altro',
+    image: import('../../../images/brand/emote-stand-angular-new.png')
+  },
+  {
+      t: 'TypeScript e RxJS', d: 'Approfondimenti sul linguaggio TypeScript e RxJS per sfruttare al meglio le potenzialità del framework',
+      image: import('../../../images/brand/emote-cuscini-ts.png')
+    },
+  {
+    t: 'Source Code', d: `Il codice è disponibile sotto ogni video per replicare velocemente quello che è stato svolto nella lezione. Troverai spesso anche dei link di approfondimento`,
+    image: import('../../../images/brand/emote-laptop-new.png')
+  },
+  {
+    t: 'Quiz e Cheatsheet', d: `Dopo ogni capitolo potrai verificare quanto appreso grazie ad un breve quiz di verifica. Avrai, inoltre, a disposizione diversi Cheatsheet PDF da scaricare`,
+    image: import('../../../images/brand/emote-desk.png')
+  },
+  {
+    t: 'Supporto', d: 'Hai dubbi o domande? <br />Puoi scrivere un commento sotto ogni video per ricevere supporto da me e dagli altri studenti',
+    image: import('../../../images/brand/emote-pausa.png')
+  }
+]}>
+Un corso per apprendere le più recenti funzionalità, API e buone pratiche per lo sviluppo di applicazioni web utilizzando Angular, il  framework front-end di Google.
+
+    Tutto ciò di cui hai bisogno per essere <span class="text-sky-600 dark:text-sky-300 font-bold">produttivo nel più breve tempo possibile</span> ma con solide fondamenta e senza trascurare aspetti come ottimizzazione delle performance e qualità del codice.
+
+</C.ImageGrid>
+
+<div class="text-center">
+Leggi le <a href="#testimonials" class="link">recensioni</a> dei primi studenti
+</div>
+
+<W.Separator size="xl"></W.Separator>
+
+
+
+  <C.BulletPoints
+    badge="CONTENUTI DEL CORSO"
+    video="https://player.vimeo.com/video/897977371?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+    vimeo
+    textTitle="Il corso più aggiornato su Angular"
+    text={`
+   Sfrutta  <span class="text-sky-600 dark:text-sky-300 font-bold">API, paradigmi e metodologie per sviluppare applicazioni web con la più recente versione del framework</span>.
+</span>
+    <br>
+    <br>
+Nel corso: <br />
+• Angular Fundamentals: template dinamici, stili, binding, API, ... <br />
+• Diversi tip'n'tricks su TypeScript e RxJS <br />
+• Signals e Gestione stato <br />
+• Nuova Control Flow Syntax <br />
+• Creazione componenti riutilizzabili <br />
+• Gestione Router e applicazioni multi-view <br />
+• Comunicazione con il server tramite REST API <br />
+• Organizzazione progetti in componenti e servizi<br />
+• Applicare best practices e migliorare le performance <br />
+• Sfruttare il motore di Dependency Injection <br />
+• Deploy e introduzione al component testing in Cypress<br />
+<br />
+
+<span class="font-bold">Guarda il video per ulteriori dettagli sui contenuti del corso</span>
+  `}
+  />
+
+<W.Notes title="TIER2">
+
+  <C.BulletPoints
+    badge="MICRO LEARNING"
+    video="https://www.youtube.com/embed/pIy2k91XznE?rel=0"
+    textTitle="Produttivo in breve tempo"
+    text={`
+    <span class="text-sky-600 dark:text-sky-300 font-bold">Video brevi, concisi e dritti al punto.</span>
+    <br>
+    <br>
+    Tutto ciò di cui hai bisogno per essere produttivo nel più breve tempo possibile ma con solide fondamenta e senza trascurare aspetti legati all'ottimizzazione delle prestazioni e alla qualità del codice.
+
+<br />
+<br />
+
+  `}
+  />
+
+</W.Notes>
+
+
+
+<C.BulletPoints
+  right
+  badge="APPROFONDIMENTI"
+  image={import('./images/angular-profiler.png')}
+  textTitle="Prestazioni e Ottimizzazioni"
+  text={`
+   Pur essendo un corso che parte delle fondamenta, ho dato molto spazio al concetto di <span class="text-sky-600 dark:text-sky-300 font-bold">performance e ottimizzazione</span> del codice:
+
+
+<div>• Analisi dei render</div>
+<div>• Funzionamento della Change Detection</div>
+<div>• Strategie per ottimizzare i render, con e senza i Signals</div>
+<div>• Lazy Loading e ottimizzazione del bundle...</div>
+<div>• ...e le più recenti funzionalità dei blocchi <code>@defer</code></div>
+<div>• Utilizzo degli Angular Dev Tools</div>
+
+  `}
+/>
+
+
+
+<C.BulletPoints
+  badge="ESEMPIO CONTENUTO"
+
+  image={import('./images/uikit_components_demo.png')}
+  textTitle="Reusable Components"
+  text={`
+    Durante il corso creeremo un set di <span class="text-sky-600 dark:text-sky-300 font-bold">componenti riutilizzabili senza l'ausilio di UIKIT e dipendenze di terza parti</span> (eccetto Tailwind e Daisy UI per i CSS).
+    <br>
+    <br>
+    <span class="font-bold">Amo la teoria ma ancora di più la pratica.</span>
+    <br><br>
+
+    La creazione di diversi componenti riutilizzabili ti permetterà di apprendere e acquisire confidenza con alcune delle funzionalità fondamentali del framework e, allo stesso tempo, di essere sufficientemente autonomo nel gestire diverse casistiche senza necessariamente ricorrere all'ausilio di librerie di terze parti, astraendo e creando componenti flessibili e modulari.
+`}
+/>
+
+
+<C.BulletPoints
+  badge="CAPITOLI BONUS"
+  right
+  image={import('./images/misc/bonus-chapters.png')}
+  textTitle="PER I PIÙ ESPERTI..."
+  text={`
+    Il corso include tre capitoli bonus con altri <span class="text-sky-600 dark:text-sky-300 font-bold">contenuti esclusivi e aggiornati</span> alle ultime versioni:
+    <br />
+    <br />
+
+    <div class="font-bold text-2xl">1. Cypress</div>
+    Spesso utilizzato per scrivere test E2E in modo davvero semplice, <span class="text-sky-600 dark:text-sky-300 font-bold"><a href="https://www.cypress.io/" target="_blank">Cypress</a></span> integra anche delle utilissime funzionalità per il <span class="text-sky-600 dark:text-sky-300 font-bold">Component Testing</span>, che in questo corso esploreremo molto velocemente.
+    <br>
+    <div class="font-bold text-2xl">2. Auth<code>0</code></div>
+    <span class="text-sky-600 dark:text-sky-300 font-bold"><a href="https://auth0.com/" target="_blank">Auth0</a></span> rappresenta una delle piattaforme più utilizzate per la creazione di sistemi di autenticazione, flessibili solidi e scalabili.
+    <br>
+    <div class="font-bold text-2xl">3. SSR e SSG (in ARRIVO)</div>
+    Utilizzare <span class="text-sky-600 dark:text-sky-300 font-bold">Server Side Rendering (SSR) e Static Site Generation (SSG)</span> per sfruttare diverse strategie di pre-rendering e creare applicazioni performanti e SEO Friendly
+`}
+/>
+
+
+
+
+<C.BulletPoints
+  badge="MICRO LEARNING"
+  image={import('./images/misc/setup2.png')}
+  textTitle="Metodologia di insegnamento"
+  text={`
+
+  <div class="text-sky-600 dark:text-sky-300 font-bold">Amo i video brevi, che vadano dritti al punto!</div>
+  <em>E non sopporto le perdite di tempo, i corsi dove è necessario impostare la riproduzione a 2x per evitare che mi addormenti, creati al solo scopo di far sembrare il corso più interessante.</em>
+  <br />
+<br />
+
+Per questo motivo: <br>
+ <span class="text-sky-600 dark:text-sky-300 font-bold">1.</span> Il percorso e gli esempi sono stati progettati con cura per fornire tutte le informazioni di cui si ha bisogno per essere produttivi nel minor tempo possibile  <br />
+<span class="text-sky-600 dark:text-sky-300 font-bold">2.</span> Non solo descrivo le funzionalità del framework ma cerco di fornire solide fondamenta, spiegando spesso i PERCHÈ, i COME e COSA accade dietro le quinte. <br />
+<span class="text-sky-600 dark:text-sky-300 font-bold">3.</span> Il processo di post-produzione è "immenso": un video di 10 minuti spesso diventa di 1 o 2 minuti, tagliando sbavature, errori, velocizzando le parti lente che non aggiungono valore reale ed eliminando tutte le parti superflue<br />
+
+  `}
+/>
+
+
+<W.Separator size="xl"></W.Separator>
+
+<C.ImageGrid bg title="A chi è rivolto" items={[
+  {
+    t: 'Principianti', d: 'Non hai mai utilizzato Angular? <br /><br />Questo corso ti aiuterà ad essere produttivo in pochissimo tempo, sfruttando le più recenti API offerte dal framework',
+    image: import('../../../images/brand/emote-angular-complete.png'),
+  },
+  {
+    t: 'Experts', d: 'Utilizzi Angular da tempo o hai già acquistato il corso Angular Fundamentals? <br /> <br />Scoprirai  moltissime novità nel più breve tempo possibile! <br /> Guarda il video di presentazione',
+    image: import('../../../images/brand/emote-superheroangular.png'),
+  }
+]}>
+</C.ImageGrid>
+
+
+<W.Separator size="xl"></W.Separator>
+
+<W.P mt="none">
+  <SingleTestimonial reviews={reviews} maxLength={240} client:load />
+
+  <em class="text-center">
+  Leggi le altre <a href="#testimonials" class="link">recensioni</a>
+  </em>
+
+</W.P>
+
+<W.Separator size="xl"></W.Separator>
+
+
+<W.P title="Requisiti" mt="none">
+
+L'unico vero requisito è saper utilizzare i costrutti alla base di JavaScript ES2015, ad es. arrow syntax, array methods, spread operators e così via.
+Anche una minima conoscenza di TypeScript sarebbe preferibile.
+
+<div class="text-sky-600 dark:text-sky-300 font-bold">Nel caso non avessi queste nozioni?</div>
+Incluso nel bundle, troverete anche un mini corso propedeutico di 3 ore su JavaScript / TypeScript che ti consiglio di guardare prima del corso Angular.
+
+Non lo consiglio, invece, nel caso non avessi proprio alcuna esperienza di programmazione.
+</W.P>
+
+<br />
+
+{/* <W.Img isWindowed={false} src={import('./images/banner/angular-evolution-hotizontal-site.png')} w={1024} quality={60} border /> */}
+
+
+
+
+
+<W.P title="Il Programma" mt="none">
+Un percorso di studio sull'ultima versione di Angular per essere produttivo nel più breve tempo possibile!
+
+<W.Notes>
+  <W.IFrame src="https://www.youtube.com/embed/_GpW1832_E0?rel=0" noMargins={true} />
+</W.Notes>
+
+  <W.IFrame vimeo src="https://player.vimeo.com/video/901363671?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" noMargins={true} />
+
+</W.P>
+
+
+
+<C.ProgramList
+  description=""
+  data={lessons}
+  frontmatter={frontmatter}
+/>
+
+
+
+<C.BulletPoints
+  badge="PROMOZIONI"
+  image={import('./images/cheatsheet_cards_reactive_forms.png')}
+  textTitle="CORSI IN SUPER PROMO"
+  text={`
+    <div class="font-bold"> Non c'è un capitolo sui form?</div>
+    Il motivo è che ho già creato un video corso dedicato, <span class="text-sky-600 dark:text-sky-300 font-bold"><a href="./angular-reactive-forms" target="_blank">"Reactive Forms Fundamentals"</a></span> della <span class="text-sky-600 dark:text-sky-300 font-bold">durata di 3 ore</span> in cui potrai imparare a creare <span class="font-bold">form tipizzati</span> usando i potentissimi Reactive Forms forniti dal framework
+
+    <br />
+    <br />
+    <div class="font-bold">All'interno del corso  troverai un coupon per acquistarlo <span class="text-sky-600 dark:text-sky-300 font-bold">a soli € 29 + iva</span>.</div>
+<br />
+    Ma non solo!
+
+    <div>Acquistando il corso Angular Evolution potrai sfruttare le super promozioni per acquistare i corsi: </div>
+
+    <div>• <span class="text-sky-600 dark:text-sky-300 font-bold"><a href="./rxjs" target="_blank">"Reactive Programming con Angular e RxJS 6"</a></span> a soli € 79 + iva* </div>
+
+    <div>• <span class="text-sky-600 dark:text-sky-300 font-bold"><a href="./scrivere-e2e-test-con-cypress" target="_blank">"Scrivere E2E test con Cypress "</a></span> a soli € 79 + iva* </div>
+
+    <em class="text-sm">* Troverai i coupon all'interno del video corso Angular Evolution</em>
+
+`}
+/>
+
+
+
+
+
+
+<div>
+  <C.Pricing
+    frontmatter={frontmatter}
+    left={{
+      title: 'TEAM 5 studenti',
+      price: {
+        value: '69', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo promozionale per team di almeno 5 persone',
+        'Report / Progress per singolo utente',
+        'Promozione applicabile solo a società e team. Non gruppi di acquisto',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 5 licenze del video corso Angular Evolution'
+      }
+    }}
+    center={{
+      badge: 'IN OFFERTA ',
+      title: 'Singolo Utente',
+      description: 'In offerta limitata solo per i primi giorni di lancio',
+      price: {
+        value: '139',
+        currency: '€',
+        unit: '+ iva',
+        promo: '97',
+        promoMsg: '<div class="text-xl">invece di € 139 + iva</div>'
+      },
+      items: [
+         '200+ video su Angular v.17',
+        '10+ ore di lezione',
+        'Cheatsheet PDF',
+        'Quiz',
+        'Link di approfondimento',
+        '+ 3 ore corso <br />JavaScript / TypeScript',
+        '15 gg soddisfatto o rimborsato',
+        'Codice Sorgente',
+        'Supporto Tecnico',
+      ],
+      button: {
+        label: 'PROCEDI',
+        link: 'https://sso.teachable.com/secure/213789/checkout/5260786/angular-evolution?coupon_code=EVO_LAUNCH',
+        target: '_blank'
+      }
+    }}
+    right={{
+
+      title: 'TEAM 10 studenti',
+      price: {
+        value: '49', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo promozionale per team di 10+ persone',
+        'Report / Progress per singolo utente',
+        'Promozione applicabile solo a società e team. Non gruppi di acquisto',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 10 licenze del video corso Angular Evolution'
+      }
+    }}
+  />
+</div>
+
+
+<C.Faq frontmatter={frontmatter}/>
+
+<a href="https://t.me/fabiobiondi" target="_blank">
+<W.Img isWindowed={false} src={import('./images/banner/iscriviti_al_gruppo_telegram.png')} w={800} quality={60} border />
+</a>
+
+<W.Testimonials data={reviews} />
+
+
+
+
+
+<W.Notes title="FINAL ">
+
+  <div>
+    <C.Pricing
+      frontmatter={frontmatter}
+      center={{
+        badge: 'PRESTO DISPONIBILE',
+        title: 'Disponibile a giorni',
+        description: 'Iscriviti al mio gruppo  Telegram per assicurarti la promo del lancio',
+        price: {
+          value: '',
+          currency: '',
+          unit: '',
+          promo: '',
+          promoMsg: ''
+        },
+        items: [
+          /*`<div class=" text-black">
+            <!-- <div class="font-bold">A soli € xx+iva <br /> per i primi giorni di lancio</div> -->
+            <div  class="text-sm">Iscriviti al <a href="https://t.me/fabiobiondi" target="_blank" class="underline  font-bold">canale Telegram</a> per saperne di più</div>
+          </div>`*/,
+            '180+ video su Angular v.17',
+            '9+ ore di lezione',
+            'Cheatsheet PDF',
+            'Quiz',
+            'Link di approfondimento',
+            '+ 3 ore corso <br />JavaScript / TypeScript',
+            '15 gg soddisfatto o rimborsato',
+            'Codice Sorgente',
+            'Supporto Tecnico',
+        ],
+        button: {
+          label: 'ISCRIVITI AL GRUPPO TELEGRAM',
+          link: 'https://t.me/fabiobiondi',
+           target: '_blank'
+        }
+      }}
+    />
+  </div>
+</W.Notes>
+

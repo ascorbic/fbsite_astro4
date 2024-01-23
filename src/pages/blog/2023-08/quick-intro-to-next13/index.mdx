@@ -1,0 +1,373 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2023-08/quick-intro-to-next13'
+title: A quick introduction to NextJS v.13
+title1: Next v.13
+title2: A quick introduction to NextJS v.13 and the "App Router" folder
+description: Discover some of the new API and features introduced by Next JS 13
+author: ['Fabio Biondi']
+image: 
+  blur: "image.png"
+  url: "image.png"
+  alt: "NextJS emote"
+pubDate: 2023-08-10
+tags: ["nextjs", "react"]
+series: 
+  name: "NextJS"
+difficulty: 2
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+import Hint from '@widgets/Hint.astro';
+import StackBlitz from '@widgets/StackBlitz';
+
+## TOPICS
+
+# Introduction
+
+I'm creating several videos about the main features of <a href="https://nextjs.org/">Next 13</a> (by Vercel) and in addition to the code I created some animations to simplify many concepts.
+
+I have shared some tips on LinkedIn but, since after a while it's hard to find information, I have thoughts to share them on my blog too.
+
+
+<Hint title="My Video Course about NextJS" type="empty">
+  I have published a <a href="https://www.fabiobiondi.dev/video-courses/next-fundamentals">video course </a>(in italian only) about <a href="https://www.fabiobiondi.dev/video-courses/next-fundamentals"> Next JS </a>  (created with version 12 but updated to 13.x) and this content is part of that.
+</Hint>
+
+
+# Layout & Index files in Next 13
+
+Usually a simple Next (v.13) application has at least the following files:
+* `layout.tsx`: used to share components (and state) across multiple routes
+* `page.tsx`: one or more files that represent a single route
+
+
+<IFrame src="https://www.youtube.com/embed/qmgh66E95OE" />
+
+When we make fetch calls in a page created with NextJS we have to wait for the completion of the Promises before being able to view the rendered content.
+
+
+<Code techs={['react', 'ts',  'next']} title="example of static data fetch in Next 13">
+```tsx
+import { User } from '@/model/user';
+
+async function getData(): Promise<User[]> {
+  const res = await fetch('https://jsonplaceholder.typicode.com/users')
+  return res.json();
+}
+
+// This is a React Server Component
+export default async function Demo() {
+  const data = await getData();
+
+  return (
+    <main>
+      <h1>Demo 2</h1>
+      {
+        data?.map(user => {
+          return <li key={user.id}>{user.name}</li>
+        })
+      }
+    </main>
+  )
+}
+```
+</Code>
+
+
+The user experience suffers a lot so it would be appropriate to provide a loader and Next provides a very convenient way for doing so, that is, creating a `loading.js` (or `ts`) file in the same folder of the page/route.
+
+This component may contain e.g. a spinner and will be displayed before page rendering. After that, it will automatically be destroyed.
+
+After loading the page will then be rendered with all its client and server components
+
+In the video above you can see how it works.
+
+
+### THE "PROBLEM"
+The problem is that we have to wait until ALL promises are resolved.
+There is a better way to display a separate loader for each component, but do you know how to this?
+
+Anyway I will show you the solution (with code and another animation) it in the next recipe : )
+
+
+
+# `Loading.jsx` flle: create a preloader
+
+In NextJs we can create a `loading.jsx` file in the same folder of your route (`page.js`/`ts`) to show an instant loading state from the server while the content of your route segment loads.
+The new content is automatically swapped in once rendering is complete.
+(you can get more info about it and a small video in my previous post).
+
+<IFrame src="https://www.youtube.com/embed/OsC_ldYmb5I" />
+
+
+However, from a UI perspective, it's not the best technique we can use.
+If our page has to make two or more REST API calls we have to wait for all the promises to complete before seeing any element of the page.
+
+This means that if our API calls take 3 seconds, we will have to wait that long to display anything.
+
+An approach that I think is much better is to split the page into several server components, each of which will fetch the data.
+Wrapping these components with the Suspense component will get a better result:
+
+  1. we'll show a preloader of the entire page (thanks to the `loading.js` file) which will be displayed only for the time necessary to render the static or client components, which will therefore be displayed almost immediately since they do not require further asynchronous fetches.
+
+  2. We will also display N preloaders for each of the server components which must instead make asynchronous calls, significantly improving the user experience and allowing the user to see the contents progressively, one after the other.
+
+
+# Several type of components
+
+Probably your NextJS application will be organised into several pages/routes and each page can contain Client or Server components, or a mix of them .
+
+
+<IFrame src="https://www.youtube.com/embed/CieiARyhpZU" />
+
+
+* A page could be totally static, with no need to invoke REST API and doesn't have interactive parts.
+In this case the page will be rendered on the server and will be totally static
+
+* Another page could request data, invoke a REST API and then render on the server.
+And this page may contain other server components within it that make other API calls or contains other static components (always pre-rendered on server)
+
+* Another section could be rendered on the server but contain:
+  * other React Server components
+  * Client Components: we can imagine a two-column page where on the left side we render a list of data fetched by a REST API (rendered on server) and on the left we have a carousel, a map or an interactive component that requires some JavaScript to work (so Client components)
+  * or a client component to which we pass a server component as a child. For example a component that contains interactive parts but needs content that can be rendered on the server side (avoiding to fetch data on browser and SEO friendly)
+
+* However, we can also have a page created entirely client side and inside it have only client components, just like any application that uses Client Side Rendering, such as SINGLE PAGE APPLICATIONS (SPA).
+
+In other words, the system is very flexible.
+In the next post I will show you some examples of Client and Server components
+
+
+
+# Server vs Client Components
+
+In NextJS we can create two types of components:
+* server components: which are pre-rendered on the server through different techniques
+* client components: which are completely rendered on the client
+
+
+<Code techs={['react', 'ts', 'next']} title="React Server Component (NextJS 13+)">
+  ```tsx
+export default async function Page() {
+  const data = await getData();
+
+  return (<div>
+    <h1>Demo Next</h1>
+    <List data={data} />
+  </div>)
+}
+```
+</Code>
+
+<Code techs={['react', 'ts', 'next']} title="React Client Component (NextJS 13+)">
+  ```jsx
+'use client'
+export default function List(props) {
+  return (
+  <div>
+  {
+    props.data.map(item =>
+      <li
+        key={item.id}
+        onClick={doSomething}
+      >{item.name}</li>
+    )
+  }
+  </div>
+)}
+
+```
+</Code>
+
+Code-wise, the main differences from the "normal" React component are:
+
+1) The most obvious is that client components contain the "use client" directive at the top of the file
+
+2) Server components can use `async-await` and wait for promises to be resolved before rendering the template, thus without needing to use the `useEffect` hook or tools like <a href="https://tanstack.com/query/latest">  TanStack Query</a> or the new <a href="https://reactrouter.com/">React Router</a> API in order to fetch data when the component is mount
+
+Below are some indications provided by the Next team to use server or client components:
+
+<h3>SERVER COMPONENTS</h3>
+
+* Fetch Data
+* Access backends
+* Keep sensitive information on servers
+* Keep large dependencies on server (useful to reduce client-side JS)
+
+<h3>CLIENT COMPONENTS</h3>
+
+* Add interactivity (event listener such as onClick, onChange...)
+* Use hooks such as useState, useEffects, ...
+* Use browser-only APIs
+* Use custom hooks that depend on state, effects and browser-only API
+
+
+
+# Sequential and Parallel data fetching in Next 13+
+
+
+In #NextJS v.13 we can use `async/await` to fetch data directly in the Server Components.
+However, we may need to invoke two or more REST API in the same component, for example, to get data from multiple sources.
+
+
+### SEQUENTIAL DATA FETCHING
+
+In the  snippet below you can see a very simple example where a Server Component get "users" and "posts" through the use of two awaits ("getUsers" and "getPosts" are functions that use "fetch" and return a "Promise" ).
+
+In this way, the operations will be done SEQUENTIALLY.
+
+I mean that the second request will start only after the previous one has been completed.
+If each request takes 1 second, then we will have to wait 2 seconds before being able to render the component.
+
+<Code techs={['react', 'ts',  'next']} title="Sequential Fetch">
+```typescript
+export default async function Page() {
+  const users = await getUsers();
+  const posts = await getPosts();
+
+  return (
+    <main>
+    // ... use data here ...
+    </main>
+  )
+}
+  ```
+</Code>
+
+
+
+
+### PARALLEL DATA FETCHING
+
+We can do better! 😎
+
+How?
+
+Fetching data in parallel, starting the calls "simultaneously" and, in this way, the result will arrive roughly within a second.
+
+<Hint title="simultaneously?">
+The calls are not really simultaneous but done one after the other in the server, so they run very fast
+</Hint>
+
+
+How can we do?
+
+In the next snippet  we have removed the two `await` but we always invoke `getUsers` and `getPosts` functions which will start to fetch both data immediately.
+
+However, we use a single "await" with "Promise.all" to stop the rendering of the component until all Promises are resolved.
+
+<Code techs={['react', 'ts',  'next']} title="Parallel Fetch">
+```typescript
+export default async function Page() {
+  const usersData = getUsers();
+  const postsData = getPosts();
+
+  const [users, posts] = await Promise.all([
+    usersData, postsData
+  ])
+
+  return (
+    <main>
+    // ... use data here ...
+    </main>
+  )
+}
+  ```
+</Code>
+
+
+
+
+### CONCLUSION
+In both cases the component will render only after both fetches/promises have been resolved but in the second case we will cut the rendering time in half or nearly so.
+
+
+
+# Multiple preloaders with `Suspense`
+
+There is another strategy to reduce the rendering time of a NextJS page (and improve the UX) that needs to fetch data from multiple sources, therefore from different endpoints.
+
+Instead of invoking several API into the same Server component (using different `await` or `Promise.all`, as we did before, and wait for both to complete) we can instead:
+
+1. Create several Server Components
+2. Each component can fetch its own data using `async/await`
+3. we can then use these components in a NextJS page and wrap them with React `Suspense`, displaying a dedicated loader.
+
+<IFrame src="https://www.youtube.com/embed/YSEinmvYOsI" />
+
+
+<Code techs={['react', 'ts',  'next']} title="page.tsx">
+```typescript
+import { Suspense } from 'react';
+import { Posts } from '@/app/demo2/components/Posts';
+import { Users } from '@/app/demo2/components/Users';
+
+export default function Demo() {
+  return (
+    <main>
+      <Suspense fallback={<Spinner />}>
+        <Users />
+      </Suspense>
+
+      <Suspense fallback={<Spinner />}>
+        <Posts />
+      </Suspense>
+    </main>
+  )
+}
+```
+</Code>
+
+
+<Code techs={['react', 'ts',  'next']} title="components/User.tsx">
+```typescript
+import { getUsers } from '@/api/users.api';
+
+export async function Users() {
+  const users = await getUsers(); // returns a promise
+
+  return (<div>
+    {
+      users?.map(...)
+    }
+  </div>)
+}
+```
+</Code>
+
+
+
+# Follow me
+
+For more tips you can follow me on my [YouTube Channel](https://www.youtube.com/c/FabioBiondi) or on [LinkedIn](https://www.linkedin.com/in/fabiobiondi/)
+
+
+# LinkedIn Posts
+
+You can also read my original posts on LinkedIn (july/august 2023)
+
+* [post 1](https://www.linkedin.com/posts/fabiobiondi_next-activity-7089187990471622656-5k7s?utm_source=share&utm_medium=member_desktop)
+* [post 2](https://www.linkedin.com/posts/fabiobiondi_nextjs-activity-7089863027079979008-21_x?utm_source=share&utm_medium=member_desktop)
+* [post 3](https://www.linkedin.com/posts/fabiobiondi_next-server-client-activity-7090244868635078657-zwrF?utm_source=share&utm_medium=member_desktop)
+* [post 4](https://www.linkedin.com/posts/fabiobiondi_nextjs-activity-7090622359090401280-MKVD?utm_source=share&utm_medium=member_desktop)
+* [post 5](https://www.linkedin.com/posts/fabiobiondi_nextjs-activity-7091666307804200960-iBnY?utm_source=share&utm_medium=member_desktop)
+* [post 6](https://www.linkedin.com/posts/fabiobiondi_nextjs-react-nextjs-activity-7092055105302073344-6VXj?utm_source=share&utm_medium=member_desktop)
+
+
+
+<PostSeries frontmatter={frontmatter} />

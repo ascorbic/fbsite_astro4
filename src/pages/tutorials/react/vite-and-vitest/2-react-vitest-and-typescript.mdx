@@ -1,0 +1,185 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: react/vite-and-vitest
+route: '2-react-vitest-and-typescript'
+title: React, Vitest & TypeScript
+title1: React, Vitest & TypeScript
+title2: Configure Vitest in React projects
+author: ['Fabio Biondi']
+description: 
+image: 
+  blur: 'react/vite-and-vitest/image.png'
+  url: null
+  alt: Hello React Vitest
+  series: 'react/vite-and-vitest/image.png'
+pubDate: 2022-12-26
+tags: ["react", "typescript"] 
+series: 
+  name: "React, TypeScript and Vitest: write your first test"
+  idx: 2
+difficulty: 1
+draft: false
+---
+
+import { Image } from 'astro:assets';
+
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import StackBlitz from '@widgets/StackBlitz'
+import Hint from '@widgets/Hint.astro';
+
+
+
+
+In this chapter we'll install and configure [Vitest](https://vitest.dev/), a Unit Test Framework very similar to [Jest](https://jestjs.io/): 
+it's faster, smart and powered by [Vite](https://vitejs.dev/):.
+
+Install Vitest:
+
+<Code>
+```ts
+npm install -D vitest
+```
+</Code>
+
+Add following script to `package.json`:
+
+<Code>
+```ts
+scripts: {
+  // ...
+  "test": "vitest",
+}
+```
+</Code>
+
+Now you can create your first (useless) test.
+
+Create a new file:  `src/components/Hello.test.ts`:
+
+<Code title="<Code>/components/Hello.test.ts</Code>" techs={['ts', 'react']}>
+```ts
+import React from 'react';
+
+test('render text', () => {
+  expect(true).toBe(true)
+});
+```
+</Code>
+
+and run your test suite:
+
+<Code>
+```
+npm run test
+```
+</Code>
+
+You'll get following errors
+
+<Code>
+```
+ReferenceError: test is not defined
+```
+</Code>
+
+<Img src={import('./images/2023-01-04-04-41-40.png')} w={600} quality={60} border />
+
+You can fix it by simpling adding the `global` option to `vite.config.ts`:
+
+<Code title="<Code>vite.config.ts</Code>" techs={['ts']}>
+```ts
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import checker from 'vite-plugin-checker';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  test: {
+   globals: true, // < ==
+  },
+  plugins: [
+    react(),
+    checker({ typescript: true }),
+    // You can also disable type checking when running testing with Vitest
+    // !process.env.VITEST ? checker({ typescript: true }) : undefined,
+  ],
+})
+
+```
+</Code>
+
+<Hint title="what is ///?">
+We have also used <code>/// < reference types="vitest" / ></code>.
+
+Triple-slash references instruct the compiler to include additional files in the compilation process.
+In fact you'll get some TypeScript errors, if you remove it (see image below).
+
+More info on [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html)
+
+<Img src={import('./images/2023-01-04-18-29-05.png')} w={600} quality={60} border />
+</Hint>
+
+
+Now you should kill the current process (<Key>CTRL</Key> + <Key>C</Key>) and run tests again: `npm run test`.
+
+It should works now:
+
+<Img src={import('./images/2023-01-04-04-49-16.png')} w={600} quality={60} border />
+
+
+Your editor (I use WebStorm) may still display some errors, on `test` and `expect` commands:
+
+<Img src={import('./images/2023-01-04-04-45-08.png')} w={600} quality={60} border />
+
+I highly recommend to add `vitest` types in `tsconfig.json`:
+
+<Code title="<Code>tsconfig.ts</Code>" techs={['ts']}>
+```json
+{
+  "compilerOptions": {
+    "types": ["vitest/globals"],
+    // ...
+  }
+}
+```
+</Code>
+
+
+# Command Line
+
+
+
+You can also run your tests directly from command line too:
+
+<Code>
+```
+npx vitest
+```
+</Code>
+
+
+<Img src={import('./images/2023-01-04-05-17-55.png')} w={600} quality={60} border />
+
+or you can also filter and run some specific tests :
+
+<Code>
+  ```bash
+  ✅ vitest Hello       # run the `Hello.test.tsx` (watch mode)
+  ❌ vitest foo         # no tests with this name. Errors
+  ✅ vitest run Hello   # run the `Hello.test.tsx` (NO watch)
+  ```
+</Code>
+
+In the next chapter we'll configure React Testing Library and we write a test for a React component.
+
+<TutorialSeries frontmatter={frontmatter} />

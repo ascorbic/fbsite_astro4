@@ -1,0 +1,203 @@
+---
+layout: ../../../components/video-courses/VideoCoursesLayout.astro
+css: 'purple'
+slug: 'rxjs'
+featured: false
+title: Reactive Programming con Angular e RxJS 6
+title1: Reactive Programming con Angular e RxJS 6
+title2: Video Corso
+description: Un video corso per comprendere RxJS 6 e la programmazione reattiva, allo scopo di sfruttarne il potenziale in applicazioni Angular.
+author: ['Fabio Biondi']
+image: 
+  blur: "images/emote-murena.png"
+  url: "images/emote-murena.png"
+  alt: "Next Fundamentals"
+lastUpdate: 2023-01-10
+tags: ["angular", "rxjs"]  
+difficulty: 1
+draft: false
+stats: [
+  {v: 65, unit: 'video', text: 'su RxJS 6.x'},
+  {v: 8, unit: 'ore', text: 'di materiale'}
+]
+videoSeries: 
+  name: angular
+  idx: 20
+---
+
+import * as C from '../../../components/video-courses/components/'
+import * as W from '@widgets'
+// import StackBlitz from '@widgets/StackBlitz'; // NOTE: cannot be exported from barrel file 
+import {lessons, lessonsRXJS} from './program';
+
+
+<div class="text-center mb-12">
+   # Il corso include:
+</div>
+
+
+<C.BulletPoints
+  frontmatter={frontmatter}
+  video="https://www.youtube.com/embed/Si2-osQs1oI"
+  items={[
+    { id: '1', t: 'Video Corso "Angular & RxJS"', d: 'Apprendere le fondamenta del paradigma funzionale reattivo, comprendere a fondo la libreria RxJS e sfruttarne il potenziale in applicazioni Angular' },
+    { id: '2', t: 'BONUS: MasterClass RxJS & JavaScript', d: 'Una sessione di live coding (esclusiva) della durata di 4 ore per comprendere RxJS e la programmazione reattiva, con esempi in vanilla JavaScript e TypeScript' },
+  ]}
+/>
+
+
+
+
+<C.ImageGrid bg title="A chi è rivolto" items={[
+  {
+    t: 'Angular Developers', d: 'Pur essendo un corso realizzato per sviluppatori Angular, tutti gli argomenti sono affrontati dalle basi. Si rivolge, quindi, a tutti coloro che vogliono comprendere il potenziale e le opportunità offerte da RxJS e dalla programmazione reattiva.',
+    image: import('../../../images/brand/emote-angular.png'),
+    align: 'right'
+  },
+  {
+    t: 'Requisiti', d: 'Per comprendere buona parte degli argomenti trattati è preferibile aver già utilizzato in precedenza il  framework Angular. <br /> Potrebbe, quindi, interessarti il corso <a href="/video-courses/angular-fundamentals" class="link"> Angular Fundamentals</a>',
+    image: import('../../../images/brand/emote-book.png')
+  },
+
+]}>
+
+</C.ImageGrid>
+
+
+<C.ImageGrid title="Punti di forza" items={[
+  {
+    t: 'Principianti ed Esperti', d: 'Un percorso guidato per fornire un solido background su RxJS, adatto a sviluppatori che non hanno mai utilizzato il paradigma reattivo e per coloro che vogliono, invece, approfondire',
+    image: import('../../../images/brand/emote-laptop.png')
+  },
+  {
+    t: 'Angular & RxJS', d: 'Moltissimi esempi e casi d\'uso di integrazione in applicazioni Angular: utilizzo di decine di operatori per la creazione di sequenze di observable, integrazione con router, comunicazione con il server, HTTP Interceptor, Reactive Forms e molto altro',
+    image: import('../../../images/brand/emote-desk.png')
+  },
+  {
+    t: 'BONUS: RxJS e JavaScript', d: 'È inclusa nel pacchetto una sessione di live coding (esclusiva) di 4 ore in cui si creano e utilizzano moltissimi operatori RxJS in vanilla JavaScript e TypeScript, allo scopo di assimilare i concetti basilari della libreria.',
+    image: import('../../../images/brand/emote-murena.png')
+  },
+  {
+    t: 'Approndimenti su...', d: 'Utilizzo di best practice, analisi delle differenti tipologie di Subject, multicasting, creazione di operatori custom, flattening operators, ...',
+    image: import('../../../images/brand/emote-ngrx.png')
+  },
+
+]}>
+Un corso per comprendere il paradigma reattivo con RxJS, sfruttarne il potenziale in Angular ed è propedeutico all'utilizzo di <a href="/video-courses/ngrx"  class="link">NGRX</a> e altri state manager reattivi.
+
+</C.ImageGrid>
+
+
+<C.Program
+  row1="Argomenti trattati nel corso"
+  row2="Angular & RxJS"
+  data={lessonsRXJS}
+  frontmatter={frontmatter}
+  />
+
+<W.Separator size="xl" />
+<h1 class="text-center"> Cos'è RxJS?</h1>
+<W.Separator size="md" />
+
+
+<C.BulletPoints
+
+  video="https://www.youtube.com/embed/4rowC16maj4"
+  textTitle="Introduzione su RxJS"
+  text={`
+    Un breve video di introduzione sul funzionamento di RxJS e del paradigmo reattivo per comprenderne le fondamenta:
+    <br> • Observable
+    <br> • Observer
+    <br> • Subscription
+    <br> • Operatori di creazione e pipeable
+    <br> • Marble Diagrams
+  `}
+/>
+
+
+<C.BulletPoints
+  right
+  video="https://www.youtube.com/embed/_obSErq6fmw"
+  textTitle="RxJS e vanilla JavaScript: scrivere da zero un Operatore di Creazione"
+  text={`
+    RxJS fornisce moltissimi operatori e utility per manipolare e creare Observable.
+In questa sessione di live coding comprenderete:
+<br/>• come funzionano gli Observable?
+<br/>• cos'è un Observer
+<br/>• come funziona il sistema di sottoscrizioni
+<br/>• come creare da zero un Observable
+<br/>• come creare da zero degli operatori di creazione, in particolar modo l'operatore "interval" e "fromEvent"
+
+  `}
+/>
+
+
+<C.BulletPoints
+  video="https://www.youtube.com/embed/97UbXN9gVJU"
+  textTitle="Il  primo form reattivo in Angular"
+  text={`
+    In questo esempio si può vedere un "semplice" utilizzo di RxJS in un form creato in Angular.
+    <br /> Inizialmente viene utilizzato l'operatore di creazione <code>fromEvent</code> per generare un Observable da un campo di input presente nel template e, successivamente, si migrerà all'utilizzo di un Reactive Forms.
+    <br /> Saranno inoltre utilizzati diversi operatori: <code>filter</code>, <code>map</code>, <code>debounceTime</code> e <code>distinctUntileChanged</code>.
+
+
+  `}
+/>
+
+
+
+<div>
+  <C.Pricing
+    frontmatter={frontmatter}
+    left={{
+      title: 'Multi Licenza',
+      price: {
+        value: '197', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo scontato per 5 o più utenti',
+        'Report / Progress per singolo utente',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 5 licenze del corso Reactive Programming con Angular e RxJS'
+      }
+    }}
+    center={{
+      badge: 'Il più venduto!',
+      title: 'Singolo Utente',
+      price: {
+        value: '297', currency: '€', unit: '+ iva'
+      },
+      items: [
+        'Corso RxJS 6',
+        '60+ video tutorial',
+        '1 registrazione live',
+        '8+ ore di lezione',
+        '15 gg soddisfatto o rimborsato',
+      ],
+      button: {
+        label: 'PROCEDI',
+        link: 'https://fabiobiondi.teachable.com/purchase?product_id=4535494',
+        target: '_blank'
+      }
+    }}
+    right={{
+      title: '10 studenti',
+      price: {
+        value: '97', currency: '€', unit: '/utente'
+      },
+      items: [
+        'Prezzo scontato per 10 o più utenti',
+        'Report / Progress per singolo utente',
+      ],
+      button: {
+        label: 'Contattami',
+        link: '/contact-form?msg=Vorrei acquistare 10 licenze del corso Reactive Programming con Angular e RxJS'
+      }
+    }}
+  />
+</div>
+
+
+<C.Faq frontmatter={frontmatter}/>

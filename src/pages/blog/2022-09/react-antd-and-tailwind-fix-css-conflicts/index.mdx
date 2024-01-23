@@ -1,0 +1,91 @@
+---
+layout: ../../../../layouts/BlogPageLayout.astro
+slug: '2022-09/react-antd-and-tailwind-fix-css-conflicts'
+title: React, AntD and Tailwind | fix CSS conflicts
+title1: React, AntD and Tailwind
+title2: fix CSS conflicts
+author: ['Fabio Biondi']
+description: How to fix problem between React, Tailwind and Ant Design
+image: 
+  blur: "image.png"
+  url: "image.png"
+  alt: "a small ninja"
+pubDate: 2022-09-30
+tags: ["esbuild", "react", "typescript"] 
+series: 
+  name: "React Tips"
+difficulty: 1
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro';
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import PostSeries from '@widgets/PostSeries.astro';
+
+import Hint from '@widgets/Hint.astro';
+
+
+
+
+If you're using React, [Tailwind](https://tailwindcss.com/) and [Ant Design](https://ant.design) (and probably most of the others UIKIT available in the market) you may encounter some CSS conflicts.
+
+For example, the AntD `Modal` component shows the "OK" and "Cancel" buttons by default in its footer:
+
+
+<Code>
+```ts
+ <Modal title="Add city" onOk={} onCancel={} />
+```
+</Code>
+
+As you can see in the screenshot below, the OK button is not displayed as it should (I mean it should be _blue_):
+
+<DesktopWindow center>
+![AntD and Tailwind conflict](https://res.cloudinary.com/my-notes-demo/image/upload/v1656813412/tutorial-content/dev.to/2022-07-antd-tailwind-conflicts/2022-07-03_03-55-26.png)
+</DesktopWindow>
+
+In fact Tailwind applies a transparent background color, while AntD should apply a blue background:
+
+<DesktopWindow center>
+![](https://res.cloudinary.com/my-notes-demo/image/upload/v1656813786/tutorial-content/dev.to/2022-07-antd-tailwind-conflicts/2022-07-03_04-02-21.png)
+</DesktopWindow>
+
+To solve the issue we can disable Tailwind [Preflight](https://tailwindcss.com/docs/preflight), a set of base styles that are designed to smooth over cross-browser inconsistencies.
+
+<Code>
+```ts
+// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    // ...
+  ],
+  corePlugins: {
+    preflight: false // <== disable this!
+  },
+}
+```
+</Code>
+
+And the problem is magically solved:
+
+<DesktopWindow center>
+![fix](https://res.cloudinary.com/my-notes-demo/image/upload/v1656814066/tutorial-content/dev.to/2022-07-antd-tailwind-conflicts/2022-07-03_04-07-28.png)
+</DesktopWindow>
+
+<PostSeries frontmatter={frontmatter} />

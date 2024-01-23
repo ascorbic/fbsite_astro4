@@ -1,0 +1,75 @@
+---
+// BLOG INDEX PAGE: list of posts
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CardSimple from "@widgets/CardSimple.astro";
+import { getAllPosts } from "src/api/blog-post.utils";
+
+const posts = await Astro.glob("./**/*.{md,mdx}")
+//const allPosts = getPosts.filter((post) =>  import.meta.env.DEV ? true : !post.frontmatter.draft);
+const allPosts = getAllPosts(posts, false)
+
+const images = import.meta.glob<ImageMetadata>('./**/*', { import: 'default' })
+---
+
+<BaseLayout pageTitle="Fabio Biondi Blog" description="Fabio Biondi - Front-End Training">
+
+  <div class="page page-min">
+  
+    <h1 class="text-3xl md:text-4xl xl:text-6xl my-3 text-center mb-12 themetxt">Posts </h1>
+
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+      {
+        allPosts.map(async (post: any, i: number) => {
+          const path = `./${post.frontmatter.slug}/${post.frontmatter.image.url}`
+          const imagesrc = await images[path]()
+
+          return <CardSimple 
+            image={imagesrc} 
+            difficulty={post.frontmatter.difficulty}
+            alt={post.frontmatter.image.alt} 
+            title={post.frontmatter.title} 
+            desc={post.frontmatter.description} 
+            url={post.url}
+            tags={post.frontmatter.tags}
+          />
+        }
+          
+        )
+      }
+
+    </div>
+
+
+{/*
+    <br /><br />
+
+    <h1 class="text-3xl my-3">Dev To Articles</h1>
+    
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+      {
+        devToArticles?.map((article: any, i: number) => 
+          <div class="card shadow-xl bg-slate-900 mb-4">
+            {article.cover_image && <figure><img src={article.cover_image} alt="Shoes" /></figure>}
+            <div class="card-body">
+
+              <a class="card-title text-white hover:text-pink-500 text-ellipsis" href={article.slug}>{article.title}</a> 
+              <p class="text-slate-600">{article.description}</p>
+              <div class="card-actions">
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+    </div>
+    */}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-min {
+    min-height: calc(100vh - 500px);
+  }
+</style>

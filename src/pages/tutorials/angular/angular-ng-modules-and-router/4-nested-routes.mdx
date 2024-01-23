@@ -1,0 +1,310 @@
+---
+layout: ../../../../layouts/TutorialPageLayout.astro
+slug: angular/angular-ng-modules-and-router
+route: '4-nested-routes'
+title: Nested Routes
+title1: Angular 15
+title2: Nested Routes
+author: ['Fabio Biondi']
+description: In this step-by-step tutorial you will learn how to create a multiview application using Angular 15, with custom <code>ngModules</code> (core, feature and shared), lazy loading, primary and nested routes
+image: 
+  blur: 'angular/angular-ng-modules-and-router/image.png'
+  url: null
+  alt: Create a simple CRUD app
+  series: 'angular/angular-ng-modules-and-router/image.png'
+pubDate: 2022-02-25
+tags: ["angular", "typescript"] 
+series: 
+  name: "Create an Angular app with ngModules"
+  idx: 1
+difficulty: 2
+---
+
+import { Image } from 'astro:assets';
+
+import * as ReactDOMServer from 'react-dom/server';
+// import Example1 from './demo/Example1';
+import Img from '@widgets/Image.astro';
+import ImageCarousel from '@widgets/ImageCarousel.astro';
+import HDivider from '@widgets/HDivider.astro';
+import IFrame from '@widgets/IFrame.astro'; 
+import Key from '@widgets/Key.astro';
+import Code from '@widgets/Code.astro';
+import Phone from '@widgets/Phone.astro';
+import BannerPromoAngular from '@widgets/BannerPromoAngular.astro';
+import DesktopWindow from '@widgets/DesktopWindow.astro';
+import Hero from '@widgets/PostHero.astro';
+import TutorialSeries from '@widgets/TutorialSeries.astro';
+import Hint from '@widgets/Hint.astro';
+import StackBlitz from '@widgets/StackBlitz';
+
+
+
+
+# TOPICS
+
+# Nested Routes
+
+A primary route, just like `/settings`, can also define its own children and handle secondary routes:
+
+* `/settings/profile`
+* `/settings/configuration`
+* `/settings/anything`
+
+## Preview
+
+<Img src={import('./images/sub-final-preview.gif')} w={600} quality={60} border align="center"/>
+
+
+Visit the "Settings" page to see the behaviors we're going to add:
+
+<StackBlitz clickToLoad={true} url="https://stackblitz.com/edit/angular-ivy-afhf5k?file=src%2Fapp%2Ffeatures%2Fsettings%2Fsettings.component.ts" client:visible />
+
+
+
+So, create now the "**Profile**" page and define it as child of the `Settings` module (`/settings/profile`):
+
+<Code>
+```bash
+ng g m features/settings/profile --route profile --module features/settings.module
+```
+</Code>
+
+Do the same for the `/settings/configuration` page:
+
+<Code>
+```bash
+ng g m features/settings/configuration --route configuration --module features/settings.module
+```
+</Code>
+
+<Img src={import('./images/sub-settings-folders.png')} w={400} quality={60} border align="center"/>
+
+These commands have also updated the `settings-routing.module` file, adding two paths:
+
+<Code techs={['angular']}  title="<code>settings-routing.module</code>">
+```ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { SettingsComponent } from './settings.component';
+
+const routes: Routes = [
+  { path: '', component: SettingsComponent },
+  // NEW
+  { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
+  // NEW
+  { path: 'configuration', loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule) }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class SettingsRoutingModule { }
+```
+</Code>
+
+Anyway, the default behavior is not what we really want.
+
+In fact, the "Settings" page still works as before so, when we visit the `http://localhost:4200/settings` url, the default component is still loaded:
+
+<Img src={import('./images/sub-route-preview-settings.png')} w={600} quality={60} border align="center"/>
+
+But the "default" component is totally destroyed (and the new one is loaded) when the `/settings/profile` page is visited.
+
+<Img src={import('./images/sub-route-preview-settings-profile.png')} w={600} quality={60} border align="center"/>
+
+And that's not what we want.
+
+Our goal is the creation of a secondary navigation bar inside the default `SettingsComponent` to navigate the `/profile` and `configuration` pages.
+
+## 3. Children Routes
+
+Open `features/settings/settings-routing.module.ts` and move the paths you have just created as `children` of the route.
+
+
+<Code techs={['angular']} title="<code>settings-routing.module</code>">
+```ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { SettingsComponent } from './settings.component';
+
+const routes: Routes = [
+  {
+    // the component loaded when `settings` page is visited
+    // that contains a secondary Nav Bar and router-outlet
+    path: '',
+    component: SettingsComponent,
+    // children routes
+    children: [
+      { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
+      { path: 'configuration', loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule) },
+      // default path: automatically loads the '/profile' child route
+      { path: '', redirectTo: 'profile', pathMatch: 'full' }
+    ]
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class SettingsRoutingModule { }
+```
+</Code>
+
+We have also defined a default path to automatically redirect users to the `/profile` child route every time the `/settings` page is visited.
+
+
+# Add the secondary <code>router-outlet</code>
+
+The primary component, `SettingsComponent`, acts now like the layout of the page and can contain a secondary navigation bar and another `router-outlet` that will be used to load and display its children routes.
+
+So update `SettingsComponent` replacing all its content with the following:
+
+<Code techs={['angular']} title="<code>features/settings/settings.component.ts</code>">
+```html
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-settings',
+  template: `
+    <div class="btn-group">
+
+      <button
+        routerLink="./profile"
+        routerLinkActive="text-bg-warning"
+        class="btn btn-primary text"
+      >Profile</button>
+
+      <button
+        routerLink="./configuration"
+        routerLinkActive="text-bg-warning"
+        class="btn btn-primary "
+      >Configuration</button>
+
+    </div>
+
+    <router-outlet></router-outlet>
+  `,
+})
+export class SettingsComponent { }
+```
+</Code>
+
+
+### RESULT
+
+You should be able to visit following children routes:
+
+* `/settings` (it automatically redirects to `/settings/profile`)
+* `/settings/profile`
+* `/settings/configuration`
+
+<Img src={import('./images/sub-final-preview.gif')} w={600} quality={60} border align="center"/>
+
+<Hint title="Children routes are lazy loaded too!">
+  <Img src={import('./images/sub-network-lazy.png')} w={600} quality={60} border align="center"/>
+</Hint>
+
+
+
+# Navigate between pages
+
+You can also navigate between pages.
+
+For example, we can add a button in `ProfileComponent` to redirect to the `/configuration` page.
+
+Open `settings -> profile -> profile.component.ts` and add the button:
+
+<Hint>
+We use the `routerLink` directive to change the url
+</Hint>
+
+<Code techs={['angular']} title="<code>profile.component.ts</code>">
+```html
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-profile',
+  template: `
+    <p>
+      profile works!
+    </p>
+    <button
+      routerLink="/settings/configuration"
+      class="btn btn-outline-primary"
+    >
+      Go to configuration
+    </button>
+  `,
+})
+export class ProfileComponent {}
+```
+</Code>
+
+
+### RESULT
+
+
+<Img src={import('./images/sub-navigate-pages.gif')} w={600} quality={60} border align="center"/>
+
+
+# Router API
+
+We can also use the `Router` API, instead of the `routerLink` directive, in order to accomplish the same task.
+
+Add a button in `ConfigurationComponent` to redirect to the `/profile` page:
+
+Open `features -> settings -> configuration -> configuration.component.ts`, add a `button` and use the `navigateByUrl` method of `Router` service to redirect
+
+<Hint>
+  `Router` service must be injected!
+</Hint>
+
+<Code techs={['angular']} title="<code>configuration.component.ts</code>">
+```ts
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-configuration',
+  template: `
+    <p>
+      configuration works!
+    </p>
+
+    <button (click)="gotoProfile()" class="btn btn-outline-primary">
+      Go to Profile
+    </button>
+  `,
+})
+export class ConfigurationComponent {
+  constructor(private router: Router) { }
+
+  gotoProfile() {
+    this.router.navigateByUrl('/settings/profile');
+  }
+}
+```
+</Code>
+
+## FINAL RESULT
+
+<Img src={import('./images/sub-navigate-pages-2.gif')} w={600} quality={60} border align="center"/>
+
+
+## Final Source Code
+
+<StackBlitz clickToLoad={true} url="https://stackblitz.com/edit/angular-ivy-afhf5k?file=src%2Fapp%2Ffeatures%2Fsettings%2Fsettings.component.ts" client:visible />
+<TutorialSeries frontmatter={frontmatter} />
+
+I hope you enjoyed the tutorial and that it was helpful.
+
+<Hint>
+You can find more Angular tutorials in the ["Tutorials"](/tutorials) section of this site.
+</Hint>
+
+  <br />
+
+<BannerPromoAngular></BannerPromoAngular>

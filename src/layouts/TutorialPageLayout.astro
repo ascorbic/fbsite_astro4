@@ -5,13 +5,10 @@ import BaseLayout from "./BaseLayout.astro";
 import TutorialHero from '@widgets/TutorialHero.astro';
 import NewsLetterPanel from "src/components/panels/NewsLetterPanel";
 import SocialBar from "src/components/panels/SocialBar.astro";
-import Disqus from "@widgets/Disqus.astro";
-import Toggle from "@widgets/Toggle.astro";
-import * as W from '@widgets'
 
 const { frontmatter } = Astro.props;
 
-// Trick to load images 
+// Trick to load images
 // const images = import.meta.glob<ImageMetadata>('/src/pages/posts/**/*.{png,svg,jpg,gif,webp}', { import: 'default' })
 // const imageBlur = await  images[`/src/pages/posts/${frontmatter.slug}/${frontmatter.image.blur}`]()
 // const imageUrl = await  images[`/src/pages/posts/${frontmatter.slug}/${frontmatter.image.url}`]()
@@ -29,50 +26,50 @@ const seriesImageUrl = frontmatter.image.series && await  images[`/src/pages/tut
 ---
 
 
-<BaseLayout 
-  pageTitle={frontmatter.series.name + ' | ' + frontmatter.title} 
-  description={frontmatter.description} 
+<BaseLayout
+  pageTitle={frontmatter.series.name + ' | ' + frontmatter.title}
+  description={frontmatter.description}
   image={seriesImageUrl.src}
   frontmatter={frontmatter}
 >
 
   <div class="page 3xl:max-w-screen-3xl mx-auto">
-    <TutorialHero 
-      frontmatter={frontmatter} 
+    <TutorialHero
+      frontmatter={frontmatter}
       imageUrl={imageUrl}
       imageBlur={imageBlur}
       seriesUrl={seriesImageUrl}
-      showSeriesPanel 
+      showSeriesPanel
     ></TutorialHero>
   </div>
 
   <SocialBar />
 
   <div class="page">
-    <div class="content mt-0 md:mt-3 xl:mt-36">  
-      <slot /> 
+    <div class="content mt-0 md:mt-3 xl:mt-36">
+      <slot />
     </div>
 
     <!--
     <div class="my-12">
       <Toggle title="Write a Comment">
-        <Disqus slug={frontmatter.slug} /> 
+        <Disqus slug={frontmatter.slug} />
       </Toggle>
     </div>
     -->
   </div>
 
- 
+
 
 
    <NewsLetterPanel
     client:visible
     newsListId="0817a264-d1bf-47a3-ae83-d39fd2bd3489"
     promoListId="b2c160b2-e01d-4a2a-984f-2f96f3c12cd5"
-  />   
+  />
   <script src="../helpers/links.utils.js"/>
 
 
 </BaseLayout>
 
-  
+
