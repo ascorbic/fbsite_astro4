@@ -4,8 +4,9 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import { remarkReadingTime } from './remark-reading-time.mjs';
 import remarkToc from 'remark-toc';
-
 import mdx from "@astrojs/mdx";
+
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,5 +21,5 @@ export default defineConfig({
     // remarkPlugins: [remarkToc, remarkReadingTime],
     shikiConfig: {}
   },
-  integrations: [react(), tailwind(), mdx()]
+  integrations: [react(), tailwind(), mdx(), sitemap()]
 });
