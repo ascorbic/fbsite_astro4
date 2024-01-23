@@ -1,0 +1,516 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/svg+xml" href="/favicon-16x16.png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"><!-- <link rel="icon" type="image/svg+xml" href="/favicon-16x16.png" /> --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><meta name="facebook-domain-verification" content="6utfysbhmmy73m1e92ula8glanfv79"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v4.2.3"><!-- <title>{pageTitle}</title>
+    <meta name="description" content={description}> --><title>Angular Basics | Tutorial for absolute beginners </title><link rel="canonical" href="https://www.fabiobiondi.dev/tutorials/angular/angular-basics/1-angular-hello-world/"><meta name="description" content="In this step-by-step tutorial you will learn how to create dinamic HTML template in Angular, what is the interpolation, the differences between attribute and structural directives and familiarize yourself with Angular."><meta name="robots" content="index, follow"><meta property="og:title" content="Angular Basics | Tutorial for absolute beginners"><meta property="og:type" content="In this step-by-step tutorial you will learn how to create dinamic HTML template in Angular, what is the interpolation, the differences between attribute and structural directives and familiarize yourself with Angular."><meta property="og:image" content="https://www.fabiobiondi.dev/_astro/image.pY_w-pB4.png"><meta property="og:url" content="https://www.fabiobiondi.dev/tutorials/angular/angular-basics/1-angular-hello-world/"><meta property="og:image:url" content="https://www.fabiobiondi.dev/_astro/image.pY_w-pB4.png"><meta property="og:image:alt" content="Angular Basics | Tutorial for absolute beginners"><meta property="article:published_time" content="2022-12-26T00:00:00.000Z"><meta property="article:author" content="Fabio Biondi"><meta property="article:section" content="Programming"><meta property="article:tag" content="angular"><meta property="article:tag" content="typescript"><meta name="twitter:image" property="https://www.fabiobiondi.dev/_astro/image.pY_w-pB4.png"><meta name="twitter:title" property="Angular Basics | Tutorial for absolute beginners"><meta name="twitter:description" property="In this step-by-step tutorial you will learn how to create dinamic HTML template in Angular, what is the interpolation, the differences between attribute and structural directives and familiarize yourself with Angular."><!-- <script is:inline src="/helpers/theme.utils.js"></script> --><script>
+      const currentTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+      // Get the current theme from local storage
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+
+      // If the current local storage item can be found
+      if (currentTheme) {
+        // Set the body data-theme attribute to match the local storage item
+        document.documentElement.setAttribute("data-theme", currentTheme);
+        window.localStorage.setItem("theme", currentTheme);
+        //document.documentElement.classList.add("dark");
+        // If the current theme is dark, check the theme toggle
+        // if (currentTheme === "dark") {
+        //   themeToggle.checked = true;
+        // }
+      }
+    </script><style>.steps[data-astro-cid-lwd7ki6e] .step[data-astro-cid-lwd7ki6e]:before{--tw-bg-opacity: 1;background-color:rgb(30 41 59 / var(--tw-bg-opacity))}.steps[data-astro-cid-lwd7ki6e] .step[data-astro-cid-lwd7ki6e]:after{--tw-bg-opacity: 1;background-color:rgb(30 41 59 / var(--tw-bg-opacity))}.steps[data-astro-cid-lwd7ki6e] .step-info[data-astro-cid-lwd7ki6e]:after{--tw-bg-opacity: 1;background-color:rgb(14 165 233 / var(--tw-bg-opacity));--tw-text-opacity: 1;color:rgb(255 255 255 / var(--tw-text-opacity))}
+</style>
+<link rel="stylesheet" href="/_astro/about.49oK8tT4.css" />
+<style>.dark .kbd{--tw-bg-opacity: 1;background-color:rgb(15 23 42 / var(--tw-bg-opacity));--tw-text-opacity: 1;color:rgb(255 255 255 / var(--tw-text-opacity))}.hint p,.hint li{font-size:1rem;line-height:1.5rem}@media (min-width: 1280px){.hint p,.hint li{font-size:1.25rem;line-height:1.75rem}}.paragraph[data-astro-cid-kpqbyg4j]{margin:0 auto;width:100%;max-width:120ch;padding:0 1rem;line-height:1.5}.hidden[data-astro-cid-22xs7k66]{display:none}.youtubeModalTrigger p{margin:0;padding:0}
+</style>
+<link rel="stylesheet" href="/_astro/index.Q2hbxR4i.css" />
+<link rel="stylesheet" href="/_astro/index.6O5HehPT.css" />
+<link rel="stylesheet" href="/_astro/index.OuTgNjvL.css" /><script type="module" src="/_astro/hoisted.I7Bsg5q7.js"></script></head> <body> <div id="iframe_youtube_wrapper" class=" fixed top-0 bottom-0 left-0 right-0 z-50  text-white  flex justify-center align-middle items-center mx-auto " style="visibility: hidden; backdrop-filter: blur(10px); background-color: rgba(0,0,0,0.5)" data-astro-cid-22xs7k66> <iframe id="iframe_youtube" style="background: #000; color-scheme: normal" class=" aspect-video bg-black" allowfullscreen allowtransparency="false" loading="lazy" data-astro-cid-22xs7k66></iframe> <!--  class=" aspect-video portrait:w-full landscape:md:h-[640px]  " --> <!-- CLose buttons --> <div class="fixed top-1 right-1 md:top-3 md:right-3 closeYouTubeModalX cursor-pointer" data-astro-cid-22xs7k66> <i class="fa fa-times fa-3x" data-astro-cid-22xs7k66></i> </div> <div class="fixed -bottom-8 left-1/2 transform -translate-x-1/2 -translate-y-1/2 closeYouTubeModalBottomButton" style="z-index: 100000000" data-astro-cid-22xs7k66> <button class="button !rounded-b-none closeYouTubeModal" data-astro-cid-22xs7k66>CLOSE</button> </div> </div>    <!-- When user scroll to this point the ScrollToArrow is shown --> <!-- <div id="showArrowScrollTrigger"></div> --> <!-- <div class="border-t border-slate-700 block md:hidden"></div> --> <div class="mx-3 lg:mx-10 my-4">  <header class="mb-10 3xl:max-w-screen-3xl mx-auto"> <nav> <div class="hamburger"> <div class=" flex justify-between items-center"> <div class="flex items-center gap-3"> <img src="/images/brand/laptop1.png" class="menu_logo" alt="logo" width="50" height="50" loading="lazy" decoding="async"> <a href="/" class="text-2xl sm:text-3xl mr-0 themetxt pt-1"><span class="font-thin">Fabio</span> <span class="font-extrabold">Biondi</span></a> </div> <div class="hamburger-button"> <span class="line"></span> <span class="line"></span> <span class="line"></span> </div> <!-- <div class="absolute bg-red-700 text-white text-sm font-bold text-center rotate-45 p-2 w-96 -right-40 top-4">BETA</div> --> </div> </div>   <div class="nav-links h-80 lg:h-24 flex items-center justify-between mx-10 collapsed transition-all !overflow-hidden"> <div class="flex flex-col lg:flex-row items-center justify-between w-full "> <a href="/" class="flex flex-col lg:flex-row items-center gap-x-2 !m-0 !p-0"> <div class="flex-none hidden lg:block"> <img src="/_astro/emote-laptop.DzezlRPj_Z2o140B.webp" class="menu_logo" alt="logo" width="100" height="100" loading="lazy" decoding="async"> </div> <div class=" text-2xl  lg:text-4xl hidden lg:block"> <span class="font-thin">FFFabio</span> <span class="font-extrabold">Biondi</span> </div> </a> <div class="flex flex-col lg:flex-row justify-between items-center gap-4"> <div class="flex flex-col lg:flex-row justify-center lg:justify-start "> <!-- <a href="/about/">About</a> --> <a class="menu_item block lg:hidden xl:block" href="/about/">About</a> <a class="menu_item" href="/blog/">Blog</a> <a class="menu_item" href="/tutorials/">Tutorials</a> <a class="menu_item" href="/video-courses/">🇮🇹 Video Courses</a> <!-- <a href="/tags/">Tags</a> --> </div> <div id="themeToggle" class="cursor-pointer " data-astro-cid-3vjzidht> <svg width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" data-astro-cid-3vjzidht> <path class="sun" fill-rule="evenodd" d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 1.5a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm12-7a.8.8 0 0 1-.8.8h-2.4a.8.8 0 0 1 0-1.6h2.4a.8.8 0 0 1 .8.8zM4 12a.8.8 0 0 1-.8.8H.8a.8.8 0 0 1 0-1.6h2.5a.8.8 0 0 1 .8.8zm16.5-8.5a.8.8 0 0 1 0 1l-1.8 1.8a.8.8 0 0 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM6.3 17.7a.8.8 0 0 1 0 1l-1.7 1.8a.8.8 0 1 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM12 0a.8.8 0 0 1 .8.8v2.5a.8.8 0 0 1-1.6 0V.8A.8.8 0 0 1 12 0zm0 20a.8.8 0 0 1 .8.8v2.4a.8.8 0 0 1-1.6 0v-2.4a.8.8 0 0 1 .8-.8zM3.5 3.5a.8.8 0 0 1 1 0l1.8 1.8a.8.8 0 1 1-1 1L3.5 4.6a.8.8 0 0 1 0-1zm14.2 14.2a.8.8 0 0 1 1 0l1.8 1.7a.8.8 0 0 1-1 1l-1.8-1.7a.8.8 0 0 1 0-1z" data-astro-cid-3vjzidht></path> <path class="moon" fill-rule="evenodd" d="M16.5 6A10.5 10.5 0 0 1 4.7 16.4 8.5 8.5 0 1 0 16.4 4.7l.1 1.3zm-1.7-2a9 9 0 0 1 .2 2 9 9 0 0 1-11 8.8 9.4 9.4 0 0 1-.8-.3c-.4 0-.8.3-.7.7a10 10 0 0 0 .3.8 10 10 0 0 0 9.2 6 10 10 0 0 0 4-19.2 9.7 9.7 0 0 0-.9-.3c-.3-.1-.7.3-.6.7a9 9 0 0 1 .3.8z" data-astro-cid-3vjzidht></path> </svg> </div>   </div> </div> </div>  </nav> </header> </div> <div>  <div class="page 3xl:max-w-screen-3xl mx-auto"> <div id="tutorialHero" class="flex flex-col xl:flex-row mt-0 xl:mt-12 relative gap-x-16 gap-y-8"> <div class="absolute -top-10 left-0  blurFix blur-3xl w-full h-full opacity-20 pointer-events-none"> <img src="/_astro/image.pY_w-pB4_3crsn.webp" class="w-full rounded-3xl" fit="cover" aspectRatio="1.3333333333333333" alt="Hello Angular" width="400" height="140" loading="lazy" decoding="async"> </div> <div class="w-full xl:w-2/3 text-center xl:text-start"> <h2 class="m-0 my-3 text-3xl xl:text-4xl 3xl:text-7xl font-thin themetxt">Hello Angular (v15)</h2> <h2 class="m-0 text-3xl md:text-4xl lg:text-4xl xl:text-6xl 3xl:text-8xl font-extrabold themetxt">Tutorial for absolute beginners</h2> <p class="m-0 mt-3 text-normal sm:text-xl 3xl:text-2xl themetxt">In this step-by-step tutorial you will learn how to create dinamic HTML template in Angular, what is the interpolation, the differences between attribute and structural directives and familiarize yourself with Angular.</p> <div class="flex justify-center xl:justify-start"> <div class="w-full max-w-3xl  bg-slate-900 text-primary-content mt-12 rounded-2xl p-4 text-lg"> <div class="flex flex-col sm:flex-row gap-2 sm:gap-8 "> <div class="w-full lg:w-1/2 flex flex-col gap-3 text-center"> <div class="text-slate-400">2022-12-26</div> <div class="text-white text-3xl font-bold">11 min read</div> <div class=""> <a href="/about"> <button class="btn btn-sm bg-sky-500 text-white">Fabio Biondi</button> </a> </div> </div> <div class="w-full lg:w-1/2 flex flex-col gap-0 sm:gap-3 text-center"> <div class="flex sm:flex-col justify-center items-center gap-3"> <div class="text-slate-400">Difficulty</div> <div class="text-3xl flex justify-center my-3 pb-4 sm:py-0"> <div class="relative w-32"> <div style="background-color:green;width:20%" class=" rounded-full  h-4 absolute top-0 left-0 z-10"></div> <div class="border border-slate-900 bg-slate-700 rounded-full h-4 w-full absolute top-0 left-0"></div> </div> <!-- 
+<span class="flex gap-2 flex-wrap">
+  <div>
+  {
+    [1,2,3,4,5].map((item, i) => 
+      <i  class:list={['fa text-normal', {
+        'fa-star': (i+1) <= value, 
+        'fa-star-o': (i+1) > value
+      }]}></i>)
+  }
+  </div>
+</span> --> </div> </div> <div class="flex justify-center"> <span class="flex gap-2 flex-wrap my-2 text-black dark:text-white"> <!-- {
+    tags.map((tag: string) => 
+      <div class=" badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline">
+        #{tag}
+      </div>
+      // <a 
+      //   class="badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline"
+      //   href={`/tags/${tag}`}
+      // >
+      //   #{tag}
+      // </a>
+    ) 
+  }--> <div class="bg-slate-500 dark:bg-slate-700  text-white rounded-2xl px-2 py-1 shadow-lg  md:px-4 no-underline"> angular </div><div class="bg-slate-500 dark:bg-slate-700  text-white rounded-2xl px-2 py-1 shadow-lg  md:px-4 no-underline"> typescript </div> </span> </div> </div> </div> </div> </div> </div> <div class="flex justify-center xl:justify-end"> <div class="w-full"> <!-- 
+        <div class="w-full max-w-xl  flex justify-center xl:justify-end order-first md:order-none">
+          {
+           
+          }
+        </div> --> <div class="w-full flex justify-center" data-astro-cid-lwd7ki6e> <div data-astro-cid-lwd7ki6e> <img src="/_astro/image.pY_w-pB4_1CFgh8.webp" class="w-96 hidden xl:block" alt="Hello Angular" fit="outside" aspectRatio="1" data-astro-cid-lwd7ki6e width="300" height="300" loading="lazy" decoding="async"> </div> </div>  </div> </div> </div> <!-- When user scroll to this point the ScrollToArrow is shown --> <!-- <div id="showArrowScrollTrigger"></div> --> <!-- <div class="border-t border-slate-700 block md:hidden"></div> --> </div> <div class="socialBarWrapper hidden 2xl:inline fixed top-1/2  -translate-y-1/2 -right-96 z-10 "> <div class="flex flex-col gap-5 bg-slate-900 rounded-tl-xl rounded-bl-xl p-3 w-16 justify-center items-center border border-r-0 border-slate-600" id="socialBar"> <div class="text-xs	text-slate-400 border-b border-slate-500 pb-3">SHARE</div> <div class="social-icon" data-name="linkedin"> <div class="text-white hover:text-pink-500 transition" aria-label="LinkedIn"> <i class="fa fa-2x fa-linkedin"></i> </div> </div><div class="social-icon" data-name="twitter"> <div class="text-white hover:text-pink-500 transition" aria-label="Twitter"> <i class="fa fa-2x fa-twitter"></i> </div> </div><div class="social-icon" data-name="facebook"> <div class="text-white hover:text-pink-500 transition" aria-label="Facebook"> <i class="fa fa-2x fa-facebook"></i> </div> </div><div class="social-icon" data-name="telegram"> <div class="text-white hover:text-pink-500 transition" aria-label="Telegram"> <i class="fa fa-2x fa-telegram"></i> </div> </div><div class="social-icon" data-name="whatsapp"> <div class="text-white hover:text-pink-500 transition" aria-label="Twitch"> <i class="fa fa-2x fa-whatsapp"></i> </div> </div> </div> </div>  <div class="page"> <div class="content mt-0 md:mt-3 xl:mt-36"> <h1 id="topics">TOPICS</h1>
+<ul>
+<li><a href="#who-is-this-tutorial-for">Who is this tutorial for?</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#use-stackblitz">Use StackBlitz</a></li>
+<li><a href="#components">Components</a></li>
+<li><a href="#your-first-angular-example">Your first Angular example</a></li>
+<li><a href="#add-interactivity-with-native-events">Add interactivity with Native Events</a></li>
+<li><a href="#attribute-directives-ngclass">Attribute directives: <code>[ngClass]</code></a></li>
+<li><a href="#class-methods">Class Methods</a></li>
+<li><a href="#invoke-methods-from-template">Invoke methods from template</a></li>
+<li><a href="#structural-directives-ngif">Structural directives: <code>*ngIf</code></a></li>
+<li><a href="#whats-next">What’s Next</a></li>
+</ul>
+<h1 id="who-is-this-tutorial-for">Who is this tutorial for?</h1>
+<p>If you have never used Angular this is a good starting point.</p>
+<p>In this short “step by step” tutorial you will develop your first <em>hello world</em> web application in Angular by the creation of a simple counter.
+You will learn how to create dinamic HTML templates, work with CSS, the concept of interpolation, the differences between attribute / structural directives and familiarize yourself with the framework.</p>
+<h2 id="why-another-angular-tutorial">Why another Angular tutorial?</h2>
+<p>Angular is a sophisticated framework and includes most of the functionality needed to create Single Page Application, also known as SPA.
+The <a href="https://angular.io/">Angular Documentation</a> is amazing but it might seem a bit difficult and complex for beginners.</p>
+<p>So I have created some tutorials trying to simplify many of the fundamental concepts of the framework and give you the opportunity to practice with some exercises</p>
+<h1 id="requirements">Requirements</h1>
+<p>You only need a browser and an internet connection since you’ll use an online “Code Playground”: <a href="https://stackblitz.com/">StackBlitz</a>.
+Although you can use this tool as a guest I really suggest you to login with your GitHub account to save your progress.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">Why Stackblitz?</h1> <div> <p>StackBlitz is a code online Playground and its editor is very similar to Visual Studio Code.
+You can use it to practice and make some experiments without installing anything on your machine.</p><br/><ul>
+<li>I like StackBlitz because it’s a good compromise between speed and flexibility when compared to other code playgrounds</li>
+<li>you can save the your snippets for future use</li>
+<li>but the most important reason is that it’s a cool way to share your code with the community and ask support sharing a working example. The community can then fork your example and reply with the solution</li>
+</ul><br/><p>So I think it’s convenient to get familiar with it</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h1 id="use-stackblitz">Use StackBlitz</h1>
+<p>After opening <a href="https://stackblitz.com/">StackBlitz</a> the first step is to authenticate with your GitHub account.
+Now you can select the StackBlitz Angular template but, as you can see, there are several other options: React, Svelte, Vue, RxJS and so on. So you can use it to practice with any other front-end technology.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50">  <div> <p>The authentication is not a required step but you cannot save snippets in your profile without doing it</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<p>You can see how to create an Angular template in the animation below:</p>
+<div class="mockup-window border !my-12 border-slate-700 dark:border-base-700 "> <div class="flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700  bg-slate-900"> <div class="flex flex-col gap-4 w-full"> <div class=" my-3     w-full"><div class="flex w-full p-1 sm:p-6  justify-center"><div class="relative"><div class="z-20 relative"><img src="/_astro/2022-12-24_13-58-30%20(1).xGBtanFD_Z1w3kXp.webp" class="rounded-sm sm:rounded-2xl" alt="" width="600" height="361" loading="lazy" decoding="async"></div><div class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div></div></div> </div> </div> </div>
+<p>The Stackblitz window is very similar to Visual Studio Code:</p>
+<ul>
+<li>left side: project files and dependencies</li>
+<li>right side: application preview and the console panel</li>
+<li>center: the code editor</li>
+</ul>
+<div class="mockup-window border !my-12 border-slate-700 dark:border-base-700 "> <div class="flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700  bg-slate-900"> <div class="flex flex-col gap-4 w-full"> <div class=" my-3     w-full"><div class="flex w-full p-1 sm:p-6  justify-center"><div class="relative"><div class="z-20 relative"><img src="/_astro/01_screen_stackblitz.H0nH5o7X_1tqVtY.webp" class="rounded-sm sm:rounded-2xl" alt="" width="800" height="419" loading="lazy" decoding="async"></div><div class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div></div></div> </div> </div> </div>
+<h1 id="components">Components</h1>
+<p>Components are custom html elements (i.e. <code>&lt;my-component&gt;</code>) that allow you to split HTML templates and business logic into several and (often) reusable parts.</p>
+<p>Some common scenarios:</p>
+<ul>
+<li>you want to create reusable UI components such as <code>&lt;tab-bar&gt;</code>, <code>&lt;carousel&gt;</code>, <code>&lt;card&gt;</code> and so on…</li>
+<li>you have an HTML page composed by 500/1000+ rows: you can then split the template into small parts to have more maintainable code and improve semantics.</li>
+</ul>
+<p>Modern front-end frameworks are often based around the concept of components and each application usually have at least one component, known as “Root  Component”.</p>
+<p>Each component is composed by 3 parts:</p>
+<ul>
+<li><code>[name].component.html</code>: the HTML template</li>
+<li><code>[name].component.ts</code>: a TypeScript class in which you can define properties and methods that are accessible to the template</li>
+<li><code>[name].component.css</code>: local CSS that are only accessible by the component itself (so it’s not global!)</li>
+</ul>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50">  <div> <p>In this tutorial we will not talk about components but we will focus only on the dynamic management of templates through the use of directives and the basic features of the framework</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h1 id="your-first-angular-example">Your first Angular example</h1>
+<p>Create a new <a href="https://stackblitz.com/">Stackblitz</a> (Angular Template), open <code>src/app/app.component.html</code>  and replace everything with the following snippet:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ 1 + 1 }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>The output (in the preview panel) will be 2.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50">  <div> <p>The syntax <code>{{expression}}</code> is known as “interpolation” (or simply template tags) and allow you to embed valid expressions into your HTML template.
+For example, you can use it to make math operations, display the value of class properties or insert a ternary operator.</p><!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ anyClassProperty }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div><!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ condition ? &#39;A&#39; : &#39;B&#39; }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h1 id="add-interactivity-with-native-events">Add interactivity with Native Events</h1>
+<p>Your next goal is the creation of a simple counter that increment its value when a button is clicked.</p>
+<p>You can simply add events to your HTML elements using brackets:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> (mouseOver)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;...&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">input</span><span style="color:#B392F0"> (change)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;...&quot;</span><span style="color:#E1E4E8"> /&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">form</span><span style="color:#B392F0"> (submit)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;...&quot;</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<h2 id="create-a-simple-counter">Create a simple counter</h2>
+<p>Now open <code>app.component.ts</code> and add the <code>counter</code> property:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { Component } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/core&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#B392F0">Component</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  selector: </span><span style="color:#9ECBFF">&#39;my-app&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  templateUrl: </span><span style="color:#9ECBFF">&#39;./app.component.html&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  styleUrls: [</span><span style="color:#9ECBFF">&#39;./app.component.css&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> AppComponent</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  counter</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">; </span><span style="color:#6A737D">// &lt;==</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre> </div> </div>
+<p>Open <code>app.component.html</code>, insert a <code>button</code> and add the <code>click</code> event listener to increment the <code>counter</code> property.</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/html.VmflVUL5_137DM2.webp" alt="HTML" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.html</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter = counter + 1&quot;</span><span style="color:#E1E4E8">&gt;+&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ counter }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>Click on the “RUN PROJECT” button below to see the working example:</p>
+<style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var l=(s,i,o)=>{let r=async()=>{await(await s())()},t=typeof i.value=="object"?i.value:void 0,c={rootMargin:t==null?void 0:t.rootMargin},n=new IntersectionObserver(e=>{for(let a of e)if(a.isIntersecting){n.disconnect(),r();break}},c);for(let e of o.children)n.observe(e)};(self.Astro||(self.Astro={})).visible=l;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="Z21BsJX" prefix="r1" component-url="/_astro/StackBlitz.OA8bQSuT.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;url&quot;:[0,&quot;https://stackblitz.com/edit/angular-ivy-5n3lr8?embed=1&amp;file=src/app/app.component.ts&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;StackBlitz2&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 p-3 m-3 rounded-2xl"><iframe width="100%" class="h-96 sm:h-full sm:aspect-video" src="https://stackblitz.com/edit/angular-ivy-5n3lr8?embed=1&amp;file=src/app/app.component.ts&amp;ctl=1" title="Code Playground"></iframe></div><!--astro:end--></astro-island>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50">  <div> <p>Click the first icon on the left to display the project files</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">Why the template is updated?</h1> <div> <p>Angular <span class="font-bold"> “change detection” </span> is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
+It detects common browser events like mouse / keyboard events, timers, HTTP requests and so on.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h2 id="conditional-dom">Conditional DOM</h2>
+<p>You can also use ternary operators inside your template tags.</p>
+<p>Update <code>app.component.html</code> in order to increment and decrement your counter and display a different text:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/html.VmflVUL5_137DM2.webp" alt="HTML" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.html</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter = counter - 1&quot;</span><span style="color:#E1E4E8">&gt;-&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter = counter + 1&quot;</span><span style="color:#E1E4E8">&gt;+&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ counter }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;{{ counter &gt;= 0 ? &#39;positive&#39; : &#39;negative&#39; }}&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"></span></code></pre> </div> </div>
+<astro-island uid="2bGBoT" prefix="r2" component-url="/_astro/StackBlitz.OA8bQSuT.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;url&quot;:[0,&quot;https://stackblitz.com/edit/angular-ivy-avanzc?file=src/app/app.component.html&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;StackBlitz2&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 p-3 m-3 rounded-2xl"><iframe width="100%" class="h-96 sm:h-full sm:aspect-video" src="https://stackblitz.com/edit/angular-ivy-avanzc?file=src/app/app.component.html&amp;ctl=1" title="Code Playground"></iframe></div><!--astro:end--></astro-island>
+<h2 id="brackets-and-attributes">Brackets and Attributes</h2>
+<p>Use square brackets to dinamically set attributes and properties to any HTML element.</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">a</span><span style="color:#B392F0"> [href]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;myProp1&quot;</span><span style="color:#B392F0"> [target]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;myProp2&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [innerHTML]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;myProp2&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">img</span><span style="color:#B392F0"> [src]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;myProp3&quot;</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>Now we want to apply a different CSS class in according with the <code>counter</code> value:  when <code>counter &gt;= 0</code>: apply the <code>red</code> class, otherwise the <code>green</code> class:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/html.VmflVUL5_137DM2.webp" alt="HTML" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.html</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [class]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter &gt;= 0 ? &#39;green&#39; : &#39;red&#39;&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  {{ counter &gt;= 0 ? &#39;positive&#39; : &#39;negative&#39; }}</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>Of course, you have to add the new <code>.green</code> and <code>.red</code> CSS classes in <code>app.component.css</code>:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/css.NMk-pgJf_2sSuox.webp" alt="CSS" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.css</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#B392F0">.green</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">  background-color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">green</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.red</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">  background-color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">red</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre> </div> </div>
+<astro-island uid="Z1UNOn6" prefix="r3" component-url="/_astro/StackBlitz.OA8bQSuT.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;url&quot;:[0,&quot;https://stackblitz.com/edit/angular-ivy-rivim4?file=src/app/app.component.html&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;StackBlitz2&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 p-3 m-3 rounded-2xl"><iframe width="100%" class="h-96 sm:h-full sm:aspect-video" src="https://stackblitz.com/edit/angular-ivy-rivim4?file=src/app/app.component.html&amp;ctl=1" title="Code Playground"></iframe></div><!--astro:end--></astro-island>
+<h1 id="attribute-directives-ngclass">Attribute directives: <code>[ngClass]</code></h1>
+<p>A directive is a sort of custom HTML attribute that handle some logic behind the scenes and Angular provides several built-in directives to handle common scenarios such as DOM manipulation, apply dynamic styles, create list of elements and so on.</p>
+<p>There are two types of directives:</p>
+<ul>
+<li><em>attribute</em> directive: they are usually used to dinamically update the look and feel of your application and add behaviors, such as events. Attributes directives are often used with square brackets: <code>[directive]=&quot;...&quot;</code></li>
+<li><em>structural</em> directive: used for DOM manipulation, for example destroy and re-create the DOM. Structural directives has always the <code>*</code> prefix ( <code>*ngIf</code>, <code>*ngFor</code>, … ) that can be very useful to recognize them, since you cannot add more that one structural directive to an HTML element.</li>
+</ul>
+<br/>
+<p>Some of the most used “attribute” directives are <code>ngClass</code> and <code>ngStyle</code>:</p>
+<p>You may apply the <code>active</code> CSS class when the condition returns <code>true</code>:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [ngClass]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;{&#39;active&#39;: condition}&quot;</span><span style="color:#E1E4E8">&gt;...</span></span></code></pre> </div> </div>
+<p>or dinamically apply inline styles.
+The following example increments the <code>font-size</code> in according with the <code>counter</code> value:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [ngStyle]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;{&#39;font-size&#39;: counter + &#39;px&#39;}&quot;</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>In angular there are other cool ways to do the same operation:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [style.font-size]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter + &#39;px&#39;&quot;</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>or using the “suffix” operator</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [style.font-size.px]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [style.font-size.rem]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter&quot;</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>The <code>*ngIf</code> structural directive allow you to conditionally destroy and create DOM elements:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> *ngIf</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;boolean | condition&quot;</span><span style="color:#E1E4E8">&gt;Some content&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p><code>*ngFor</code> directive clones a part of the template looping through an array and it’s used to display a list of elements:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> *ngFor</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;let item of items&quot;</span><span style="color:#B392F0">*</span><span style="color:#E1E4E8">&gt;{{item.prop}}&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<p>You can also create your own custom directives. <br/>
+For example, the following one may hide the HTML element if user is not logged. However, the creation of custom directives is out of the scope of this tutorial</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> *ifLogged</span><span style="color:#E1E4E8">&gt;Some content&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<h1 id="class-methods">Class Methods</h1>
+<p><code>app.component.ts</code> file is a TypeScript class and can contains methods.
+it’s often preferable to move your business logic into the class rather than in the template.
+So now we’ll move the logic to increment and decrement the <code>counter</code> value from the template to the class.</p>
+<p>First, add the <code>increment</code> and <code>decrement</code> methods to <code>app.component.ts</code>:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { Component } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/core&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#B392F0">Component</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  selector: </span><span style="color:#9ECBFF">&#39;my-app&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  templateUrl: </span><span style="color:#9ECBFF">&#39;./app.component.html&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  styleUrls: [</span><span style="color:#9ECBFF">&#39;./app.component.css&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> AppComponent</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  counter</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  increment</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.counter</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  decrement</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.counter</span><span style="color:#F97583">--</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre> </div> </div>
+<p>And you can invoke these methods from the HTML template:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/html.VmflVUL5_137DM2.webp" alt="HTML" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.html</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;decrement()&quot;</span><span style="color:#E1E4E8">&gt;-&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;increment()&quot;</span><span style="color:#E1E4E8">&gt;+&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ counter }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [class]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter &gt;= 0 ? &#39;green&#39; : &#39;red&#39;&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  {{ counter &gt;= 0 ? &#39;positive&#39; : &#39;negative&#39; }}</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<astro-island uid="Z1bI2o6" prefix="r4" component-url="/_astro/StackBlitz.OA8bQSuT.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;url&quot;:[0,&quot;https://stackblitz.com/edit/angular-ivy-3xozzp?embed=1&amp;file=src/app/app.component.ts&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;StackBlitz2&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 p-3 m-3 rounded-2xl"><iframe width="100%" class="h-96 sm:h-full sm:aspect-video" src="https://stackblitz.com/edit/angular-ivy-3xozzp?embed=1&amp;file=src/app/app.component.ts&amp;ctl=1" title="Code Playground"></iframe></div><!--astro:end--></astro-island>
+<h1 id="invoke-methods-from-template">Invoke methods from template</h1>
+<p>So far we have not properly handled the “zero” value but we couldn’t do it simply using a ternary operator in the HTML template.</p>
+<p>We’ll rather invoke class methods to add more logic in order to dinamically set the CSS <code>class</code> and the label to display:
+we want to remove the CSS class and display a default message  when the <code>counter</code> is zero.</p>
+<p>First we add the <code>getLabel</code> and the <code>getCls</code> methods to handle the <code>0</code> value too:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { Component } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/core&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#B392F0">Component</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  selector: </span><span style="color:#9ECBFF">&#39;my-app&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  templateUrl: </span><span style="color:#9ECBFF">&#39;./app.component.html&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  styleUrls: [</span><span style="color:#9ECBFF">&#39;./app.component.css&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> AppComponent</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">  // UPDATE: now start from zero</span></span>
+<span class="line"><span style="color:#FFAB70">  counter</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  increment</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.counter</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  decrement</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.counter</span><span style="color:#F97583">--</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // NEW</span></span>
+<span class="line"><span style="color:#B392F0">  getLabel</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.counter </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#9ECBFF"> &#39;Demo Counter&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.counter </span><span style="color:#F97583">&gt;</span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#9ECBFF"> &#39;positive&#39;</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> &#39;negative&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // NEW</span></span>
+<span class="line"><span style="color:#B392F0">  getCls</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.counter </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.counter </span><span style="color:#F97583">&gt;</span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#9ECBFF"> &#39;green&#39;</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> &#39;red&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre> </div> </div>
+<p>and the HTML template will automatically invoke these methods each time the change detection is triggered:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/html.VmflVUL5_137DM2.webp" alt="HTML" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.html</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;decrement()&quot;</span><span style="color:#E1E4E8">&gt;-&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> (click)</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;increment()&quot;</span><span style="color:#E1E4E8">&gt;+&lt;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;{{ counter }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> [class]</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;getCls()&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  {{ getLabel() }}</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">PERFORMANCE</h1> <div> <p>This approach can generate performance issues in complex views since these methods may be invoked too many times because of change detection.</p><p>A better approach would be the creation of custom pipes but it’s out of scope of this tutorial.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<astro-island uid="GMHNy" prefix="r5" component-url="/_astro/StackBlitz.OA8bQSuT.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;url&quot;:[0,&quot;https://stackblitz.com/edit/angular-ivy-zkjm93?embed=1&amp;file=src/app/app.component.ts&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;StackBlitz2&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 p-3 m-3 rounded-2xl"><iframe width="100%" class="h-96 sm:h-full sm:aspect-video" src="https://stackblitz.com/edit/angular-ivy-zkjm93?embed=1&amp;file=src/app/app.component.ts&amp;ctl=1" title="Code Playground"></iframe></div><!--astro:end--></astro-island>
+<h1 id="structural-directives-ngif">Structural directives: <code>*ngIf</code></h1>
+<p><code>*ngIf</code> is one of the most used Angular directives and allow you to dinamically render or destroy HTML elements.</p>
+<p>Now we can then remove the counter <code>h1</code> element from the template when its value is zero.</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/html.VmflVUL5_137DM2.webp" alt="HTML" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.html</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">h1</span><span style="color:#B392F0"> *ngIf</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;counter !== 0&quot;</span><span style="color:#E1E4E8">&gt;{{ counter }}&lt;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">&gt;</span></span></code></pre> </div> </div>
+<astro-island uid="22auF2" prefix="r6" component-url="/_astro/StackBlitz.OA8bQSuT.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;url&quot;:[0,&quot;https://stackblitz.com/edit/angular-ivy-wg6spa?file=src/app/app.component.ts&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;StackBlitz2&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 p-3 m-3 rounded-2xl"><iframe width="100%" class="h-96 sm:h-full sm:aspect-video" src="https://stackblitz.com/edit/angular-ivy-wg6spa?file=src/app/app.component.ts&amp;ctl=1" title="Code Playground"></iframe></div><!--astro:end--></astro-island>
+<h1 id="whats-next">What’s Next</h1>
+<p>Read the <a href="https://angular.io/">Angular Documentation</a> to get more info and examples. It’s amazing, well-written and always updated: I often read it again to discover something I didn’t know until the day before 😅.</p>
+<p>Or you can also read my next tutorial “<a href="/tutorials/angular/simple-crud-in-angular/1-create-an-angular-project">Create a simple CRUD app with Angular</a>” to learn how to create template-driven forms, display list of elements, use the dependency injection engine, communicate with REST API and more.</p>
+<h2 id="support">Support</h2>
+<p>Let me know if you liked it with a comment and don’t forget to add me on <a href="https://twitter.com/biondifabio">Twitter</a>, <a href="https://www.linkedin.com/in/fabiobiondi/">LinkedIn</a> and <a href="https://www.youtube.com/c/FabioBiondi">YouTube</a>.</p>
+<p>You can also get free support on our <a href="https://t.me/we_are_devs">Telegram Group | Angular Topic</a>. We usually speak in italian but we will do our best to support you in English too.</p>
+<br/>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-2"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="ADS: MY LATEST VIDEO COURSE <br />(italian only)" aspectRatio="1" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="ADS: MY LATEST VIDEO COURSE <br />(italian only)" aspectRatio="1" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2 ">ADS: MY LATEST VIDEO COURSE <br />(italian only)</div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <a href="/video-courses/angular-reactive-forms" class="flex justify-center"> <img src="/images/banners/banner1.png" class="rounded-sm sm:rounded-2xl" alt="Nuovo Corso" width="507" height="582" loading="lazy" decoding="async"> </a> </div> </div>
+<br/> </div> <!--
+    <div class="my-12">
+      <Toggle title="Write a Comment">
+        <Disqus slug={frontmatter.slug} />
+      </Toggle>
+    </div>
+    --> </div> <astro-island uid="121MtI" prefix="r0" component-url="/_astro/NewsLetterPanel.Qi5s216h.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;newsListId&quot;:[0,&quot;0817a264-d1bf-47a3-ae83-d39fd2bd3489&quot;],&quot;promoListId&quot;:[0,&quot;b2c160b2-e01d-4a2a-984f-2f96f3c12cd5&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;NewsLetterPanel&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 text-center border-b border-b-slate-800" id="newsletterBox"><div class="page !py-16 "><div class="flex justify-center"><img src="./images/brand/emote-newsletter-low.png" alt=""/></div><div class="my-4 text-gray-400"><div class="text-xl sm:text-3xl">Keep updated about latest content</div><div class="text-xl sm:text-lg">videos, articles, tips and news</div></div><form class="mt-4 mb-2 sm:flex justify-center"><div class="form-control"><div class="sm:input-group sm:input-group-y"><input name="email" type="email" placeholder="Your Email Address" class=" input input-bordered rounded-2xl sm:!rounded-l-2xl text-black bg-white w-full mb-3 sm:mb-0 sm:w-96" value=""/><button class="btn  !rounded-2xl sm:!rounded-l-none !rounded-r-2xl  !bg-sky-400 opacity-40 hover:bg-sky-700 !text-gray-900 hover:text-sky-900" type="submit" disabled="">SUBSCRIBE</button></div></div></form><div class="flex flex-col justify-center items-start gap-1 w-full sm:w-96 mx-auto"><div class="form-control "><label class="cursor-pointer label gap-3"><input type="checkbox" class="checkbox checkbox-info" name="hasSelectedPromoList"/><span class="text-white text-left"><span>I also want to receive info about Premium content, promo, courses </span></span></label></div><div class="form-control "><label class="cursor-pointer label gap-3 relative"><input type="checkbox" class="checkbox checkbox-success" name="privacyConfirm"/><span class="text-white"><span class="hidden sm:inline">I have read the </span><a href="/privacy-policy" target="_blank" class="text-sky-500 hover:!text-sky-400">privacy policy</a></span></label></div></div></div></div><!--astro:end--></astro-island>   <div class="fixed z-10 bg-red-700 text-white text-sm font-bold text-center rotate-45 p-2 w-96 -left-40 bottom-4" data-astro-cid-ofitbb36>BETA</div> <div class="footer p-10 relative" data-astro-cid-ofitbb36> <div class="mx-auto gap-x-32 gap-y-8 flex flex-col lg:flex-row justify-center" data-astro-cid-ofitbb36> <div data-astro-cid-ofitbb36> <div class="footer-title pb-1" data-astro-cid-ofitbb36>ABOUT ME </div> <div data-astro-cid-ofitbb36> <i class="fa fa-info-circle w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Visit the Profile Page" href="/about" data-astro-cid-ofitbb36>About Page</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-youtube w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Facebook Profile" href="https://www.youtube.com/c/FabioBiondi" data-astro-cid-ofitbb36>YouTube</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-linkedin w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the LinkedIn Profile" href="https://www.linkedin.com/in/fabiobiondi/" data-astro-cid-ofitbb36>LinkedIn</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-twitch w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Twitch Channel" href="https://www.twitch.tv/fabio_biondi" data-astro-cid-ofitbb36>Twitch</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-telegram w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Telegram Page" href="https://t.me/fabiobiondi" data-astro-cid-ofitbb36>Telegram Page</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-instagram w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Instagram Page" href="https://www.instagram.com/biondifabio/" data-astro-cid-ofitbb36>Instagram</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Facebook Page" href="https://www.facebook.com/groups/fabiobiondi.training" data-astro-cid-ofitbb36>Facebook Group</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-twitter w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Twitter Profile" href="https://twitter.com/biondifabio" data-astro-cid-ofitbb36>Twitter</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-bookmark w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Dev.to Profile" href="https://dev.to/fabiobiondi" data-astro-cid-ofitbb36>Dev.To</a> </div> </div> <div data-astro-cid-ofitbb36> <div class="footer-title pb-1" data-astro-cid-ofitbb36>Communities</div> <div data-astro-cid-ofitbb36> <i class="fa fa-telegram w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join WeAreDevs Community" href="https://t.me/we_are_devs" data-astro-cid-ofitbb36>We Are Devs</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join Angular Community" href="https://www.facebook.com/groups/angularjs.developer.italiani" data-astro-cid-ofitbb36>Angular</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join React Community" href="https://www.facebook.com/groups/react.developer.italiani" data-astro-cid-ofitbb36>React</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join JavaScript Community" href="https://www.facebook.com/groups/javascript.developer.italiani" data-astro-cid-ofitbb36>JavaScript</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join Opportunities Community" href="https://www.facebook.com/groups/opportunita.developer.italiani" data-astro-cid-ofitbb36>Opportunities</a> </div> </div> <div data-astro-cid-ofitbb36> <div class="footer-title pb-1" data-astro-cid-ofitbb36>PRODUCTS</div> <div data-astro-cid-ofitbb36> <i class="fa fa-book w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Visit Training Page" href="https://formazione.fabiobiondi.io/" target="_blank" rel="noopener" data-astro-cid-ofitbb36>Front-End Training (ita)</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-video-camera w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Visit Video Courses Page" href="/video-courses" data-astro-cid-ofitbb36>Video Courses (ita)</a> </div> <!-- <div>
+        <i class="fa fa-graduation-cap"></i>
+        <a aria-label="Visit Academy Profile" href="https://academy.talent-factory.it/" target="_blank" rel="noopener">Angular / React Academies</a> 
+      </div> --> <div class="footer-title pb-1 pt-4" data-astro-cid-ofitbb36>SECTIONS</div> <div data-astro-cid-ofitbb36> <i class="fa fa-code w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Blog" href="/blog" rel="noopener" data-astro-cid-ofitbb36>Blog</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-graduation-cap w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Tutorials" href="/tutorials" rel="noopener" data-astro-cid-ofitbb36>Tutorials</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-user w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="About" href="/about" rel="noopener" data-astro-cid-ofitbb36>About</a> </div> </div> <div class="flex flex-col gap-3 justify-center" data-astro-cid-ofitbb36> <div data-astro-cid-ofitbb36> <img src="/_astro/emote-opla._CelARBT_Z1afxD6.webp" class="w-full text-center" aspectRatio="1" alt="logo" data-astro-cid-ofitbb36 width="140" height="140" loading="lazy" decoding="async"> </div> <div class="w-full text-center" data-astro-cid-ofitbb36> <div data-astro-cid-ofitbb36> 2023 Fabio Biondi | P.I. 01116230317 </div> <div data-astro-cid-ofitbb36> <a href="/privacy-policy" data-astro-cid-ofitbb36>Privacy Policy</a> | <a href="/cookie-policy" data-astro-cid-ofitbb36>Cookie Policy</a> </div> </div> </div> </div> <div id="scrollArrowbottom" class="absolute right-6 bottom-16 text-xl lg:text-2xl" data-astro-cid-ofitbb36> <i class="fa fa-arrow-up cursor-pointer	" data-astro-cid-ofitbb36></i> </div> </div>   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">   <!-- Matomo -->  <!-- End Matomo Code --> <!-- End Matomo Code --> <!-- COOKIE IUBENDA --> <script type="text/javascript">
+        var _iub = _iub || [];
+        _iub.csConfiguration = {
+          askConsentAtCookiePolicyUpdate: true,
+          ccpaAcknowledgeOnDisplay: true,
+          consentOnContinuedBrowsing: false,
+          countryDetection: true,
+          enableCcpa: true,
+          enableLgpd: true,
+          floatingPreferencesButtonDisplay: "bottom-right",
+          invalidateConsentWithoutLog: true,
+          lang: "en",
+          lgpdAppliesGlobally: false,
+          perPurposeConsent: true,
+          siteId: 2903640,
+          whitelabel: false,
+          cookiePolicyId: 19604960,
+          banner: {
+            acceptButtonDisplay: true,
+            closeButtonDisplay: false,
+            customizeButtonDisplay: true,
+            explicitWithdrawal: true,
+            listPurposes: true,
+            position: "bottom",
+            rejectButtonDisplay: true,
+          },
+        };
+      </script> <script type="text/javascript" src="//cdn.iubenda.com/cs/ccpa/stub.js"></script> <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script> </div>  </body></html>
