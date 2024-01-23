@@ -36,9 +36,7 @@
     "remark-toc": "^9.0.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "vanilla-sharing": "^6.1.2",
-    "cookie": "^0.6.0",
-    "set-cookie-parser": "^2.6.0"
+    "vanilla-sharing": "^6.1.2"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

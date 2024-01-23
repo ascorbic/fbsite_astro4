@@ -1,0 +1,524 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="icon" type="image/svg+xml" href="/favicon-16x16.png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"><!-- <link rel="icon" type="image/svg+xml" href="/favicon-16x16.png" /> --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><meta name="facebook-domain-verification" content="6utfysbhmmy73m1e92ula8glanfv79"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v4.2.3"><!-- <title>{pageTitle}</title>
+    <meta name="description" content={description}> --><title>Create a simple CRUD app | HttpClient and REST API </title><link rel="canonical" href="https://www.fabiobiondi.dev/tutorials/angular/simple-crud-in-angular/4-http-client-and-rest-api/"><meta name="description" content="Beginner developers often don't know how to simulate real-world scenarios for practice and don't know where to get data from. <br />In this chapter we will therefore see how to set up a fake REST API server and consume data from an Angular application. <br /><br />You will learn how to fetch data from REST API (<code>GET</code>) and remove elements from the database (<code>DELETE</code>) by using the <code>HTTPClient</code> Angular service."><meta name="robots" content="index, follow"><meta property="og:title" content="Create a simple CRUD app | HttpClient and REST API"><meta property="og:type" content="Beginner developers often don't know how to simulate real-world scenarios for practice and don't know where to get data from. <br />In this chapter we will therefore see how to set up a fake REST API server and consume data from an Angular application. <br /><br />You will learn how to fetch data from REST API (<code>GET</code>) and remove elements from the database (<code>DELETE</code>) by using the <code>HTTPClient</code> Angular service."><meta property="og:image" content="https://www.fabiobiondi.dev/_astro/image.VHOF0DkQ.png"><meta property="og:url" content="https://www.fabiobiondi.dev/tutorials/angular/simple-crud-in-angular/4-http-client-and-rest-api/"><meta property="og:image:url" content="https://www.fabiobiondi.dev/_astro/image.VHOF0DkQ.png"><meta property="og:image:alt" content="Create a simple CRUD app | HttpClient and REST API"><meta property="article:published_time" content="2022-12-28T00:00:00.000Z"><meta property="article:author" content="Fabio Biondi"><meta property="article:section" content="Programming"><meta property="article:tag" content="angular"><meta property="article:tag" content="typescript"><meta name="twitter:image" property="https://www.fabiobiondi.dev/_astro/image.VHOF0DkQ.png"><meta name="twitter:title" property="Create a simple CRUD app | HttpClient and REST API"><meta name="twitter:description" property="Beginner developers often don't know how to simulate real-world scenarios for practice and don't know where to get data from. <br />In this chapter we will therefore see how to set up a fake REST API server and consume data from an Angular application. <br /><br />You will learn how to fetch data from REST API (<code>GET</code>) and remove elements from the database (<code>DELETE</code>) by using the <code>HTTPClient</code> Angular service."><!-- <script is:inline src="/helpers/theme.utils.js"></script> --><script>
+      const currentTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+      // Get the current theme from local storage
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+
+      // If the current local storage item can be found
+      if (currentTheme) {
+        // Set the body data-theme attribute to match the local storage item
+        document.documentElement.setAttribute("data-theme", currentTheme);
+        window.localStorage.setItem("theme", currentTheme);
+        //document.documentElement.classList.add("dark");
+        // If the current theme is dark, check the theme toggle
+        // if (currentTheme === "dark") {
+        //   themeToggle.checked = true;
+        // }
+      }
+    </script><style>.steps[data-astro-cid-lwd7ki6e] .step[data-astro-cid-lwd7ki6e]:before{@apply bg-slate-800;}.steps[data-astro-cid-lwd7ki6e] .step[data-astro-cid-lwd7ki6e]:after{@apply bg-slate-800;}.steps[data-astro-cid-lwd7ki6e] .step-info[data-astro-cid-lwd7ki6e]:after{@apply text-white bg-sky-500;}
+.dark .kbd{@apply bg-slate-900 text-white;}.hint p,.hint li{@apply text-base xl:text-xl;}.paragraph[data-astro-cid-kpqbyg4j]{margin:0 auto;width:100%;max-width:120ch;padding:0 1rem;line-height:1.5}.hidden[data-astro-cid-22xs7k66]{display:none}.youtubeModalTrigger p{margin:0;padding:0}
+.content{@apply text-black dark:text-white;}.content>h1{@apply text-3xl md:text-4xl mt-12 mb-4 md:mt-24 md:mb-6 font-extrabold;}.content>h1:before{font-family:FontAwesome;content:"";@apply mr-2;}.content>h2{@apply text-2xl md:text-3xl mt-12 md:mt-24 font-extrabold;}.content>h3{@apply text-xl md:text-2xl mt-12 md:mt-16 font-semibold;}.content>h4{@apply text-2xl mt-12 md:mt-24 font-thin;}.content>p{@apply text-lg leading-6 md:text-xl md:leading-7 lg:text-2xl lg:leading-10 my-6 opacity-90 px-4;}.content a{@apply italic font-bold no-underline text-sky-600 dark:text-sky-500 hover:text-sky-800 dark:hover:text-sky-700;}.content>p img{@apply rounded-xl;}#tutorialHero code{@apply text-slate-700 bg-white rounded-xl px-2 py-0 mx-0.5;}.content>h1 code,.content li code,.content p code{@apply text-white bg-slate-700 rounded-xl px-2 py-0 mx-0.5;}.content>p a code{@apply bg-sky-400;}.content>p a code:before{font-family:FontAwesome;content:"";@apply text-sm mr-2;}.content li{@apply ml-12 leading-6 md:text-xl md:leading-7 lg:text-2xl lg:leading-10;list-style-type:disc}.content #topics{@apply text-black dark:text-white text-left border-2 lowercase border-b-0 border-slate-700 px-6 py-3 rounded-t-xl w-full mx-auto mt-12 mb-0;}.content #topics:before{font-family:FontAwesome;content:"";@apply mr-4;}.content #topics+ul{@apply text-lg border-2 border-slate-700 mt-0 px-12 py-6 rounded-t-none rounded-b-xl w-full mx-auto my-0 mb-12;}.content #topics+ul li{@apply ml-3;list-style-type:disc}.content #topics+ul li a{@apply no-underline text-black dark:text-white not-italic hover:text-sky-600 dark:hover:text-sky-400;}blockquote{padding:10px 100px 20px;position:relative;margin-bottom:7rem;display:flex;align-items:center;min-height:10rem}blockquote p{@apply text-2xl text-slate-300;text-align:left;font-style:italic}blockquote:before{position:absolute;font-family:FontAwesome;top:-20px;left:10px;content:"";font-size:130px;@apply text-slate-700 opacity-80;}blockquote:after{top:20px;left:50%;margin-left:-30px;position:absolute;border-bottom:3px solid #ff00b7;height:3px;width:200px}
+summary[data-astro-cid-nnilz33g]{@apply rounded-xl;border:4px solid transparent;outline:none;display:block;padding-left:2.2rem;position:relative;cursor:pointer}details[data-astro-cid-nnilz33g][open]>summary[data-astro-cid-nnilz33g]{@apply rounded-b-none;}details[data-astro-cid-nnilz33g]{max-width:100%;box-sizing:border-box;@apply !rounded-xl;}details[data-astro-cid-nnilz33g] summary[data-astro-cid-nnilz33g]{list-style-type:none}details[data-astro-cid-nnilz33g] summary[data-astro-cid-nnilz33g]::-webkit-details-marker{display:none!important}details[data-astro-cid-nnilz33g][open]>summary[data-astro-cid-nnilz33g]:before{transform:rotate(90deg)}summary[data-astro-cid-nnilz33g]:before{@apply -mt-1 3xl:mt-0 !text-white;font-family:FontAwesome;content:"";font-size:2rem;position:absolute;left:1rem;transform:rotate(0);transition:.25s transform ease}.content[data-astro-cid-nnilz33g]{border-top:none;padding:10px}#faq a{@apply dark:text-sky-400 dark:hover:text-sky-600 text-sky-600 hover:text-sky-800;}.video-course{@apply text-black dark:text-white;}.video-course h1{@apply text-3xl md:text-5xl font-thin;}.video-course h1:before{font-family:FontAwesome;video-course:"";@apply mr-2;}.video-course h2{@apply text-2xl md:text-3xl font-extrabold;}.video-course h3{@apply text-xl md:text-2xl font-semibold;}.video-course h4{@apply text-2xl mt-12 md:mt-24 font-thin;}.video-course p{@apply text-lg leading-6 md:text-xl md:leading-7 lg:text-2xl lg:leading-10 my-3 opacity-90;}.video-course p img{@apply rounded-xl;}#tutorialHero code{@apply text-slate-700 bg-white rounded-xl px-2 py-0 mx-0.5;}.video-course h1 code,.video-course li code,.video-course p code{@apply text-white bg-slate-700 rounded-xl px-2 py-0 mx-0.5;}.video-course p a code{@apply bg-sky-400;}.video-course p a code:before{font-family:FontAwesome;video-course:"";@apply text-sm mr-2;}.video-course li{@apply ml-12 leading-6 md:text-xl md:leading-7 lg:text-2xl lg:leading-10;list-style-type:disc}.video-course #topics{@apply text-black dark:text-white text-left border-2 lowercase border-b-0 border-slate-700 px-6 py-3 rounded-t-xl w-full mx-auto mt-12 mb-0;}.video-course #topics:before{font-family:FontAwesome;video-course:"";@apply mr-4;}.video-course #topics+ul{@apply text-lg border-2 border-slate-700 mt-0 px-12 py-6 rounded-t-none rounded-b-xl w-full mx-auto my-0 mb-12;}.video-course #topics+ul li{@apply ml-3;list-style-type:disc}.video-course #topics+ul li a{@apply no-underline text-black dark:text-white not-italic hover:text-sky-600 dark:hover:text-sky-400;}blockquote{padding:10px 100px 20px;position:relative;margin-bottom:7rem;display:flex;align-items:center;min-height:10rem}blockquote p{@apply text-2xl text-slate-300;text-align:left;font-style:italic}blockquote:before{position:absolute;font-family:FontAwesome;top:-20px;left:10px;video-course:"";font-size:130px;@apply text-slate-700 opacity-80;}blockquote:after{top:20px;left:50%;margin-left:-30px;position:absolute;border-bottom:3px solid #ff00b7;height:3px;width:200px}
+@tailwind base;@tailwind components;@tailwind utilities;[data-theme=light]{--color-bg: rgb(203 213 225);--color-text: #333}[data-theme=dark]{--color-bg: rgb(30 41 59);--color-text: #fffff}html,main,body{height:100%}html{scroll-behavior:smooth;background-color:var(--color-bg)!important;color:var(--color-text)!important}body{font-family:Raleway;scroll-behavior:smooth;background:var(--color-bg);color:var(--color-text)}main{margin:0 auto;width:100%;max-width:120ch;padding:1rem;line-height:1.5;font-family:Raleway;scroll-behavior:smooth}*{box-sizing:border-box}.themetxt{@apply text-black dark:text-white;}a.link{@apply dark:text-sky-400 dark:hover:text-sky-600 transition font-bold text-sky-600 hover:text-sky-700;}.outline-text{color:#1e293b!important;text-shadow:2px 0 #fff,-2px 0 #fff,0 2px #fff,0 -2px #fff;transition:all .5s}a.outline-text:hover{color:#1e293b!important;text-shadow:2px 0 #00a4ff,-2px 0 #00a4ff,0 2px #00a4ff,0 -2px #00a4ff}.button-white{@apply border border-white text-white px-4 p-2 rounded-xl hover:border-pink-400 hover:bg-white hover:bg-opacity-10 transition;}.page{margin:0 auto;width:100%;max-width:120ch;padding:1rem;line-height:1.5;font-family:Raleway;scroll-behavior:smooth}.page-xxl{margin:0 auto;max-width:160ch!important}.page-fullhd{max-width:160ch}.blurFix{-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0)}button.button{@apply px-4 md:px-8 py-2 md:py-3 rounded-2xl text-xl md:text-2xl font-bold bg-slate-200 hover:bg-slate-300 text-black disabled:opacity-40 transition;}button.sm{@apply text-xs sm:text-sm p-1 sm:p-2 border-0;}.c-red,button.c-red{@apply bg-red-700 hover:bg-red-800 text-white;}.c-sky,button.c-sky{@apply bg-sky-600 hover:bg-sky-700 text-white;}button.c-dark-middle{@apply bg-slate-800 hover:bg-gray-700 text-white;}button.c-dark{@apply bg-black hover:bg-gray-900 text-white border-2 border-white;}.c-purple,button.c-purple{@apply bg-purple-600 hover:bg-purple-700 text-white;}.c-dark-slate,button.c-dark-slate{@apply bg-slate-900 hover:bg-slate-600 text-white border-2 border-white;}.hamburger .hamburger-button{cursor:pointer}.hamburger .line{@apply bg-black dark:bg-white;display:block;width:30px;height:4px;margin-bottom:7px}.hamburger .line:last-child{margin-bottom:0}.sun[data-astro-cid-3vjzidht]{fill:#000}.moon[data-astro-cid-3vjzidht],.dark .sun[data-astro-cid-3vjzidht]{fill:transparent}.dark .moon[data-astro-cid-3vjzidht]{fill:#fff}.nav-links{margin:0}.nav-links a{text-align:center;padding:10px 0;text-decoration:none;font-weight:700;text-transform:uppercase;@apply text-black dark:text-white dark:hover:text-sky-400 transition text-lg xl:text-xl;}.collapsed{@apply !h-0 lg:!h-24 overflow-hidden lg:overflow-auto;}@media screen and (min-width: 1024px){.nav-links{position:static;width:auto;background:none}.nav-links a{@apply my-1 mx-1 lg:mx-3 xl:mx-4;}.hamburger{display:none}}.footer[data-astro-cid-ofitbb36]{@apply bg-slate-900 text-white;}.footer[data-astro-cid-ofitbb36] a[data-astro-cid-ofitbb36]{@apply text-white hover:text-sky-400;}.footer[data-astro-cid-ofitbb36] .dark[data-astro-cid-ofitbb36]{@apply bg-slate-900 text-white;}
+</style><script type="module" src="/_astro/hoisted.I7Bsg5q7.js"></script></head> <body> <div id="iframe_youtube_wrapper" class=" fixed top-0 bottom-0 left-0 right-0 z-50  text-white  flex justify-center align-middle items-center mx-auto " style="visibility: hidden; backdrop-filter: blur(10px); background-color: rgba(0,0,0,0.5)" data-astro-cid-22xs7k66> <iframe id="iframe_youtube" style="background: #000; color-scheme: normal" class=" aspect-video bg-black" allowfullscreen allowtransparency="false" loading="lazy" data-astro-cid-22xs7k66></iframe> <!--  class=" aspect-video portrait:w-full landscape:md:h-[640px]  " --> <!-- CLose buttons --> <div class="fixed top-1 right-1 md:top-3 md:right-3 closeYouTubeModalX cursor-pointer" data-astro-cid-22xs7k66> <i class="fa fa-times fa-3x" data-astro-cid-22xs7k66></i> </div> <div class="fixed -bottom-8 left-1/2 transform -translate-x-1/2 -translate-y-1/2 closeYouTubeModalBottomButton" style="z-index: 100000000" data-astro-cid-22xs7k66> <button class="button !rounded-b-none closeYouTubeModal" data-astro-cid-22xs7k66>CLOSE</button> </div> </div>    <!-- When user scroll to this point the ScrollToArrow is shown --> <!-- <div id="showArrowScrollTrigger"></div> --> <!-- <div class="border-t border-slate-700 block md:hidden"></div> --> <div class="mx-3 lg:mx-10 my-4">  <header class="mb-10 3xl:max-w-screen-3xl mx-auto"> <nav> <div class="hamburger"> <div class=" flex justify-between items-center"> <div class="flex items-center gap-3"> <img src="/images/brand/laptop1.png" class="menu_logo" alt="logo" width="50" height="50" loading="lazy" decoding="async"> <a href="/" class="text-2xl sm:text-3xl mr-0 themetxt pt-1"><span class="font-thin">Fabio</span> <span class="font-extrabold">Biondi</span></a> </div> <div class="hamburger-button"> <span class="line"></span> <span class="line"></span> <span class="line"></span> </div> <!-- <div class="absolute bg-red-700 text-white text-sm font-bold text-center rotate-45 p-2 w-96 -right-40 top-4">BETA</div> --> </div> </div>   <div class="nav-links h-80 lg:h-24 flex items-center justify-between mx-10 collapsed transition-all !overflow-hidden"> <div class="flex flex-col lg:flex-row items-center justify-between w-full "> <a href="/" class="flex flex-col lg:flex-row items-center gap-x-2 !m-0 !p-0"> <div class="flex-none hidden lg:block"> <img src="/_astro/emote-laptop.DzezlRPj_Z2o140B.webp" class="menu_logo" alt="logo" width="100" height="100" loading="lazy" decoding="async"> </div> <div class=" text-2xl  lg:text-4xl hidden lg:block"> <span class="font-thin">FFFabio</span> <span class="font-extrabold">Biondi</span> </div> </a> <div class="flex flex-col lg:flex-row justify-between items-center gap-4"> <div class="flex flex-col lg:flex-row justify-center lg:justify-start "> <!-- <a href="/about/">About</a> --> <a class="menu_item block lg:hidden xl:block" href="/about/">About</a> <a class="menu_item" href="/blog/">Blog</a> <a class="menu_item" href="/tutorials/">Tutorials</a> <a class="menu_item" href="/video-courses/">🇮🇹 Video Courses</a> <!-- <a href="/tags/">Tags</a> --> </div> <div id="themeToggle" class="cursor-pointer " data-astro-cid-3vjzidht> <svg width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" data-astro-cid-3vjzidht> <path class="sun" fill-rule="evenodd" d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 1.5a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm12-7a.8.8 0 0 1-.8.8h-2.4a.8.8 0 0 1 0-1.6h2.4a.8.8 0 0 1 .8.8zM4 12a.8.8 0 0 1-.8.8H.8a.8.8 0 0 1 0-1.6h2.5a.8.8 0 0 1 .8.8zm16.5-8.5a.8.8 0 0 1 0 1l-1.8 1.8a.8.8 0 0 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM6.3 17.7a.8.8 0 0 1 0 1l-1.7 1.8a.8.8 0 1 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM12 0a.8.8 0 0 1 .8.8v2.5a.8.8 0 0 1-1.6 0V.8A.8.8 0 0 1 12 0zm0 20a.8.8 0 0 1 .8.8v2.4a.8.8 0 0 1-1.6 0v-2.4a.8.8 0 0 1 .8-.8zM3.5 3.5a.8.8 0 0 1 1 0l1.8 1.8a.8.8 0 1 1-1 1L3.5 4.6a.8.8 0 0 1 0-1zm14.2 14.2a.8.8 0 0 1 1 0l1.8 1.7a.8.8 0 0 1-1 1l-1.8-1.7a.8.8 0 0 1 0-1z" data-astro-cid-3vjzidht></path> <path class="moon" fill-rule="evenodd" d="M16.5 6A10.5 10.5 0 0 1 4.7 16.4 8.5 8.5 0 1 0 16.4 4.7l.1 1.3zm-1.7-2a9 9 0 0 1 .2 2 9 9 0 0 1-11 8.8 9.4 9.4 0 0 1-.8-.3c-.4 0-.8.3-.7.7a10 10 0 0 0 .3.8 10 10 0 0 0 9.2 6 10 10 0 0 0 4-19.2 9.7 9.7 0 0 0-.9-.3c-.3-.1-.7.3-.6.7a9 9 0 0 1 .3.8z" data-astro-cid-3vjzidht></path> </svg> </div>   </div> </div> </div>  </nav> </header> </div> <div>  <div class="page 3xl:max-w-screen-3xl mx-auto"> <div id="tutorialHero" class="flex flex-col xl:flex-row mt-0 xl:mt-12 relative gap-x-16 gap-y-8"> <div class="absolute -top-10 left-0  blurFix blur-3xl w-full h-full opacity-20 pointer-events-none"> <img src="/_astro/image.VHOF0DkQ_Z1Hw4Mm.webp" class="w-full rounded-3xl" fit="cover" aspectRatio="1.3333333333333333" alt="Create a simple CRUD app" width="400" height="140" loading="lazy" decoding="async"> </div> <div class="w-full xl:w-2/3 text-center xl:text-start"> <h2 class="m-0 my-3 text-3xl xl:text-4xl 3xl:text-7xl font-thin themetxt">Angular 15</h2> <h2 class="m-0 text-3xl md:text-4xl lg:text-4xl xl:text-6xl 3xl:text-8xl font-extrabold themetxt">HttpClient and REST API</h2> <p class="m-0 mt-3 text-normal sm:text-xl 3xl:text-2xl themetxt">Beginner developers often don't know how to simulate real-world scenarios for practice and don't know where to get data from. <br />In this chapter we will therefore see how to set up a fake REST API server and consume data from an Angular application. <br /><br />You will learn how to fetch data from REST API (<code>GET</code>) and remove elements from the database (<code>DELETE</code>) by using the <code>HTTPClient</code> Angular service.</p> <div class="flex justify-center xl:justify-start"> <div class="w-full max-w-3xl  bg-slate-900 text-primary-content mt-12 rounded-2xl p-4 text-lg"> <div class="flex flex-col sm:flex-row gap-2 sm:gap-8 "> <div class="w-full lg:w-1/2 flex flex-col gap-3 text-center"> <div class="text-slate-400">2022-12-28</div> <div class="text-white text-3xl font-bold">NaN min read</div> <div class=""> <a href="/about"> <button class="btn btn-sm bg-sky-500 text-white">Fabio Biondi</button> </a> </div> </div> <div class="w-full lg:w-1/2 flex flex-col gap-0 sm:gap-3 text-center"> <div class="flex sm:flex-col justify-center items-center gap-3"> <div class="text-slate-400">Difficulty</div> <div class="text-3xl flex justify-center my-3 pb-4 sm:py-0"> <div class="relative w-32"> <div style="background-color:green;width:20%" class=" rounded-full  h-4 absolute top-0 left-0 z-10"></div> <div class="border border-slate-900 bg-slate-700 rounded-full h-4 w-full absolute top-0 left-0"></div> </div> <!-- 
+<span class="flex gap-2 flex-wrap">
+  <div>
+  {
+    [1,2,3,4,5].map((item, i) => 
+      <i  class:list={['fa text-normal', {
+        'fa-star': (i+1) <= value, 
+        'fa-star-o': (i+1) > value
+      }]}></i>)
+  }
+  </div>
+</span> --> </div> </div> <div class="flex justify-center"> <span class="flex gap-2 flex-wrap my-2 text-black dark:text-white"> <!-- {
+    tags.map((tag: string) => 
+      <div class=" badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline">
+        #{tag}
+      </div>
+      // <a 
+      //   class="badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline"
+      //   href={`/tags/${tag}`}
+      // >
+      //   #{tag}
+      // </a>
+    ) 
+  }--> <div class="bg-slate-500 dark:bg-slate-700  text-white rounded-2xl px-2 py-1 shadow-lg  md:px-4 no-underline"> angular </div><div class="bg-slate-500 dark:bg-slate-700  text-white rounded-2xl px-2 py-1 shadow-lg  md:px-4 no-underline"> typescript </div> </span> </div> </div> </div> </div> </div> </div> <div class="flex justify-center xl:justify-end"> <div class="w-full"> <!-- 
+        <div class="w-full max-w-xl  flex justify-center xl:justify-end order-first md:order-none">
+          {
+           
+          }
+        </div> --> <div class="w-full flex justify-center" data-astro-cid-lwd7ki6e> <div class="w-full text-center relative overflow-hidden " data-astro-cid-lwd7ki6e> <div class="absolute bg-sky-700 text-white font-bold -rotate-[24deg] p-1 w-96 -left-28 top-6 text-center" data-astro-cid-lwd7ki6e>
+SERIES
+</div> <div class="p-6 m-0 rounded-box w-full bg-slate-900" data-astro-cid-lwd7ki6e> <div class="flex flex-col gap-2" data-astro-cid-lwd7ki6e> <div class="flex  justify-center" data-astro-cid-lwd7ki6e> <img src="/_astro/image.VHOF0DkQ_Z1b9i7h.webp" alt="Create a simple CRUD app" fit="outside" aspectRatio="1" data-astro-cid-lwd7ki6e width="200" height="204" loading="lazy" decoding="async"></div> <span class="text-white text-3xl font-extrabold pb-3 pt-0" data-astro-cid-lwd7ki6e>Create a simple CRUD app</span> </div> <div class="steps steps-vertical " data-astro-cid-lwd7ki6e> <a href="/tutorials/angular/simple-crud-in-angular/1-create-an-angular-project" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Create a new project with the CLI </span> </a><a href="/tutorials/angular/simple-crud-in-angular/2-display-list" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Display a list of items in Angular </span> </a><a href="/tutorials/angular/simple-crud-in-angular/3-template-driven-forms" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Template Driven Forms and Validations </span> </a><a href="/tutorials/angular/simple-crud-in-angular/4-http-client-and-rest-api" style="text-align:left" class="step no-underline step-info pointer-events-none" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full text-info " data-astro-cid-lwd7ki6e> HttpClient and REST API </span> </a><a href="/tutorials/angular/simple-crud-in-angular/5-angular-dependency-injection" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Dependency Injection </span> </a><a href="/tutorials/angular/simple-crud-in-angular/6-error-handling" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Error Handling &amp; Fix </span> </a><a href="/tutorials/angular/simple-crud-in-angular/7-challenges" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Challenges </span> </a> </div> </div> </div> </div>  </div> </div> </div> <!-- When user scroll to this point the ScrollToArrow is shown --> <!-- <div id="showArrowScrollTrigger"></div> --> <!-- <div class="border-t border-slate-700 block md:hidden"></div> --> </div> <div class="socialBarWrapper hidden 2xl:inline fixed top-1/2  -translate-y-1/2 -right-96 z-10 "> <div class="flex flex-col gap-5 bg-slate-900 rounded-tl-xl rounded-bl-xl p-3 w-16 justify-center items-center border border-r-0 border-slate-600" id="socialBar"> <div class="text-xs	text-slate-400 border-b border-slate-500 pb-3">SHARE</div> <div class="social-icon" data-name="linkedin"> <div class="text-white hover:text-pink-500 transition" aria-label="LinkedIn"> <i class="fa fa-2x fa-linkedin"></i> </div> </div><div class="social-icon" data-name="twitter"> <div class="text-white hover:text-pink-500 transition" aria-label="Twitter"> <i class="fa fa-2x fa-twitter"></i> </div> </div><div class="social-icon" data-name="facebook"> <div class="text-white hover:text-pink-500 transition" aria-label="Facebook"> <i class="fa fa-2x fa-facebook"></i> </div> </div><div class="social-icon" data-name="telegram"> <div class="text-white hover:text-pink-500 transition" aria-label="Telegram"> <i class="fa fa-2x fa-telegram"></i> </div> </div><div class="social-icon" data-name="whatsapp"> <div class="text-white hover:text-pink-500 transition" aria-label="Twitch"> <i class="fa fa-2x fa-whatsapp"></i> </div> </div> </div> </div>  <div class="page"> <div class="content mt-0 md:mt-3 xl:mt-36"> <h1 id="topics">TOPICS</h1>
+<h1 id="what-is-json-server">What is <code>json-server</code></h1>
+<p><a href="https://github.com/typicode/json-server"><code>json-server</code></a> is an opensource tool that allow you to create full (fake) REST API with zero coding in few seconds.</p>
+<p>I think it’s really a cool way to create REST API:</p>
+<ul>
+<li>to teach and write tutorials that simulate “real-world” scenarios</li>
+<li>to learn a technology that needs to work with data</li>
+<li>create simple demos, <a href="https://en.wikipedia.org/wiki/Proof_of_concept">PoC</a> (proof of concepts) and <a href="https://en.wikipedia.org/wiki/Minimum_viable_product">MVP</a> (Minimum viable product)</li>
+</ul>
+<h2 id="how-it-works">How it works</h2>
+<p>You can simply create a <code>JSON</code> file in which :</p>
+<ul>
+<li>you can specificy all the endpoints</li>
+<li>you can store some data</li>
+</ul>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12">  <div class="ml-2"><code>db.json</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  &quot;posts&quot;</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">    { </span><span style="color:#79B8FF">&quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;title&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Item 1&quot;</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">    { </span><span style="color:#79B8FF">&quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;title&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Item 2&quot;</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#79B8FF">  &quot;comments&quot;</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">    { </span><span style="color:#79B8FF">&quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;body&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;a comment&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;postId&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#79B8FF">  &quot;profile&quot;</span><span style="color:#E1E4E8">: { </span><span style="color:#79B8FF">&quot;name&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Fabio Biondi&quot;</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre> </div> </div>
+<p>The previous <code>JSON</code> file creates 3 endpoints:</p>
+<ol>
+<li><code>http://localhost:3000/posts</code></li>
+<li><code>http://localhost:3000/comments</code></li>
+<li><code>http://localhost:3000/profile</code></li>
+</ol>
+<p>Now you can query/mutate your JSON database using <code>GET</code> to retrieve data, <code>POST</code> to write, <code>PATCH</code>/<code>PUT</code> to update and <code>DELETE</code> to remove an item.</p>
+<p>But you can do much more:</p>
+<ul>
+<li>get a single item: <code>http://localhost:3000/posts/[ID]</code></li>
+<li>full text search: <code>http://localhost:3000/posts?q=[TEXT]</code></li>
+<li>sort: <code>http://localhost:3000/posts?_sort=views&amp;_order=asc</code></li>
+<li>create relationships: <code>/posts?_embed=comments</code></li>
+<li>and much more. Read the <a href="https://github.com/typicode/json-server">doc</a> for more info</li>
+</ul>
+<h1 id="install-json-server">Install <code>json-server</code></h1>
+<p>First, open a new terminal in the project root folder and install <a href="https://github.com/typicode/json-server"><code>json-server</code></a> as devDependency (using the <code>-D</code> parameter):</p>
+<details class="mb-8" data-astro-cid-nnilz33g> <summary class="py-3 bg-slate-700 text-xl" data-astro-cid-nnilz33g> <div class="flex justify-between " data-astro-cid-nnilz33g> <div class="text-sm lg:text-lg 3xl:text-2xl font-bold text-white" data-astro-cid-nnilz33g>What is a dev dependency?</div> <div data-astro-cid-nnilz33g>  </div> </div> </summary> <div class="content" data-astro-cid-nnilz33g> <p>DevDependencies are the packages a developer needs during development and not in production just like this fake server, compilers, tools for doc generations, unit and E2E tests and so on…</p> </div> </details>  
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span>npm install json-server -D</span></span></code></pre> </div> </div>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-none border-2 border-slate-700 text-black dark:text-white">  <div> <p>Usually your API can be located and developed in a completely new project / repository but, while you’re learning, I suggest you to install JSON-SERVER as <code>devDependency</code> of your front-end project. <br/>In this way, next time you’ll clone or share the project you will have everything already in place and you’re ready to go in few minutes without any further configuration, or clone another repository.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<p>Now create a JSON file to generare your database in <code>./[YOUR ROOT FOLDER]/server/db.json</code></p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12">  <div class="ml-2"><code>/server/db.json</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  &quot;users&quot;</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;label&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Fabio&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;gender&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;F&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;age&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">20</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;gender&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;F&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;label&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Marianna&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;age&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">21</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;gender&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;M&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;label&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;Mario&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      &quot;age&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">20</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  ]</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre> </div> </div>
+<p>Your project folder should look like the following:</p>
+<div class="mockup-window border !my-12 border-slate-700 dark:border-base-700 "> <div class="flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700  bg-slate-900"> <div class="flex flex-col gap-4 w-full"> <div class=" my-3     w-full"><div class="flex w-full p-1 sm:p-6  justify-center"><div class="relative"><div class="z-20 relative"><img src="/_astro/image%20(28).hnn8RIVi_ZUyo27.webp" class="rounded-sm sm:rounded-2xl" alt="" width="400" height="669" loading="lazy" decoding="async"></div><div class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div></div></div> </div> </div> </div>
+<p>After installing JSON-Server, open <code>package.json</code>, locate the <code>scripts</code> node and add following command:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12">  <div class="ml-2"><code>package.json</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#B392F0">&quot;scripts&quot;</span><span style="color:#79B8FF">:</span><span style="color:#9ECBFF"> {</span></span>
+<span class="line"><span style="color:#6A737D">  # ... others scripts here ...</span></span>
+<span class="line"><span style="color:#B392F0">  &quot;server&quot;</span><span style="color:#79B8FF">:</span><span style="color:#9ECBFF"> &quot;json-server --watch server/db.json&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre> </div> </div>
+<hr/>
+<h2 id="start-server">START SERVER</h2>
+<p>Open a new terminal window, go to the project root folder and run following script:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> server</span></span></code></pre> </div> </div>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-none border-2 border-red-400 text-black dark:text-white">  <div> <p>IMPORTANT: don’t kill the terminal in which you’re running Angular CLI. <br/> Both terminals must run at the same time</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<div class="mockup-window border !my-12 border-slate-700 dark:border-base-700 "> <div class="flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700  bg-slate-900"> <div class="flex flex-col gap-4 w-full"> <div class=" my-3     w-full"><div class="flex w-full p-1 sm:p-6  justify-center"><div class="relative"><div class="z-20 relative"><img src="/_astro/2022-11-30_00-42-39%20(1).X6b-gk8c_Z1VJOgr.webp" class="rounded-sm sm:rounded-2xl" alt="" width="700" height="257" loading="lazy" decoding="async"></div><div class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div></div></div> </div> </div> </div>
+<h2 id="use-rest-api">USE REST API</h2>
+<p>Now you can consume data from your endpoints. For instance:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">  <div class="px-3 lg:px-5 py-6 rounded-b-xl rounded-t-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span>• http://localhost:3000/users (GET)</span></span>
+<span class="line"><span>• http://localhost:3000/users/1 (DELETE)</span></span>
+<span class="line"><span>• http://localhost:3000/users/1 (POST, PUT, PATCH) and pass the user as payload</span></span></code></pre> </div> </div>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50">  <div> <p>The endpoint now supports CORS and all REST methods: GET, POST, DELETE, PUT, PATCH</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h1 id="import-httpmodule">Import <code>HttpModule</code></h1>
+<p>Angular provides a useful service to communicate with your server Api: <code>HttpClient</code>.</p>
+<p>Anyway, in order to use it in your projects, first you need to import <code>HttpClientModule</code> in  <code>AppModule</code>:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.module.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { BrowserModule } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/platform-browser&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { NgModule } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/core&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { FormsModule } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/forms&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { HttpClientModule } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/common/http&#39;</span><span style="color:#E1E4E8">;   </span><span style="color:#6A737D">// NEW</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { AppComponent } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;./app.component&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#B392F0">NgModule</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  declarations: [</span></span>
+<span class="line"><span style="color:#E1E4E8">    AppComponent</span></span>
+<span class="line"><span style="color:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#E1E4E8">  imports: [</span></span>
+<span class="line"><span style="color:#E1E4E8">    BrowserModule,</span></span>
+<span class="line"><span style="color:#E1E4E8">    FormsModule,</span></span>
+<span class="line"><span style="color:#E1E4E8">    HttpClientModule </span><span style="color:#6A737D">// NEW</span></span>
+<span class="line"><span style="color:#E1E4E8">  ],</span></span>
+<span class="line"><span style="color:#E1E4E8">  providers: [],</span></span>
+<span class="line"><span style="color:#E1E4E8">  bootstrap: [AppComponent]</span></span>
+<span class="line"><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> AppModule</span><span style="color:#E1E4E8"> { }</span></span></code></pre> </div> </div>
+<h3 id="load-data-from-server">Load Data from server</h3>
+<p>Now you can inject and use <code>HttpClient</code> service to load data from server.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">WHAT IS DEPENDENCY INJECTION</h1> <div> <p>Dependency Injecton is a mechanism that allow you to inject a class (aka <em>Service</em>) rather than create an instance. <br/>Read more in the <a href="https://angular.io/guide/dependency-injection">Angular Documentation</a> and go to the next chapter to create your own service.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<p>In fact, now you can replace all previous <code>AppComponent</code> class content with the following in order to:</p>
+<ol>
+<li>Inject the <code>HttpClient</code> service in the class constructor</li>
+<li>Get data from <code>/users</code> endpoint when the application starts and populate the <code>this.users</code> array.</li>
+</ol>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-none border-2 border-slate-700 text-black dark:text-white">  <div> <p>HTML template does not need to be updated so you only need to change the component class.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> AppComponent</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">  // init to empty array</span></span>
+<span class="line"><span style="color:#FFAB70">  users</span><span style="color:#F97583">:</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">[] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];                     </span></span>
+<span class="line"><span style="color:#6A737D">  /* base API url */</span></span>
+<span class="line"><span style="color:#FFAB70">  URL</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> &#39;http://localhost:3000&#39;</span><span style="color:#E1E4E8">;          </span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // Inject HttpClient Service</span></span>
+<span class="line"><span style="color:#F97583">  constructor</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">private</span><span style="color:#FFAB70"> http</span><span style="color:#F97583">:</span><span style="color:#B392F0"> HttpClient</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">init</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  init</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">    // Get all users from REST API</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.http.</span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">User</span><span style="color:#E1E4E8">[]&gt;(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">URL</span><span style="color:#F97583"> +</span><span style="color:#9ECBFF"> &#39;/users&#39;</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">subscribe</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">res</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">        // populate the `users` array</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> res;</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  deleteHandler</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">userToRemove</span><span style="color:#F97583">:</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">    // MISSING: we should invoke the endpoint to delete the item from the database</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.users.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">u</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> u.id </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> userToRemove.id);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  saveHandler</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">f</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NgForm</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">    // MISSING: we should invoke the endpoint to add a new item to the database</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> user</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> f.value </span><span style="color:#F97583">as</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    user.id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Date.</span><span style="color:#B392F0">now</span><span style="color:#E1E4E8">(); </span><span style="color:#6A737D">// add a fake ID</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#F97583">...</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.users, user]</span></span>
+<span class="line"><span style="color:#E1E4E8">    f.</span><span style="color:#B392F0">reset</span><span style="color:#E1E4E8">({ gender: </span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre> </div> </div>
+<p>The <code>deleteHandler</code> and <code>saveHandler</code> methods still don’t update the database yet since we still have to invoke the endpoints.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50">  <div> <p>You will receive an compiler error if you don’t import <code>HttpClient</code> in <code>AppComponent</code>:</p><p>So, don’t forget to import it:</p><!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { HttpClient } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/common/http&#39;</span><span style="color:#E1E4E8">;</span></span></code></pre> </div> </div> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">BEST PRACTICE</h1> <div> <p>Usually we should invoke and consume an API in a lifecycle hook of the component called <code>ngOnInit</code> but  now I prefer invoke the API in the costructor to keep the article as simple as possible.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h3 id="result">Result</h3>
+<p>You should be able now to load and display all available users of your JSON database:</p>
+<div class="mockup-window border !my-12 border-slate-700 dark:border-base-700 "> <div class="flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700  bg-slate-900"> <div class="flex flex-col gap-4 w-full"> <div class=" my-3     w-full"><div class="flex w-full p-1 sm:p-6  justify-center"><div class="relative"><div class="z-20 relative"><img src="/_astro/image%20(16).4xvb8Dv5_1zOGdz.webp" class="rounded-sm sm:rounded-2xl" alt="" width="400" height="256" loading="lazy" decoding="async"></div><div class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div></div></div> </div> </div> </div>
+<h1 id="delete-and-post-methods"><code>DELETE</code> and <code>POST</code> methods</h1>
+<p>Now we update <code>deleteHandler</code> and <code>saveHandler</code> methods to invoke the REST API in order to update our database when adding or removing users. <br/>
+Furthermore we also want to clean the form when a new user is added.</p>
+<p>So update your class methods as shown below:</p>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#B392F0">  deleteHandler</span><span style="color:#E1E4E8">(userToRemove: User) {</span></span>
+<span class="line"><span style="color:#6A737D">    // Remove User from db.json</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.http.</span><span style="color:#B392F0">delete</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`${</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#79B8FF">URL</span><span style="color:#9ECBFF">}/users/${</span><span style="color:#E1E4E8">userToRemove</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">id</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">subscribe</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">        // Update `users` array removing the element from the list</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.users.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">u</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> u.id </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> userToRemove.id);</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  saveHandler</span><span style="color:#E1E4E8">(f: NgForm) {</span></span>
+<span class="line"><span style="color:#6A737D">    // get form data (it does not contain the `id`)</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> user</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> f.value </span><span style="color:#F97583">as</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    // add the user to db.json</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.http.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">User</span><span style="color:#E1E4E8">&gt;(</span><span style="color:#9ECBFF">`${</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#79B8FF">URL</span><span style="color:#9ECBFF">}/users/`</span><span style="color:#E1E4E8">, user)</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">subscribe</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">dbUser</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">        // Add the returned user (with `id`) to the `users` array</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#F97583">...</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.users, dbUser]</span></span>
+<span class="line"><span style="color:#6A737D">        // reset form to &quot;pristine&quot; status</span></span>
+<span class="line"><span style="color:#E1E4E8">        f.</span><span style="color:#B392F0">reset</span><span style="color:#E1E4E8">({ gender: </span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span></code></pre> </div> </div>
+<h3 id="result-1">Result</h3>
+<p>Now you can remove and add users from the database. In fact, your JSON file should be updated when users are added or removed.</p>
+<h3 id="final-source-code">FINAL SOURCE CODE</h3>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-1 h-12"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="Angular" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="TypeScript" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2"><code>app.component.ts</code></div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { HttpClient } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/common/http&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { Component } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/core&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { NgForm } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@angular/forms&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { User } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;./model/user&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#B392F0">Component</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  selector: </span><span style="color:#9ECBFF">&#39;app-root&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  template: </span><span style="color:#9ECBFF">`</span></span>
+<span class="line"><span style="color:#9ECBFF">    &lt;div class=&quot;container&quot;&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;h1&gt;Users&lt;/h1&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;form</span></span>
+<span class="line"><span style="color:#9ECBFF">        class=&quot;card card-body mt-3&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        #f=&quot;ngForm&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        (submit)=&quot;saveHandler(f)&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        [ngClass]=&quot;{</span></span>
+<span class="line"><span style="color:#9ECBFF">          &#39;male&#39;: f.value.gender === &#39;M&#39;,</span></span>
+<span class="line"><span style="color:#9ECBFF">          &#39;female&#39;: f.value.gender === &#39;F&#39;</span></span>
+<span class="line"><span style="color:#9ECBFF">        }&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">      &gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &lt;input</span></span>
+<span class="line"><span style="color:#9ECBFF">          type=&quot;text&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          [ngModel]</span></span>
+<span class="line"><span style="color:#9ECBFF">          name=&quot;label&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          placeholder=&quot;Add user name&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          class=&quot;form-control&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          required</span></span>
+<span class="line"><span style="color:#9ECBFF">          #labelInput=&quot;ngModel&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          [ngClass]=&quot;{&#39;is-invalid&#39;: labelInput.invalid &amp;&amp; f.dirty}&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">        &lt;select</span></span>
+<span class="line"><span style="color:#9ECBFF">          [ngModel]</span></span>
+<span class="line"><span style="color:#9ECBFF">          name=&quot;gender&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          class=&quot;form-control&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          required</span></span>
+<span class="line"><span style="color:#9ECBFF">          #genderInput=&quot;ngModel&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          [ngClass]=&quot;{&#39;is-invalid&#39;: genderInput.invalid &amp;&amp; f.dirty}&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">          &lt;option value=&quot;&quot;&gt;Select option&lt;/option&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">          &lt;option value=&quot;M&quot;&gt;M&lt;/option&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">          &lt;option value=&quot;F&quot;&gt;F&lt;/option&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &lt;/select&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">  </span></span>
+<span class="line"><span style="color:#9ECBFF">        &lt;button</span></span>
+<span class="line"><span style="color:#9ECBFF">          class=&quot;btn&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          [disabled]=&quot;f.invalid&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          [ngClass]=&quot;{</span></span>
+<span class="line"><span style="color:#9ECBFF">            &#39;btn-success&#39;: f.valid,</span></span>
+<span class="line"><span style="color:#9ECBFF">            &#39;btn-danger&#39;: f.invalid</span></span>
+<span class="line"><span style="color:#9ECBFF">          }&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &gt;Save&lt;/button&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;/form&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;hr&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;!--LIST BELOW: NO CHANGES HERE--&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;hr&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;ul class=&quot;list-group&quot;&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &lt;li</span></span>
+<span class="line"><span style="color:#9ECBFF">          *ngFor=&quot;let u of users&quot; class=&quot;list-group-item&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          [ngClass]=&quot;{</span></span>
+<span class="line"><span style="color:#9ECBFF">            &#39;male&#39;: u.gender === &#39;M&#39;, </span></span>
+<span class="line"><span style="color:#9ECBFF">            &#39;female&#39;: u.gender === &#39;F&#39;</span></span>
+<span class="line"><span style="color:#9ECBFF">          }&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">          &lt;i</span></span>
+<span class="line"><span style="color:#9ECBFF">            class=&quot;fa fa-3x&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">            [ngClass]=&quot;{</span></span>
+<span class="line"><span style="color:#9ECBFF">            &#39;fa-mars&#39;: u.gender === &#39;M&#39;,</span></span>
+<span class="line"><span style="color:#9ECBFF">            &#39;fa-venus&#39;: u.gender === &#39;F&#39;</span></span>
+<span class="line"><span style="color:#9ECBFF">          }&quot;</span></span>
+<span class="line"><span style="color:#9ECBFF">          &gt;&lt;/i&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">          {{u.label}}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">          &lt;i class=&quot;fa fa-trash fa-2x pull-right&quot; (click)=&quot;deleteHandler(u)&quot;&gt;&lt;/i&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">        &lt;/li&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">      &lt;/ul&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">    &lt;/div&gt;</span></span>
+<span class="line"><span style="color:#9ECBFF">  `</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  styles: [</span><span style="color:#9ECBFF">`</span></span>
+<span class="line"><span style="color:#9ECBFF">    .male { background-color: #36caff; }</span></span>
+<span class="line"><span style="color:#9ECBFF">    .female { background-color: pink; }</span></span>
+<span class="line"><span style="color:#9ECBFF">    .card { transition: all 0.5s }</span></span>
+<span class="line"><span style="color:#9ECBFF">  `</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> AppComponent</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  users</span><span style="color:#F97583">:</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">[] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];                     </span><span style="color:#6A737D">// init to empty array</span></span>
+<span class="line"><span style="color:#FFAB70">  URL</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> &#39;http://localhost:3000&#39;</span><span style="color:#E1E4E8">;          </span><span style="color:#6A737D">/* server url */</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  constructor</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">private</span><span style="color:#FFAB70"> http</span><span style="color:#F97583">:</span><span style="color:#B392F0"> HttpClient</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">init</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  init</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.http.</span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">User</span><span style="color:#E1E4E8">[]&gt;(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">URL</span><span style="color:#F97583"> +</span><span style="color:#9ECBFF"> &#39;/users&#39;</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">subscribe</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">res</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> res;</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  deleteHandler</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">userToRemove</span><span style="color:#F97583">:</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.http.</span><span style="color:#B392F0">delete</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`${</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#79B8FF">URL</span><span style="color:#9ECBFF">}/users/${</span><span style="color:#E1E4E8">userToRemove</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">id</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">subscribe</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.users.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">u</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> u.id </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> userToRemove.id);</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  saveHandler</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">f</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NgForm</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> user</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> f.value </span><span style="color:#F97583">as</span><span style="color:#B392F0"> User</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">    this</span><span style="color:#E1E4E8">.http.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">&lt;</span><span style="color:#B392F0">User</span><span style="color:#E1E4E8">&gt;(</span><span style="color:#9ECBFF">`${</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#79B8FF">URL</span><span style="color:#9ECBFF">}/users/`</span><span style="color:#E1E4E8">, user)</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">subscribe</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">dbUser</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.users </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#F97583">...</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.users, dbUser]</span></span>
+<span class="line"><span style="color:#E1E4E8">        f.</span><span style="color:#B392F0">reset</span><span style="color:#E1E4E8">({ gender: </span><span style="color:#9ECBFF">&#39;&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre> </div> </div>
+<h3 id="result-2">Result</h3>
+<p>The result is similar to the previous one but data are now saved on database (<code>db.json</code>):</p>
+<div class="mockup-window border !my-12 border-slate-700 dark:border-base-700 "> <div class="flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700  bg-slate-900"> <div class="flex flex-col gap-4 w-full"> <div class=" my-3     w-full"><div class="flex w-full p-1 sm:p-6  justify-center"><div class="relative"><div class="z-20 relative"><img src="/_astro/2022-11-30_00-54-33%20(1).ht1NmkWX_Fgw3D.webp" class="rounded-sm sm:rounded-2xl" alt="" width="400" height="258" loading="lazy" decoding="async"></div><div class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div></div></div> </div> </div> </div>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-none border-2 border-red-400 text-black dark:text-white">  <div> <p>The following interactive code playground does not work as expected because we need to start a local JSON-SERVER.
+<br/> <strong>Run a local JSON server to see some products!</strong></p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<h1 id="what-is-subscribe">What is <code>subscribe</code>?</h1>
+<p>As you may have notice, we need to <strong>subscribe</strong> the <code>HttpClient</code> to invoke a REST API .
+<br/>Why and what is it?</p>
+<p><code>HttpClient</code> returns an <code>Observable</code> and emit some data when the request is fullfilled (and an error when it fails).
+But we must subscribe it if we want to get the emitted value.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">RxJS and Observables</h1> <div> <p>You can imagine an <code>Observarble</code> just like a stream of data that you have to subscribe to receive data from it.
+It might seems a <code>Promise</code> at a first glance but it’s much more.</p><p>This topic is very complex and hard to explain in few lines but now you only need to know that the <code>HttpClient</code> service returns a (cold) Observable, that is a “producer” that is created and activated only when subscribed.</p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<p>Often, when we’re talking about Observable we’re referring to <a href="https://rxjs.dev">RxJS</a>, an amazing library that is closely coupled in Angular: more or less everything in Angular is handled by Observables. <br/>
+When you start using Angular you can pretend it doesn’t exist but over time you will need to improve your <a href="https://rxjs.dev">RxJS</a> skills, otherwise you won’t be able to take full advantage of the framework.</p>
+<p>RxJS and Reactive Programming is a complex topic but don’t worry. You have time to learn more about it.</p>
+<br/>
+<p>Anyway, the <code>HttpClient</code> returns a “special” type of Observable that just emit one value, the result of the HTTP request, or an error, in case it doesn’t work for any reason.</p>
+<div class="hint rounded-xl p-5 text-black px-10 xl:px-16 relative mt-20 mb-24 bg-slate-50"> <h1 class="text-xl xl:text-2xl font-extrabold mb-4">Why do I need an Observable if I just receive data once?</h1> <div> <p><strong>A common question is: why Promise is not enough to handle a simple HTTP request?</strong> <br/>
+<br/>  Because thanks to RxJS we can create sequences of observable mixing reactive data from forms, router, components, multiple data sources and do other “magical” stuff. <br/> I know, it’s very hard to imagine when you’re a beginner but I suggest to have fun with Angular and think about RxJS later. <br/><br/>Anyway you can also find several videos about RxJS in my <a href="https://www.youtube.com/c/FabioBiondi">Youtube Channel</a></p> </div> <img src="/_astro/emote-opla_right.U6-1sQxd_2g61Jt.webp" class="absolute -left-5 -top-4 xl:-left-14 xl:-top-10 w-16 xl:w-28" alt="" fit="outside" aspectRatio="1" width="120" height="120" loading="lazy" decoding="async"> </div> 
+<div class="divider !sm:mx-32 sm:px-32 sm:mt-12  text-slate-500 before:!bg-slate-500 after:bg-slate-500">WHAT’S NEXT</div>
+<div class="w-full flex justify-center" data-astro-cid-lwd7ki6e> <div class="w-full text-center relative overflow-hidden " data-astro-cid-lwd7ki6e> <div class="absolute bg-sky-700 text-white font-bold -rotate-[24deg] p-1 w-96 -left-28 top-6 text-center" data-astro-cid-lwd7ki6e>
+SERIES
+</div> <div class="p-6 m-0 rounded-box w-full bg-slate-900" data-astro-cid-lwd7ki6e> <div class="flex flex-col gap-2" data-astro-cid-lwd7ki6e> <div class="flex  justify-center" data-astro-cid-lwd7ki6e> </div> <span class="text-white text-3xl font-extrabold pb-3 pt-0" data-astro-cid-lwd7ki6e>Create a simple CRUD app</span> </div> <div class="steps steps-vertical " data-astro-cid-lwd7ki6e> <a href="/tutorials/angular/simple-crud-in-angular/1-create-an-angular-project" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Create a new project with the CLI </span> </a><a href="/tutorials/angular/simple-crud-in-angular/2-display-list" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Display a list of items in Angular </span> </a><a href="/tutorials/angular/simple-crud-in-angular/3-template-driven-forms" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Template Driven Forms and Validations </span> </a><a href="/tutorials/angular/simple-crud-in-angular/4-http-client-and-rest-api" style="text-align:left" class="step no-underline step-info pointer-events-none" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full text-info " data-astro-cid-lwd7ki6e> HttpClient and REST API </span> </a><a href="/tutorials/angular/simple-crud-in-angular/5-angular-dependency-injection" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Dependency Injection </span> </a><a href="/tutorials/angular/simple-crud-in-angular/6-error-handling" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Error Handling &amp; Fix </span> </a><a href="/tutorials/angular/simple-crud-in-angular/7-challenges" style="text-align:left" class="step no-underline" data-astro-cid-lwd7ki6e> <span class="text-white hover:text-sky-500 w-full" data-astro-cid-lwd7ki6e> Challenges </span> </a> </div> </div> </div> </div> 
+<br/>
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> --><div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12"> <div class="flex items-center gap-1 px-3 py-2"> <img src="/_astro/angular.EFyfN8Rq_ARapj.webp" alt="ADS: MY LATEST VIDEO COURSE <br />(italian only)" aspectRatio="1" width="24" height="24" loading="lazy" decoding="async"><img src="/_astro/ts.Rgm_W9yq_Z1Rfk8H.webp" alt="ADS: MY LATEST VIDEO COURSE <br />(italian only)" aspectRatio="1" width="24" height="24" loading="lazy" decoding="async"> <div class="ml-2 ">ADS: MY LATEST VIDEO COURSE <br />(italian only)</div> </div> <div class="px-3 lg:px-5 py-6 rounded-b-xl" style="background-color: #0d1117"> <a href="/video-courses/angular-reactive-forms" class="flex justify-center"> <img src="/images/banners/banner1.png" class="rounded-sm sm:rounded-2xl" alt="Nuovo Corso" width="507" height="582" loading="lazy" decoding="async"> </a> </div> </div>
+<br/> </div> <!--
+    <div class="my-12">
+      <Toggle title="Write a Comment">
+        <Disqus slug={frontmatter.slug} />
+      </Toggle>
+    </div>
+    --> </div> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var l=(s,i,o)=>{let r=async()=>{await(await s())()},t=typeof i.value=="object"?i.value:void 0,c={rootMargin:t==null?void 0:t.rootMargin},n=new IntersectionObserver(e=>{for(let a of e)if(a.isIntersecting){n.disconnect(),r();break}},c);for(let e of o.children)n.observe(e)};(self.Astro||(self.Astro={})).visible=l;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="121MtI" prefix="r0" component-url="/_astro/NewsLetterPanel.Qi5s216h.js" component-export="default" renderer-url="/_astro/client.olTvLX7Y.js" props="{&quot;newsListId&quot;:[0,&quot;0817a264-d1bf-47a3-ae83-d39fd2bd3489&quot;],&quot;promoListId&quot;:[0,&quot;b2c160b2-e01d-4a2a-984f-2f96f3c12cd5&quot;]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;NewsLetterPanel&quot;,&quot;value&quot;:true}" await-children=""><div class="bg-slate-700 text-center border-b border-b-slate-800" id="newsletterBox"><div class="page !py-16 "><div class="flex justify-center"><img src="./images/brand/emote-newsletter-low.png" alt=""/></div><div class="my-4 text-gray-400"><div class="text-xl sm:text-3xl">Keep updated about latest content</div><div class="text-xl sm:text-lg">videos, articles, tips and news</div></div><form class="mt-4 mb-2 sm:flex justify-center"><div class="form-control"><div class="sm:input-group sm:input-group-y"><input name="email" type="email" placeholder="Your Email Address" class=" input input-bordered rounded-2xl sm:!rounded-l-2xl text-black bg-white w-full mb-3 sm:mb-0 sm:w-96" value=""/><button class="btn  !rounded-2xl sm:!rounded-l-none !rounded-r-2xl  !bg-sky-400 opacity-40 hover:bg-sky-700 !text-gray-900 hover:text-sky-900" type="submit" disabled="">SUBSCRIBE</button></div></div></form><div class="flex flex-col justify-center items-start gap-1 w-full sm:w-96 mx-auto"><div class="form-control "><label class="cursor-pointer label gap-3"><input type="checkbox" class="checkbox checkbox-info" name="hasSelectedPromoList"/><span class="text-white text-left"><span>I also want to receive info about Premium content, promo, courses </span></span></label></div><div class="form-control "><label class="cursor-pointer label gap-3 relative"><input type="checkbox" class="checkbox checkbox-success" name="privacyConfirm"/><span class="text-white"><span class="hidden sm:inline">I have read the </span><a href="/privacy-policy" target="_blank" class="text-sky-500 hover:!text-sky-400">privacy policy</a></span></label></div></div></div></div><!--astro:end--></astro-island>   <div class="fixed z-10 bg-red-700 text-white text-sm font-bold text-center rotate-45 p-2 w-96 -left-40 bottom-4" data-astro-cid-ofitbb36>BETA</div> <div class="footer p-10 relative" data-astro-cid-ofitbb36> <div class="mx-auto gap-x-32 gap-y-8 flex flex-col lg:flex-row justify-center" data-astro-cid-ofitbb36> <div data-astro-cid-ofitbb36> <div class="footer-title pb-1" data-astro-cid-ofitbb36>ABOUT ME </div> <div data-astro-cid-ofitbb36> <i class="fa fa-info-circle w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Visit the Profile Page" href="/about" data-astro-cid-ofitbb36>About Page</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-youtube w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Facebook Profile" href="https://www.youtube.com/c/FabioBiondi" data-astro-cid-ofitbb36>YouTube</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-linkedin w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the LinkedIn Profile" href="https://www.linkedin.com/in/fabiobiondi/" data-astro-cid-ofitbb36>LinkedIn</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-twitch w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Twitch Channel" href="https://www.twitch.tv/fabio_biondi" data-astro-cid-ofitbb36>Twitch</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-telegram w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Telegram Page" href="https://t.me/fabiobiondi" data-astro-cid-ofitbb36>Telegram Page</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-instagram w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Instagram Page" href="https://www.instagram.com/biondifabio/" data-astro-cid-ofitbb36>Instagram</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Facebook Page" href="https://www.facebook.com/groups/fabiobiondi.training" data-astro-cid-ofitbb36>Facebook Group</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-twitter w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Twitter Profile" href="https://twitter.com/biondifabio" data-astro-cid-ofitbb36>Twitter</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-bookmark w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" rel="noopener" aria-label="Visit the Dev.to Profile" href="https://dev.to/fabiobiondi" data-astro-cid-ofitbb36>Dev.To</a> </div> </div> <div data-astro-cid-ofitbb36> <div class="footer-title pb-1" data-astro-cid-ofitbb36>Communities</div> <div data-astro-cid-ofitbb36> <i class="fa fa-telegram w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join WeAreDevs Community" href="https://t.me/we_are_devs" data-astro-cid-ofitbb36>We Are Devs</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join Angular Community" href="https://www.facebook.com/groups/angularjs.developer.italiani" data-astro-cid-ofitbb36>Angular</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join React Community" href="https://www.facebook.com/groups/react.developer.italiani" data-astro-cid-ofitbb36>React</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join JavaScript Community" href="https://www.facebook.com/groups/javascript.developer.italiani" data-astro-cid-ofitbb36>JavaScript</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-facebook w-4 text-center" data-astro-cid-ofitbb36></i> <a target="_blank" aria-label="Join Opportunities Community" href="https://www.facebook.com/groups/opportunita.developer.italiani" data-astro-cid-ofitbb36>Opportunities</a> </div> </div> <div data-astro-cid-ofitbb36> <div class="footer-title pb-1" data-astro-cid-ofitbb36>PRODUCTS</div> <div data-astro-cid-ofitbb36> <i class="fa fa-book w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Visit Training Page" href="https://formazione.fabiobiondi.io/" target="_blank" rel="noopener" data-astro-cid-ofitbb36>Front-End Training (ita)</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-video-camera w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Visit Video Courses Page" href="/video-courses" data-astro-cid-ofitbb36>Video Courses (ita)</a> </div> <!-- <div>
+        <i class="fa fa-graduation-cap"></i>
+        <a aria-label="Visit Academy Profile" href="https://academy.talent-factory.it/" target="_blank" rel="noopener">Angular / React Academies</a> 
+      </div> --> <div class="footer-title pb-1 pt-4" data-astro-cid-ofitbb36>SECTIONS</div> <div data-astro-cid-ofitbb36> <i class="fa fa-code w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Blog" href="/blog" rel="noopener" data-astro-cid-ofitbb36>Blog</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-graduation-cap w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="Tutorials" href="/tutorials" rel="noopener" data-astro-cid-ofitbb36>Tutorials</a> </div> <div data-astro-cid-ofitbb36> <i class="fa fa-user w-4 text-center" data-astro-cid-ofitbb36></i> <a aria-label="About" href="/about" rel="noopener" data-astro-cid-ofitbb36>About</a> </div> </div> <div class="flex flex-col gap-3 justify-center" data-astro-cid-ofitbb36> <div data-astro-cid-ofitbb36> <img src="/_astro/emote-opla._CelARBT_Z1afxD6.webp" class="w-full text-center" aspectRatio="1" alt="logo" data-astro-cid-ofitbb36 width="140" height="140" loading="lazy" decoding="async"> </div> <div class="w-full text-center" data-astro-cid-ofitbb36> <div data-astro-cid-ofitbb36> 2023 Fabio Biondi | P.I. 01116230317 </div> <div data-astro-cid-ofitbb36> <a href="/privacy-policy" data-astro-cid-ofitbb36>Privacy Policy</a> | <a href="/cookie-policy" data-astro-cid-ofitbb36>Cookie Policy</a> </div> </div> </div> </div> <div id="scrollArrowbottom" class="absolute right-6 bottom-16 text-xl lg:text-2xl" data-astro-cid-ofitbb36> <i class="fa fa-arrow-up cursor-pointer	" data-astro-cid-ofitbb36></i> </div> </div>   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">   <!-- Matomo -->  <!-- End Matomo Code --> <!-- End Matomo Code --> <!-- COOKIE IUBENDA --> <script type="text/javascript">
+        var _iub = _iub || [];
+        _iub.csConfiguration = {
+          askConsentAtCookiePolicyUpdate: true,
+          ccpaAcknowledgeOnDisplay: true,
+          consentOnContinuedBrowsing: false,
+          countryDetection: true,
+          enableCcpa: true,
+          enableLgpd: true,
+          floatingPreferencesButtonDisplay: "bottom-right",
+          invalidateConsentWithoutLog: true,
+          lang: "en",
+          lgpdAppliesGlobally: false,
+          perPurposeConsent: true,
+          siteId: 2903640,
+          whitelabel: false,
+          cookiePolicyId: 19604960,
+          banner: {
+            acceptButtonDisplay: true,
+            closeButtonDisplay: false,
+            customizeButtonDisplay: true,
+            explicitWithdrawal: true,
+            listPurposes: true,
+            position: "bottom",
+            rejectButtonDisplay: true,
+          },
+        };
+      </script> <script type="text/javascript" src="//cdn.iubenda.com/cs/ccpa/stub.js"></script> <script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script> </div>  </body></html>
