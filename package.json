@@ -42,5 +42,9 @@
     "@tailwindcss/forms": "^0.5.7",
     "@types/aos": "^3.0.7",
     "daisyui": "^4.6.0"
+  },
+  "peerDependencies": {
+    "cookie": "^0.6.0",
+    "set-cookie-parser": "^2.6.0"
   }
 }
