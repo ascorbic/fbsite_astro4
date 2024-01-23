@@ -1,0 +1,161 @@
+---
+import { Image, Picture } from 'astro:assets';
+
+---
+
+<div class="fixed z-10 bg-red-700 text-white text-sm font-bold text-center rotate-45 p-2 w-96 -left-40 bottom-4">BETA</div>
+
+<div class="footer p-10 relative">
+  <div class="mx-auto gap-x-32 gap-y-8 flex flex-col lg:flex-row justify-center">
+    
+
+    <div>
+      <div class="footer-title pb-1">ABOUT ME </div> 
+      <div>
+        <i class="fa fa-info-circle w-4 text-center" />
+        <a aria-label="Visit the Profile Page" href="/about">About Page</a> 
+      </div>
+      <div>
+        <i class="fa fa-youtube w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Facebook Profile" href="https://www.youtube.com/c/FabioBiondi">YouTube</a> 
+      </div>
+      <div>
+        <i class="fa fa-linkedin w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the LinkedIn Profile" href="https://www.linkedin.com/in/fabiobiondi/">LinkedIn</a>
+      </div>
+      <div>
+        <i class="fa fa-twitch w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Twitch Channel" href="https://www.twitch.tv/fabio_biondi">Twitch</a> 
+      </div>
+      <div>
+        <i class="fa fa-telegram w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Telegram Page" href="https://t.me/fabiobiondi">Telegram Page</a> 
+      </div>
+      <div>
+        <i class="fa fa-instagram w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Instagram Page" href="https://www.instagram.com/biondifabio/">Instagram</a> 
+      </div>
+      <div>
+        <i class="fa fa-facebook w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Facebook Page" href="https://www.facebook.com/groups/fabiobiondi.training">Facebook Group</a> 
+      </div>
+      <div>
+        <i class="fa fa-twitter w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Twitter Profile" href="https://twitter.com/biondifabio">Twitter</a>
+      </div>
+      <div>
+        <i class="fa fa-bookmark w-4 text-center" />
+        <a target="_blank" rel="noopener" aria-label="Visit the Dev.to Profile" href="https://dev.to/fabiobiondi">Dev.To</a> 
+      </div>
+    </div>
+    <div>
+      <div class="footer-title pb-1">Communities</div> 
+      <div> 
+        <i class="fa fa-telegram w-4 text-center" />
+        <a target="_blank" aria-label="Join WeAreDevs Community" href="https://t.me/we_are_devs">We Are Devs</a> 
+      </div>
+      
+      <div>
+        <i class="fa fa-facebook w-4 text-center"></i>
+        <a target="_blank" aria-label="Join Angular Community" href="https://www.facebook.com/groups/angularjs.developer.italiani">Angular</a> 
+      </div>
+      <div>
+        <i class="fa fa-facebook w-4 text-center"></i>
+        <a target="_blank" aria-label="Join React Community" href="https://www.facebook.com/groups/react.developer.italiani">React</a> 
+      </div>
+      
+      <div>
+        <i class="fa fa-facebook w-4 text-center"></i>
+        <a target="_blank" aria-label="Join JavaScript Community" href="https://www.facebook.com/groups/javascript.developer.italiani">JavaScript</a> 
+      </div>
+      <div>
+        <i class="fa fa-facebook w-4 text-center"></i>
+        <a target="_blank" aria-label="Join Opportunities Community" href="https://www.facebook.com/groups/opportunita.developer.italiani">Opportunities</a>
+      </div>
+    </div> 
+    
+    <div>
+      <div class="footer-title pb-1">PRODUCTS</div> 
+      <div>
+        <i class="fa fa-book w-4 text-center"></i>
+        <a aria-label="Visit Training Page" href="https://formazione.fabiobiondi.io/" target="_blank" rel="noopener">Front-End Training (ita)</a>
+      </div>
+      <div>
+        <i class="fa fa-video-camera w-4 text-center"></i>
+        <a aria-label="Visit Video Courses Page" href="/video-courses">Video Courses (ita)</a>
+      </div>
+      <!-- <div>
+        <i class="fa fa-graduation-cap"></i>
+        <a aria-label="Visit Academy Profile" href="https://academy.talent-factory.it/" target="_blank" rel="noopener">Angular / React Academies</a> 
+      </div> -->
+
+      <div class="footer-title pb-1 pt-4">SECTIONS</div>
+      <div>
+        <i class="fa fa-code w-4 text-center"></i>
+        <a aria-label="Blog" href="/blog" rel="noopener">Blog</a>
+      </div>
+
+      <div>
+        <i class="fa fa-graduation-cap w-4 text-center"></i>
+        <a aria-label="Tutorials" href="/tutorials" rel="noopener">Tutorials</a>
+      </div>
+      <div>
+        <i class="fa fa-user w-4 text-center"></i>
+        <a aria-label="About" href="/about" rel="noopener">About</a>
+      </div>
+    </div>
+
+
+
+    <div class="flex flex-col gap-3 justify-center">
+      <div >
+        <Image
+          src={import('../../images/brand/emote-opla.png')}
+          class="w-full text-center"  
+          width={140}
+          aspectRatio={1}
+          alt="logo"></Image>
+      </div>
+
+      <div  class="w-full text-center">
+        <div> 2023 Fabio Biondi | P.I. 01116230317 </div>
+        <div>
+          <a href="/privacy-policy">Privacy Policy</a> | <a href="/cookie-policy">Cookie Policy</a> 
+        </div>
+      </div>
+    </div> 
+  </div>
+
+  <div id="scrollArrowbottom" class="absolute right-6 bottom-16 text-xl lg:text-2xl">
+    <i class="fa fa-arrow-up cursor-pointer	"></i>
+  </div>
+  
+</div>
+
+<script>
+
+document.querySelector('#scrollArrowbottom')
+  .addEventListener('click', () => {
+    document.querySelector('html').scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+  })
+
+</script>
+
+<style>
+
+.footer {
+    @apply bg-slate-900 text-white   ;
+    /* @apply bg-green-300; */
+     /* display: flex;
+     gap: 0.5rem; */
+ }
+
+ .footer a {
+  @apply text-white hover:text-sky-400
+ }
+
+ .footer .dark {
+    @apply bg-slate-900 text-white 
+  }
+
+</style>

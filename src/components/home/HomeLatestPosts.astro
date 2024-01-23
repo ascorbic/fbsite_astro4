@@ -1,0 +1,51 @@
+---
+import CardSimple from "@widgets/CardSimple.astro";
+
+const { posts, images} = Astro.props;
+
+---
+
+<div class="page">
+  <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+
+
+    <a href="/blog" class="m-0 text-4xl sm:text-5xl md:text-7xl font-extrabold  outline-text ">
+      Articles
+    </a>
+
+    <!--
+    <div>
+      <a href="/blog" class="px-6 py-2 font-bold rounded-2xl bg-sky-600 hover:bg-sky-700 transition text-white">READ ARTICLES...</a>
+    </div>
+    -->
+  </div>
+</div>
+<!-- 
+<div class="flex justify-center mt-3 gap-3">
+  <a href="/blog" class="px-6 py-2 font-bold rounded-2xl bg-sky-600 hover:bg-sky-700 transition text-white">Blog</a>
+  <a href="/tutorials" class="px-6 py-2 font-bold rounded-2xl bg-sky-600 hover:bg-sky-700 transition text-white">Tutorials</a>
+</div> -->
+
+<div class="flex justify-center items-center px-3 mt-8">
+  <div class="max-w-7xl w-full	grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    {
+      posts.slice(0, 4).map(async (post: any, i: number) => {
+        //const path = `./pages/blog/${post.frontmatter.slug}/${post.frontmatter.image.url}`;
+        const path = `./blog/${post.frontmatter.slug}/${post.frontmatter.image.url}`;
+
+        return <div class="flex" data-aos="zoom-in" data-aos-delay={i * 100} data-aos-easing="ease-in-sine">
+          <CardSimple 
+            image={images[path]()}
+            alt={post.frontmatter.image.alt} 
+            title={post.frontmatter.title} 
+            desc={post.frontmatter.description} 
+            url={post.url}
+          />
+        </div>
+      })
+    }
+
+
+  </div>
+</div>

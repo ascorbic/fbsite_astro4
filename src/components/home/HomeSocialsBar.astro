@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<div class="mt-16  flex justify-center">
+
+  <div class="flex gap-3 justify-center  bg-slate-900 bg-opacity-50 p-4 rounded-3xl">
+
+    <a class="opacity-70 hover:opacity-100 transition" target="_blank" rel="noopener" href="https://www.linkedin.com/in/fabiobiondi/" aria-label="Visit the LinkedIn Profile">
+      <Image 
+        class="rounded-2xl w-8 md:w-16"
+        width={100}
+        height={100}
+        quality={50}
+        src={import('../../images/socials/linkedin.png')}
+        alt={''} 
+      />
+     </a>
+    
+      <a class="opacity-70 hover:opacity-100 transition" target="_blank" rel="noopener" href="https://www.facebook.com/groups/fabiobiondi.training" aria-label="Visit the Facebook Profile">
+        <Image 
+          class="rounded-2xl w-8 md:w-16"
+          width={100}
+          height={100}
+          quality={70}
+          src={import('../../images/socials/facebook.png')}
+          alt={''} 
+        />
+      </a>
+    
+      <span class="border-l border-slate-700 w-1 ml-2"></span> 
+      
+      <a class="opacity-70 hover:opacity-100 transition" target="_blank" rel="noopener" href="https://t.me/we_are_devs" aria-label="Join We Are Devs Community">
+        <Image 
+          class="rounded-2xl w-8 md:w-16"
+          width={100}
+          height={100}
+          quality={50}
+          src={import('../../images/socials/telegram.png')}
+          alt={''} 
+        />
+      </a>
+      
+      <a class="opacity-70 hover:opacity-100 transition" target="_blank" rel="noopener" href="https://www.youtube.com/c/FabioBiondi" aria-label="Visit the YouTube Channel">
+        <Image 
+          class="rounded-2xl w-8 md:w-16"
+          width={100}
+          height={100}
+          quality={50}
+          src={import('../../images/socials/yt.png')}
+          alt={''} 
+        />
+      </a>
+
+      <a class="opacity-70 hover:opacity-100 transition" target="_blank" rel="noopener" href="https://www.twitch.tv/fabio_biondi" aria-label="Visit the Twitch Channel">
+        <Image 
+          class="rounded-2xl w-8 md:w-16"
+          width={100}
+          height={100}
+          quality={50}
+          src={import('../../images/socials/twitch.png')}
+          alt={''} 
+        />
+      </a>
+     
+  </div>
+</div>

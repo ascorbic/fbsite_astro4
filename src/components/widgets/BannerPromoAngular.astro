@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+const {
+  title = 'ADS: MY LATEST VIDEO COURSE <br />(italian only)',
+  techs = ['angular', 'ts'],
+  href="/video-courses/angular-reactive-forms",
+  w = undefined,
+  quality: number
+} = Astro.props
+
+const TECHS = {
+  'js': { img: import('../../images/icons/techs/js.png'), longName: 'JavaScript' },
+  'ts': { img: import('../../images/icons/techs/ts.png'), longName: 'TypeScript' },
+  'angular': { img: import('../../images/icons/techs/angular.png'), longName: 'Angular' },
+  'react': { img: import('../../images/icons/techs/react.png'), longName: 'React' },
+  'html': { img: import('../../images/icons/techs/html.png'), longName: 'HTML' },
+  'css': { img: import('../../images/icons/techs/css.png'), longName: 'CSS' },
+}
+
+const hasHeaderContent = title || techs;
+
+
+---
+
+<!-- <div class="mt-4 mb-12 relative">
+  <div class="mockup-code !rounded-b-none " style="background-color: #0d1117"></div>
+  <div  style="background-color: #0d1117">
+    <div class="px-5">
+      <slot />
+    </div>
+  </div>
+  <div class="p-4 rounded-b-2xl  shadow-slate-900 shadow-md "  style="background-color: #0d1117"></div>
+</div> -->
+
+<div class="relative border-2 border-slate-700 rounded-2xl mt-4 mb-12">
+  {
+    (hasHeaderContent) && 
+      <div class="flex items-center gap-1 px-3 py-2">
+
+        { 
+          techs?.length && 
+          techs.map(tech => {
+            return <Image src={TECHS[tech].img} quality={80} alt={title} width={24} aspectRatio={1} />
+          })
+        }
+
+        { title && <div class="ml-2 " set:html={title}></div>}
+
+      </div>
+  }
+  <div class:list={['px-3 lg:px-5 py-6 rounded-b-xl', {'rounded-t-xl': !hasHeaderContent}]} style="background-color: #0d1117">
+    <a href={href} class="flex justify-center">
+      <Image
+        class="rounded-sm sm:rounded-2xl"
+        src={'/images/banners/banner1.png'}
+        quality={80} alt="Nuovo Corso"
+        width={1014/2} height={1164/2} />
+    </a>
+  </div>
+</div>

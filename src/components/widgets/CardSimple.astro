@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import Difficulty from './Difficulty.astro';
+import Tags from './Tags.astro';
+
+interface Props {
+  image: string | any;
+  title: string;
+  desc: string;
+  alt: string;
+  url: string
+  difficulty?: number;
+  tags?: string[];
+  horizontal?: boolean;
+}
+
+const { image, tags, title, desc, alt, url, difficulty, horizontal = true  } = Astro.props;
+
+---
+
+<a class="relative rounded-3xl shadow-xl mb-4 bg-slate-200 dark:bg-slate-900 hover:bg-slate-300 dark:hover:bg-slate-700 hover:text-white transition w-full" href={url}>
+    { 
+      difficulty && <div>
+        <div class="flex justify-center items-center gap-3 absolute bottom-6 left-6">
+          <div class="text-black dark:text-slate-400 relative ">
+            <div class="mt-4">Difficulty: </div>
+          </div> 
+          <div>
+            <Difficulty value={difficulty} />
+          </div>
+        </div>
+      </div>
+    }
+
+  <div class="flex justify-center overflow-hidden relative">
+    <Image
+      class="object-cover object-center h-48 w-96 overflow-hidden rounded-t-xl border-b-slate-800 "
+      src={image}
+      alt={alt}
+      width={300}
+      fit="inside"
+      quality={90}
+      aspectRatio={1}
+    />
+  </div>
+
+  {
+    tags && 
+      <div class="flex justify-center">
+        <Tags tags={tags} />
+      </div>
+  }
+
+  <div class=" text-black dark:text-white pb-8 px-6 relative">
+
+    {/* <div class="badge badge-secondary">NEW</div> */}
+
+    <div class="my-3 font-bold text-2xl  text-ellipsis no-underline" set:html={title}></div> 
+    <div class="mb-6" set:html={desc}></div>
+
+
+  </div>
+</a>

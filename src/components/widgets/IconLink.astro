@@ -1,0 +1,29 @@
+---
+import clsx from 'clsx';
+
+interface Props {
+  icon: 'linkedin' | 'github' | 'link';
+  link: string;
+}
+
+const { icon, link } = Astro.props;
+---
+
+<!--ICON WITH LINK-->
+{
+  link &&
+  <a href={link} target="_blank">
+
+    <i
+      class={clsx(
+        "fa mr-2 text-sky-500",
+        {
+          'fa-github': icon === 'github',
+          'fa-linkedin': icon === 'linkedin',
+          'fa-link': icon === 'link' || !icon,
+        }
+      )}
+
+    ></i>
+  </a>
+  }

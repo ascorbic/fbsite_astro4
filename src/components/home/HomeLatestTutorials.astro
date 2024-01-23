@@ -1,0 +1,51 @@
+---
+import { allTutorialsSeries } from "../../pages/tutorials/_tutorial_list";
+import CardSimple from "@widgets/CardSimple.astro";
+
+const images = import.meta.glob<ImageMetadata>('../../pages/tutorials/**/*', { import: 'default' })
+---
+
+<div class="page">
+
+  <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+    <a href="/tutorials" class="m-0 text-4xl sm:text-5xl md:text-7xl font-extrabold  outline-text">
+    Tutorials
+    </a>
+
+    <!--
+    <div>
+      <a href="/tutorials" class="px-6 py-2 font-bold rounded-2xl bg-purple-600 hover:bg-purple-700 transition text-white">MORE TUTORIALS...</a>
+    </div>
+    -->
+  </div>
+
+
+  <div class="grid grid-cols-1 lg:grid-cols-2  gap-4 mt-8">
+
+    {
+      allTutorialsSeries.slice(0, 2).map(async (tutorial: any, i: number) => {
+        //const path = `./${tutorial.frontmatter.slug}/${tutorial.frontmatter.image.url}`
+        // const imagesrc = await images[path]()
+        const path = `../../pages/tutorials/${tutorial.slug}/${tutorial.image}`
+        //const imagesrc = await images[path]()
+
+        return ( 
+        <CardSimple
+          image={images[path]()}
+
+          difficulty={tutorial.difficulty}
+          alt={tutorial.title} 
+          title={tutorial.title} 
+          desc={tutorial.description} 
+          tags={tutorial.tags}
+          url={'/'+tutorial.firstPost}
+        />
+        )}
+        
+      )
+    }
+
+  </div>
+</div>
+
+

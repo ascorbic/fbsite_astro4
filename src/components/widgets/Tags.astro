@@ -1,0 +1,39 @@
+---
+const {tags, center, white } = Astro.props;
+---
+<span class:list={[
+  'flex gap-2 flex-wrap my-2', { 
+    'justify-center': center, 
+    'text-black dark:text-white': !white,
+    'text-white': white
+  }]
+}>
+  <!-- {
+    tags.map((tag: string) => 
+      <div class=" badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline">
+        #{tag}
+      </div>
+      // <a 
+      //   class="badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline"
+      //   href={`/tags/${tag}`}
+      // >
+      //   #{tag}
+      // </a>
+    ) 
+  }-->
+
+
+  {
+    tags.map((tag: string) => 
+      <div class="bg-slate-500 dark:bg-slate-700  text-white rounded-2xl px-2 py-1 shadow-lg  md:px-4 no-underline">
+        {tag}
+      </div>
+      // <a 
+      //   class="badge badge-outline px-4 p-2 md:badge-lg badge-sm md:py-4 md:px-8 no-underline"
+      //   href={`/tags/${tag}`}
+      // >
+      //   #{tag}
+      // </a>
+    )
+  }
+</span>

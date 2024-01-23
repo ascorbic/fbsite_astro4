@@ -1,0 +1,42 @@
+---
+import Difficulty from './Difficulty.astro';
+import Tags from './Tags.astro';
+
+const { frontmatter } = Astro.props;
+
+---
+  <div class="w-full max-w-3xl  bg-slate-900 text-primary-content mt-12 rounded-2xl p-4 text-lg">
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-8 ">
+      <div class="w-full lg:w-1/2 flex flex-col gap-3 text-center">
+        <div class="text-slate-400">{frontmatter.pubDate.slice(0, 10)}</div>
+        <div class="text-white text-3xl font-bold">{`${frontmatter.minutesTotal + 2} min read`}</div>
+        <div class="">
+        
+            {
+              frontmatter.author?.map(author => {
+                return   <a href={author === 'Fabio Biondi' ? '/about' : `/collaborators/author`}>
+                  <button class="btn btn-sm bg-sky-500 text-white">{author}</button>
+                </a> 
+              })
+            }
+        </div>
+      </div>
+
+
+      <div class="w-full lg:w-1/2 flex flex-col gap-0 sm:gap-3 text-center">
+        <div class="flex sm:flex-col justify-center items-center gap-3">
+          <div class="text-slate-400">Difficulty</div>
+          <div class="text-3xl flex justify-center my-3 pb-4 sm:py-0">
+            <Difficulty value={frontmatter.difficulty} />
+          </div>
+        </div>
+  
+        <div class="flex justify-center">
+          <Tags tags={frontmatter.tags}  />
+        </div>
+      </div>
+
+    </div>
+
+    
+  </div>

@@ -1,0 +1,21 @@
+---
+
+
+---
+
+
+<script>
+
+  const url = new URL(location.href);
+  const isCompact = url.searchParams.get('compact')
+
+  if (isCompact) {
+    const header = document.querySelector('header')
+    header.remove()
+
+    const footer = document.querySelector('.footer')
+    footer.remove()
+  }
+  
+
+</script>

@@ -1,0 +1,31 @@
+---
+import Toggle from "@widgets/Toggle.astro";
+
+const { data, row1, row2, frontmatter } = Astro.props;
+---
+<div class="page" id="video-course-program">
+  <div class="p-3 md:p-8 mb-16 bg-slate-200 dark:bg-slate-700 rounded-2xl ">
+    <!-- <div class="border-b border-slate-500 mt-16 mb-8"></div> -->
+    <span class="text-md md:text-lg font-bold bg-white text-slate-900 rounded-3xl px-3 py-1">{row1}</span>
+
+    <div class="font-extrabold text-2xl xl:text-4xl 3xl:text-6xl py-3 mb-3 border-b border-slate-500">{row2}</div>
+    
+
+  {
+    data?.map(chapter => {
+      return (
+      <Toggle badgeColor={`c-${frontmatter.css}`} bg={false} text={chapter.duration_formatted} titleClass="text-2xl" title={chapter.chapter}>
+        {chapter.description && <div class="text-xl font-bold ml-6">{chapter.description}</div>}
+        {
+          chapter.items?.map(lesson => {
+            return <div class="text-sm xl:text-xl ml-6 my-1">
+              • {lesson}  
+            </div>
+          })
+        }
+      </Toggle>
+      )
+    })
+  }
+  </div>
+</div>

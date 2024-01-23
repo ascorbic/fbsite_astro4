@@ -1,0 +1,104 @@
+---
+import { Image, Picture} from 'astro:assets';
+---
+<div class="bg-slate-900 relative overflow-hidden py-48 p-8 ">
+  <div class="flex flex-col md:flex-row justify-center gap-12 items-center" data-aos="fade-right">
+
+    <!-- GRADIENT BLUr BACKGROUND -->
+    <div class="absolute -right-96 -top-24 -z-10 blur-3xl w-full h-full opacity-30 ">
+  
+      <!-- <Image
+        class="w-full"
+        fit="cover"
+        width={200}
+        quality={10}
+        height={140}
+        aspectRatio={4/2.45}
+        src={import('../../images/brand/emote-setup.png')}
+        alt={''} 
+      /> -->
+      <Picture 
+        fit="cover"
+        src={import('../../images/brand/emote-desk.png')}
+        widths={[50, 50, 50]} 
+        aspectRatio={3000/2324} 
+        alt="Emote desktop"
+        sizes="(max-width: 800px) 100vw, 300px"
+      />
+    
+    </div>
+
+    <div class="w-full md:w-1/2 flex  justify-center md:justify-end   ">
+       <Picture 
+        src={import('../../images/brand/emote-desk.png')}
+        widths={[140, 300]} 
+        aspectRatio={3000/2324} 
+        alt="Emote desktop"
+        sizes="(max-width: 800px) 100vw, 400px"
+      /> 
+      <!-- <Image 
+        class="w-2/3"
+        width={3000/10}
+        height={2324/10}
+        quality={40}
+        src={import('../../images/brand/emote-desk.png')}
+        alt={''} 
+      /> -->
+    </div>
+
+    <div class="w-full md:w-1/2" data-aos="fade-left">
+      <div class="text-3xl md:text-5xl text-white">I help devs & teams</div>
+      <div class="text-xl md:text-3xl text-white">to improve their JS skills</div>
+      <div class="w-full 2xl:w-2/3">
+        <p class="my-8 text-white">
+          I have been dealing with front-end and interactive UI for 20 years, first with Adobe software (Flex, Flash, Air, ...) and in recent years I have totally dedicated to web technologies especially on Angular and React ecosystems.
+        </p>
+
+        <p class="my-8 text-white">
+          I'm totally focused in front-end applications and all related aspects, both visuals and architecturals, and I love cutting-edge libraries and frameworks, such as Svelte, SolidJS, Google Lit & web components, D3.js, GSAP and more...
+        </p>
+
+        <p class="my-8 text-white">
+          My job is mainly to train teams and developers on the JavaScript world, with a focus on Angular and React ecosystems and everything around them: <br>
+          • languages & frameworks: JS / TS, Redux, NGRX, NextJS, RxJS... <br>
+          • best practices, paradigms, patterns and clean coding<br>
+          • software architectures
+            
+        </p>
+      </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 mt-3">
+          <div>
+            <Image 
+              class="rounded-xl"
+              width={751/3}
+              height={303/3}
+              quality={80}
+              src={import('../../images/logo/mvp.png')}
+              alt={''} 
+            />
+        </div>
+
+        <div>
+
+          <Image 
+            class="rounded-xl"
+            width={600/2.1}
+            height={212/2.1}
+            quality={80}
+            src={import('../../images/logo/gde.png')}
+            alt={''} 
+          />
+        </div>
+          
+          
+        </div>
+    </div>
+  </div>
+
+  <!--
+  <h1 class="text-7xl  text-center p-16">Training / Formazione 🇮🇹</h1>
+   -->
+
+</div>
+

@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import VideoCoursesStats from './VideoCoursesStats.astro';
+
+interface Props {
+  frontmatter: any;
+  imageBlur: any;
+  imageUrl: any;
+  showSeriesPanel?: boolean
+}
+
+const { frontmatter, imageBlur, imageUrl, showSeriesPanel = false  } = Astro.props;
+
+---
+
+
+<div class="p-3 xl:p-16">
+
+    
+  <div class="flex flex-col xl:flex-row justify-between items-start mt-12 relative">
+    
+    {
+      imageBlur && 
+        <div class="absolute -top-10 z-0 blurFix blur-3xl w-full h-full opacity-20 pointer-events-none">
+          <Image
+            class="w-full rounded-3xl"
+            fit="cover"
+            width={400}
+            quality={10}
+            aspectRatio={4/2}
+            src={imageBlur}
+            alt={frontmatter.image.alt || 'blurred image'} 
+          />
+        </div>
+    }
+
+      <div class="  w-full xl:w-2/3 order-none xl:order-first text-center themetxt xl:text-start">
+        <h2 class="m-0 text-4xl xl:text-6xl 3xl:text-8xl font-extrabold themetxt" set:html={frontmatter.title1}></h2>
+        <h2 class="m-0 my-3 text-3xl xl:text-4xl 3xl:text-6xl font-thin themetxt" set:html={frontmatter.title2}></h2>
+        <div
+          class="m-0 mt-12 sm:text-xl xl:text-2xl themetxt text-justify px-0 sm:px-6 xl:px-0 xl:text-left" 
+
+        >
+          <div set:html={frontmatter.description}></div>
+
+
+          {
+            frontmatter.list &&
+              <div class="mt-8">
+                <div set:html={frontmatter.list?.text} class="mb-3"></div>
+                <ul class="mx-2">
+                  {
+                    frontmatter.list.items.map(item => {
+                      return <li>• <span set:html={item.text}></span></li>
+                    })
+                  }
+                </ul>
+                <div set:html={frontmatter.list?.endText} class="mt-3"></div>
+
+              </div>
+          }
+
+        </div>
+
+        <div class="flex flex-col xl:flex-row items-center justify-center md:justify-start gap-4 mt-16">
+          <a href="#video-course-pricing">
+            <button class={`button c-${frontmatter.css}`}>
+              {frontmatter.heroButtonLabel || 'ACQUISTA IL CORSO' }
+            </button>
+          </a>
+
+          {
+            frontmatter.heroButtonConsultaHidden ? null :  <a href="#video-course-program">
+            <button class="button">CONSULTA IL PROGRAMMA</button>
+          </a>
+          }
+        </div>
+
+
+        <!-- STATS -->
+        <div class="flex justify-center xl:justify-start">
+          <!-- <Stats frontmatter={frontmatter} /> -->
+        
+            <VideoCoursesStats frontmatter={frontmatter} />
+        </div>
+
+
+      </div>
+
+
+      <div class="w-full xl:w-1/3 flex justify-center xl:justify-left order-first xl:order-none mb-6">
+        {
+          imageUrl && <Image 
+            class="rounded-xl"
+              src={imageUrl} 
+              alt={frontmatter.image.alt} 
+              width={500}
+              quality={50}
+              fit="inside"
+              aspectRatio={1} 
+          /> 
+        }
+      </div>
+
+    </div>
+
+</div>

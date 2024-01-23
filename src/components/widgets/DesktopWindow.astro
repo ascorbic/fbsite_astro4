@@ -1,0 +1,26 @@
+---
+
+interface Props {
+  isLight?: boolean;
+  isDark?: boolean;
+  center?: boolean
+}
+
+const { center = false, isLight = false, isDark = false } = Astro.props;
+
+
+---
+
+
+<div  class="mockup-window border !my-12 border-slate-700 dark:border-base-700 " >
+  <div class:list={[
+      'flex justify-center px-4 py-8 border-t border-slate-700 dark:border-base-700 ',
+      {'bg-slate-100': isLight, 'bg-slate-900': isDark}
+    ]}>
+    <div class:list={["flex flex-col gap-4 w-full", {
+      'items-center': center
+    }]}>
+      <slot />
+    </div>
+  </div>
+</div>

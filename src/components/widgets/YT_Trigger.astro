@@ -1,0 +1,29 @@
+---
+interface Props {
+  class: string;
+  id: string;
+}
+
+const { id, class: classNames  } = Astro.props;
+
+
+---
+
+<span data-id={id}
+        class={`youtubeModalTrigger ${classNames}`}>
+  <slot />
+</span>
+
+
+<style is:global>
+  .youtubeModalTrigger p {
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<!-- When user scroll to this point the ScrollToArrow is shown -->
+<!-- <div id="showArrowScrollTrigger"></div> -->
+
+
+<!-- <div class="border-t border-slate-700 block md:hidden"></div> -->

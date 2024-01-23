@@ -1,0 +1,74 @@
+---
+// import Toggle from "@widgets/Toggle.astro";
+import * as W from '@widgets'
+
+const { data, row1, row2, description, frontmatter } = Astro.props;
+---
+<div class="page" id="video-course-program">
+  <div class="p-3 md:p-8 mb-16 bg-slate-200 dark:bg-slate-700 rounded-2xl ">
+    <!-- <div class="border-b border-slate-500 mt-16 mb-8"></div> -->
+    {row1 && <span class="text-md md:text-lg font-bold bg-slate-900 text-white rounded-xl px-3 py-2">{row1}</span>}
+
+    {row2 && <div class="font-extrabold text-2xl xl:text-4xl 3xl:text-6xl py-3 ">{row2}</div>}
+    
+    <div class="text-xl mb-3 py-3 ">{description}</div>
+
+  {
+    data?.map(chapter => {
+      return (
+      <div class="mb-8  border-4 border-slate-300 dark:border-none p-4 rounded-lg bg-slate-300 dark:bg-slate-600">
+        <div class="text-xl md:text-2xl lg:text-3xl font-bold flex justify-between items-center">
+          <div>{chapter.chapter}</div>
+          {
+            chapter.duration_formatted && <div>
+              <div class="px-2 py-2 bg-slate-200 dark:bg-slate-900 rounded-xl text-xl text-center">
+                Durata: {chapter.duration_formatted}</div>
+              </div>
+            }
+        </div>
+        {chapter.description && <div class="my-6 dark:text-slate-200" set:html={chapter.description}></div>}
+        {
+          chapter.items?.map(lesson => {
+            return <div class="hover:bg-slate-400 rounded-lg p-2 text-sm xl:text-xl ml-0 sm:mx-6  opacity-80 flex justify-between items-center gap-2">
+              <div class="flex items-center">
+                {lesson.title && <div>{lesson.title}</div> || lesson || '' }
+                {
+                  lesson.wip &&
+                    <div class="bg-pink-700 px-3 py-1 rounded-xl mx-2 text-xs text-white">IN ARRIVO</div>
+                }
+              </div>
+              <div class="flex justify-end  items-center gap-1 sm:gap-2">
+                {lesson.youtube && (
+                  <W.YT_Trigger id={lesson.youtube}  class="w-full">
+                    <button class="button c-dark-middle  sm">PREVIEW</button>
+                  </W.YT_Trigger>
+                )}
+                {lesson.duration && <div class="w-8 sm:w-12 text-right">{lesson.duration}  </div>}
+              </div>
+            </div>
+          })
+        }
+      </div>
+      )
+    })
+  }
+
+<!-- 
+  {
+    data?.map(chapter => {
+      return (
+      <Toggle badgeColor={`c-${frontmatter.css}`} bg={false} text={chapter.duration_formatted} titleClass="text-2xl" title={chapter.chapter}>
+        {chapter.description && <div class="text-xl font-bold ml-6">{chapter.description}</div>}
+        {
+          chapter.items?.map(lesson => {
+            return <div class="text-sm xl:text-xl ml-6 my-1">
+              • {lesson}  
+            </div>
+          })
+        }
+      </Toggle>
+      )
+    })
+  } -->
+  </div>
+</div>

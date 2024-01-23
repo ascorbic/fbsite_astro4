@@ -1,0 +1,32 @@
+---
+const {value} = Astro.props;
+// const items = Array.from(Array(value).keys());
+export const COLORS = {
+  [1]: 'green',
+  [2]: 'lightgreen',
+  [3]: 'orange',
+  [4]: 'orangered',
+  [5]: 'red',
+}
+
+
+const backgroundColor = COLORS[value];
+const percWidth = (value*2) * 10;
+---
+
+<div class="relative w-32">
+  <div style={{backgroundColor, width: `${percWidth}%`}} class=" rounded-full  h-4 absolute top-0 left-0 z-10"></div>
+  <div class="border border-slate-900 bg-slate-700 rounded-full h-4 w-full absolute top-0 left-0"></div>
+</div>
+<!-- 
+<span class="flex gap-2 flex-wrap">
+  <div>
+  {
+    [1,2,3,4,5].map((item, i) => 
+      <i  class:list={['fa text-normal', {
+        'fa-star': (i+1) <= value, 
+        'fa-star-o': (i+1) > value
+      }]}></i>)
+  }
+  </div>
+</span> -->

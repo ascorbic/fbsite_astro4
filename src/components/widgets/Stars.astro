@@ -1,0 +1,17 @@
+---
+const {value} = Astro.props;
+const items = Array.from(Array(value).keys())
+---
+
+
+<span class="flex gap-2 flex-wrap">
+  <div>
+  {
+    [1,2,3,4,5].map((item, i) => 
+      <i  class:list={['fa text-normal', {
+        'fa-star': (i+1) <= value, 
+        'fa-star-o': (i+1) > value
+      }]}></i>)
+  }
+  </div>
+</span>

@@ -1,0 +1,63 @@
+---
+import Toggle from "@widgets/Toggle.astro";
+
+const { frontmatter } = Astro.props;
+
+---
+
+<div class="page" id="faq">
+
+  <h1 class="mt-12 mb-6">FAQ</h1>
+
+
+  <Toggle title="Ho qualche dubbio che il corso faccia al caso mio. Posso contattarti?">
+    Certo, puoi scrivermi tramite il <a href={`/contact-form?msg=Vorrei avere qualche informazione in più sul corso... "${frontmatter.title}"`}>Form di Contatto</a>
+  </Toggle>
+
+  <Toggle title="È possibile fruire il corso simultaneamente su device?">
+    Gli accessi simultanei alla piattaforma da diversi IP verranno bloccati. 
+    Nel caso fossi interessato all’acquisto di più di una licenza d’uso sono previsti degli sconti.
+    <br>
+    <a href={`/contact-form?msg=Vorrei conoscere le scontistiche per l'acquisto di licenze multiple inerenti al corso "${frontmatter.title}"`}>Contattami</a> per ulteriori info.
+
+  </Toggle>
+
+  <Toggle title="È previsto un rimborso nel caso non fossi soddisfatto?">
+    Sono sicuro che apprezzerai i contenuti del corso ma se non fossi soddisfatto potrai comunque essere rimborsato totalmente entro 15 giorni dall'acquisto
+  </Toggle>
+
+  <Toggle title="Posso ricevere la fattura?">
+    In fase di acquisto, è necessario inserire la partita iva (utilizzando IT come prefisso, ad es. IT1234567890) cliccando sul pulsante "+ ADD BUSINESS DETAILS" e inserire i dati per la fatturazione.
+  Teachable, la piattaforma americana utilizzata per erogare i corsi, si occupa di tutto il processo di pagamento e di mettere le ricevute di acquisto.
+  Essendo un sistema di pagamento extra EU, nel caso di acquisto con partita iva, l'iva non sarà applicata e quindi sarà tolto il 22% dal totale.
+  Prima di effettuare l'ordine <a href="/images/courses/esempio-fattura.jpg" target="_blank">guarda un esempio di fattura</a>  che riceverai.
+  </Toggle>
+
+  <Toggle title="L'iva viene applicata? La fattura è inviata da un'azienda americana">
+    Il mio corso è fruibile tramite la piattaforma Teachable, azienda con sede negli Stati Uniti. Per questo motivo: se richiedi la fattura e inserisci la partita iva in fase di acquisto NON verrà applicata l'iva. Al contrario, il costo per i privati sarà comprensivo di IVA
+  </Toggle>
+
+  <Toggle title="La possibilità di visionare il corso è limitata nel tempo?">
+    No! La licenza d’uso non ha nessuna scadenza. Una volta acquistato il corso potrai fruire dei contenuti del corso ed eventuali aggiornamenti senza limiti di tempo.
+  </Toggle>
+
+  <Toggle title="Dubbi e Domande?">
+    Scrivimi in privato su <a href="https://www.linkedin.com/in/fabiobiondi/" target="_blank">LinkedIn</a> o utilizza l'apposito <a href={`/contact-form?msg=Vorrei avere delle informazioni su ${frontmatter.title}:`}>form di contatto</a>
+  </Toggle>
+
+  <Toggle title="Dove posso seguirti per ulteriori aggiornamenti?">
+    Sono presente su tutti i principali social network. Trovi i link nel footer.
+    <br />
+    Per tutti gli aggiornamenti puoi seguirmi su <a href="https://t.me/fabiobiondi" target="_blank">Telegram</a> e non dimenticare di iscriverti alla newsletter 
+  </Toggle>
+
+  <Toggle title="☠️ PIRATERIA : hai visto il mio corso replicato su qualche piattaforma oppure la tua azienda condivide l'account tra più studenti?">
+    Per favore inviami una segnalazione compilando il     <a href={`/contact-form?msg=Ti invio la seguente segnalazione su "${frontmatter.title}"`}>Form di contatto</a>
+  </Toggle>
+</div>
+
+<style is:global>
+  #faq a {
+    @apply dark:text-sky-400 dark:hover:text-sky-600 text-sky-600 hover:text-sky-800
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import { IconLink } from '@w/index';
+import * as W from '@widgets'
+import clsx from 'clsx';
+
+
+interface User {
+  img: string;
+  icon: 'linkedin' | 'github' | 'link';
+  link: string;
+  name: string;
+  job: string;
+  review: string;
+  rate: number;
+}
+interface Props {
+  data: User[];
+}
+
+const { data } = Astro.props;
+
+---
+
+<div class="container my-24 mx-auto md:px-6" id="testimonials">
+  <section class="mb-32 text-center">
+    <div class="mb-6">
+      <h2 class=" text-3xl font-bold">Recensioni</h2>
+      <div>Alcune delle recensioni dei primi studenti del corso... </div>
+    </div>
+
+    <div class="grid gap-x-6  md:grid-cols-3 lg:gap-x-12">
+      {
+        data.map((user) => {
+          const vote = user.rate / 2; // vote are 10 based but we show 5 stars
+          // const integer = Math.floor(vote);
+          // const areDecimals = vote !== integer;
+          // const stars = new Array(integer).fill(null);
+
+          return (
+            <div class="px-3 mb-12 md:mb-0 border-b border-dashed border-slate-500">
+
+              <div class="my-6 flex justify-center items-center">
+                <!--<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(2).jpg"
+                     class="w-32 rounded-full shadow-lg dark:shadow-black/20" />-->
+
+
+
+                <div class="h-32 flex items-center">
+                  <W.Img
+                    isWindowed={false} src={user.img} w={100} quality={60} border
+                  />
+                </div>
+
+              </div>
+              <div class="mb-0 flex justify-center mt-6">
+
+                <W.StarsDecimal value={vote}/>
+
+
+              </div>
+
+              <h5 class="my-2 text-lg font-bold text-black dark:text-white">
+                <!--ICON WITH LINK-->
+
+                <IconLink icon={user.icon} link={user.link} />
+                {user.name}
+              </h5>
+              <h6 class="mb-4 font-xs text-black dark:text-slate-300 italic">
+                {user.job}
+              </h6>
+              <div class="font-xs pb-3">{user.review}</div>
+
+
+            </div>
+
+          )
+        })
+      }
+
+
+    </div>
+  </section>
+</div>

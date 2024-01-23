@@ -1,0 +1,70 @@
+---
+import { Image, Picture } from 'astro:assets';
+import Tags from '../widgets/Tags.astro';
+
+const { url, image, tags, title1, title2, items } = Astro.props;
+
+---
+
+<div class="page">
+
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+    <!--
+    <div class="text-3xl sm:text-4xl text-center text-black dark:text-white">
+      Latest Video Courses
+    </div>
+
+    <h2 class="m-0 text-7xl font-extrabold  outline-text">
+      Video Courses
+    </h2>
+    -->
+
+    <!--
+        <div>
+          <a href="/tutorials" class="px-6 py-2 font-bold rounded-2xl bg-purple-600 hover:bg-purple-700 transition text-white">
+            MORE VIDEO COURSES
+          </a>
+        </div>
+    -->
+  </div>
+
+  <a href={url}
+     class="grid grid-cols-1 md:grid-cols-3 gap-2 lg:gap-16 rounded-xl border-2 p-5 lg:p-16 border-slate-900 hover:bg-slate-200 dark:hover:bg-slate-900 transition">
+
+
+    <div class="">
+      <Image
+        src={image}
+        class="w-full max-w-xs"
+        width={500}
+        aspectRatio={1}
+        alt="logo"></Image>
+    </div>
+
+    <div class="col-span-2">
+      <div class="mt-2">
+        <Tags tags={tags} />
+
+        <h2 class="m-0 text-4xl md:text-7xl font-extrabold outline-text ">
+          {title1}
+        </h2>
+        <div class="m-0 text-3xl font-extrabold themetxt">
+          {title2}
+        </div>
+
+        <br />
+
+        <div class="m-0 text-3xl md:text-5xl font-extrabold  outline-text">
+          {
+            items.map(item => {
+              return <div>{item}</div>
+            })
+          }
+        </div>
+      </div>
+    </div>
+
+  </a>
+</div>
+
+
