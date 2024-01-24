@@ -1,6 +1,6 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom/server';
-import { T as AstroJSX, A as AstroError, J as renderJSX, l as createVNode } from './chunks/astro_bQErWp-c.mjs';
+import { D as AstroJSX, A as AstroError, x as renderJSX, F as createVNode } from './chunks/astro_tGQ552PS.mjs';
 
 /**
  * Astro passes `children` as a string of HTML, so we need
