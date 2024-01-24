@@ -12,7 +12,7 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      noExternal: ['cookie', 'kleur']
+      noExternal: ['cookie', 'kleur', 'clsx']
     }
   },
   integrations: [react(), mdx()]
