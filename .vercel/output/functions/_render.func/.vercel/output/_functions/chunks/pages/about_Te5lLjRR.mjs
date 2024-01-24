@@ -1,5 +1,7 @@
-import { c as createAstro, d as createComponent, r as renderTemplate } from '../astro_tGQ552PS.mjs';
+import { c as createAstro, d as createComponent, r as renderTemplate } from '../astro_ffjFK0U-.mjs';
+import 'kleur/colors';
 import 'html-escaper';
+import 'clsx';
 
 const $$Astro = createAstro("https://fbsite-astro4.vercel.app/");
 const prerender = false;

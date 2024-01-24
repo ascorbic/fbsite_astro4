@@ -9,11 +9,12 @@ export default defineConfig({
   site: 'https://fbsite-astro4.vercel.app/',
   output: 'hybrid',
   adapter: vercelServerless(),
-
+  /*
   vite: {
     ssr: {
-      noExternal: ['cookie', 'kleur', 'clsx']
+      noExternal: ['cookie']
     }
   },
+   */
   integrations: [react(), mdx()]
 });

@@ -1,4 +1,6 @@
+import { bold } from 'kleur/colors';
 import { escape } from 'html-escaper';
+import { clsx } from 'clsx';
 
 function normalizeLF(code) {
   return code.replace(/\r\n|\r(?!\n)|\n/g, "\n");
@@ -351,33 +353,6 @@ function createAstro(site) {
   };
 }
 
-let FORCE_COLOR, NODE_DISABLE_COLORS, NO_COLOR, TERM, isTTY=true;
-if (typeof process !== 'undefined') {
-	({ FORCE_COLOR, NODE_DISABLE_COLORS, NO_COLOR, TERM } = process.env || {});
-	isTTY = process.stdout && process.stdout.isTTY;
-}
-
-const $ = {
-	enabled: !NODE_DISABLE_COLORS && NO_COLOR == null && TERM !== 'dumb' && (
-		FORCE_COLOR != null && FORCE_COLOR !== '0' || isTTY
-	)
-};
-
-function init(x, y) {
-	let rgx = new RegExp(`\\x1b\\[${y}m`, 'g');
-	let open = `\x1b[${x}m`, close = `\x1b[${y}m`;
-
-	return function (txt) {
-		if (!$.enabled || txt == null) return txt;
-		return open + (!!~(''+txt).indexOf(close) ? txt.replace(rgx, close + open) : txt) + close;
-	};
-}
-const bold = init(1, 22);
-const dim = init(2, 22);
-const red = init(31, 39);
-const yellow = init(33, 39);
-const blue = init(34, 39);
-
 async function renderEndpoint(mod, context, ssr, logger) {
   const { request, url } = context;
   const method = request.method.toUpperCase();
@@ -440,8 +415,6 @@ function createRenderInstruction(instruction) {
 function isRenderInstruction(chunk) {
   return chunk && typeof chunk === "object" && chunk[RenderInstructionSymbol];
 }
-
-function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e)){var o=e.length;for(t=0;t<o;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);}else for(f in e)e[f]&&(n&&(n+=" "),n+=f);return n}function clsx(){for(var e,t,f=0,n="",o=arguments.length;f<o;f++)(e=arguments[f])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
 const PROP_TYPE = {
   Value: 0,
@@ -2068,4 +2041,4 @@ function createVNode(type, props) {
   return vnode;
 }
 
-export { AstroError as A, renderPage as B, ClientAddressNotAvailable as C, AstroJSX as D, ExpectedImage as E, createVNode as F, GetStaticPathsRequired as G, bold as H, IncompatibleDescriptorOptions as I, red as J, yellow as K, LocalImageUsedWrongly as L, MissingImageDimension as M, NoMatchingStaticPathFound as N, dim as O, PageNumberParamNotFound as P, blue as Q, ResponseSentError as R, StaticClientAddressNotAvailable as S, UnsupportedImageFormat as U, UnsupportedImageConversion as a, MissingSharp as b, createAstro as c, createComponent as d, InvalidImageService as e, ExpectedImageOptions as f, ImageMissingAlt as g, addAttribute as h, MiddlewareNoDataOrNextCalled as i, MiddlewareNotAResponse as j, InvalidGetStaticPathsReturn as k, InvalidGetStaticPathsEntry as l, maybeRenderHead as m, GetStaticPathsExpectedParams as n, GetStaticPathsInvalidRouteParam as o, PrerenderDynamicEndpointPathCollide as p, LocalsNotAnObject as q, renderTemplate as r, spreadAttributes as s, ASTRO_VERSION as t, renderEndpoint as u, ReservedSlotName as v, renderSlotToString as w, renderJSX as x, chunkToString as y, CantRenderPage as z };
+export { AstroError as A, renderPage as B, ClientAddressNotAvailable as C, AstroJSX as D, ExpectedImage as E, createVNode as F, GetStaticPathsRequired as G, IncompatibleDescriptorOptions as I, LocalImageUsedWrongly as L, MissingImageDimension as M, NoMatchingStaticPathFound as N, PageNumberParamNotFound as P, ResponseSentError as R, StaticClientAddressNotAvailable as S, UnsupportedImageFormat as U, UnsupportedImageConversion as a, MissingSharp as b, createAstro as c, createComponent as d, InvalidImageService as e, ExpectedImageOptions as f, ImageMissingAlt as g, addAttribute as h, MiddlewareNoDataOrNextCalled as i, MiddlewareNotAResponse as j, InvalidGetStaticPathsReturn as k, InvalidGetStaticPathsEntry as l, maybeRenderHead as m, GetStaticPathsExpectedParams as n, GetStaticPathsInvalidRouteParam as o, PrerenderDynamicEndpointPathCollide as p, LocalsNotAnObject as q, renderTemplate as r, spreadAttributes as s, ASTRO_VERSION as t, renderEndpoint as u, ReservedSlotName as v, renderSlotToString as w, renderJSX as x, chunkToString as y, CantRenderPage as z };
