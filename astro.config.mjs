@@ -10,5 +10,10 @@ export default defineConfig({
   output: 'hybrid',
   adapter: vercelServerless(),
 
+  vite: {
+    ssr: {
+      noExternal: 'cookie'
+    }
+  },
   integrations: [react(), mdx()]
 });
