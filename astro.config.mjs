@@ -1,13 +1,11 @@
-import { defineConfig } from 'astro/config';
-import vercelServerless from '@astrojs/vercel/serverless';
+import { defineConfig } from "astro/config";
+import vercelServerless from "@astrojs/vercel";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 
-
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://fbsite-astro4.vercel.app/',
-  output: 'hybrid',
+  site: "https://fbsite-astro4.vercel.app/",
   adapter: vercelServerless(),
   /*
   vite: {
@@ -16,5 +14,5 @@ export default defineConfig({
     }
   },
    */
-  integrations: [react(), mdx()]
+  integrations: [react(), mdx()],
 });
