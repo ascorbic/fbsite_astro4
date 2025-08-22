@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/headers",
+      "headers": [
+        {
+          "key": "Sec-CH-UA-Form-Factors",
+          "value": "Mobile"
+        }
+      ]
+    }
+  ]
+}
